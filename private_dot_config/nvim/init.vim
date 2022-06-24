@@ -2204,6 +2204,12 @@ augroup randomstuff
   autocmd BufNewFile,BufRead dot_zshrc set filetype=zsh
   autocmd BufNewFile,BufRead dot_tmux.conf set filetype=tmux
 
+
+  " if expand('%:p') =~ 'chezmoi'
+    " autocmd BufWritePost * execute ':!chezmoi -v apply'
+    " autocmd BufWritePost * !chezmoi -v apply
+  " endif
+
   " per reddit, Vim doesn't have an autocommand for graphql files, not sure if needed?
   autocmd BufRead,BufNewFile *.graphql,*.graphqls,*.gql setfiletype graphql
 
@@ -2913,7 +2919,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, this will select first item on <cr>
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nmap <silent> [G <Plug>(coc-diagnostic-prev-error)
@@ -3110,7 +3115,7 @@ augroup CocGroup
   " autocmd User CocLocationsChange ++nested call s:coc_qf_jump2loc(g:coc_jump_locations)
 
   " disable autocomplete for vimwiki, ctrl+space to trigger in insert mode
-  autocmd filetype vimwiki,markdown  let b:coc_suggest_disable = 1
+  " autocmd filetype vimwiki,markdown let b:coc_suggest_disable = 1
   " have snippets complete, only? mess with this: https://github.com/neoclide/coc.nvim/blob/804a007033bd9506edb9c62b4e7d2b36203ba479/doc/coc.txt#L908
 
   " close preview when completion is done
