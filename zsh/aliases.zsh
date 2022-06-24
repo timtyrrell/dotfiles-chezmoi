@@ -44,6 +44,13 @@ alias kctx='kubectx'
 alias kc="kubecolor"
 alias kns='kubens'
 
+# chezmoi
+alias chezd="chezmoi diff"
+alias chezp="chezmoi -v apply"
+alias cheza="chezmoi add"
+alias chezr="chezmoi remove"
+alias chezu="chezmoi unmanaged"
+
 # kitty ssh: skitty hostname
 # to copy files on connect, edit: ~/.config/kitty/ssh.conf
 alias skitty=kitty +kitten ssh

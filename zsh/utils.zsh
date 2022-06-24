@@ -9,7 +9,7 @@ gwab() {
 }
 
 # add worktree based on a branch
-$ git worktree add worktree-name branch-name
+# $ git worktree add worktree-name branch-name
 
 notify() {
   if [ -z $1 ]; then

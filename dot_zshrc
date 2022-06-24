@@ -289,11 +289,10 @@ _fzf_compgen_dir() {
 # zle -N kube-toggle
 # bindkey '^]' kube-toggle  # ctrl-] to toggle kubecontext in powerlevel10k prompt
 
-export DOTFILES="$HOME/code/timtyrrell/dotfiles"
-# source $DOTFILES/zsh/init_tasks --source_only
-source $DOTFILES/zsh/utils.zsh --source_only
-source $DOTFILES/zsh/aliases.zsh --source_only
-# source $DOTFILES/zsh/mode --source_only
+# source $HOME/zsh/init_tasks --source_only
+source $HOME/zsh/utils.zsh --source_only
+source $HOME/zsh/aliases.zsh --source_only
+# source $HOME/zsh/mode --source_only
 
 # remove duplicates in $PATH
 typeset -aU path
