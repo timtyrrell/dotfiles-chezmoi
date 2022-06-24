@@ -2199,6 +2199,11 @@ augroup randomstuff
   autocmd BufNewFile,BufRead *.build,.env* set filetype=sh
   autocmd BufNewFile,BufRead *.template set filetype=nginx
 
+  "chezmoi filetype fixes
+  autocmd BufNewFile,BufRead dot_gitconfig,dot_gitconfig.local set filetype=gitconfig
+  autocmd BufNewFile,BufRead dot_zshrc set filetype=zsh
+  autocmd BufNewFile,BufRead dot_tmux.conf set filetype=tmux
+
   " per reddit, Vim doesn't have an autocommand for graphql files, not sure if needed?
   autocmd BufRead,BufNewFile *.graphql,*.graphqls,*.gql setfiletype graphql
 
