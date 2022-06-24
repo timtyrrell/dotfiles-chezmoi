@@ -1,0 +1,21 @@
+--max-columns=150
+--max-columns-preview
+
+--type-add
+web:*.{ts,tsx,js,jsx}
+
+--type-add
+test:*{e2e,mocks,__tests__,_spec,__test__,test}.{ts,tsx,js,jsx}
+
+--glob=!.git/*
+--glob=!node_modules/*
+--glob=!.next/*
+--glob=!vendor/*
+--glob=!.sync
+
+--smart-case
+
+# skip .gitignore files even if not using :GitFiles search
+--hidden
+
+--follow

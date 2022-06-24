@@ -1,0 +1,156 @@
+[alias]
+	aa = add -A .
+	b  = branch
+	st = status
+	ci = commit
+	co = checkout
+	cob = "!f() { git checkout $(git show-ref --verify --quiet refs/heads/\"$1\" || echo '-b') \"$1\"; }; f"
+	cp = cherry-pick
+	put = push origin HEAD
+	fixup = commit --fixup
+	squash = commit --squash
+	ri = rebase --interactive
+	br = branch
+	open = browse
+	pruneremote = remote prune origin
+	lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --graph
+	ll = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --first-parent --no-merges
+	add-untracked = !"git status --porcelain | awk '/\\?\\?/{ print $2 }' | xargs git add"
+	reset-authors = commit --amend --reset-author -CHEAD
+	rmbranch = !"git branch -d $(git branch --merged)"
+	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+	pushf = push --force-with-lease
+	pushforeal = push --force
+	append = commit --amend -C HEAD
+	amend = commit --amend
+	pnb = push -u origin HEAD
+	lart = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
+	sha = rev-parse HEAD
+	releases = for-each-ref --sort=authordate --format=\"%(color:white)%(color:bold)%(refname:lstrip=-2)%09%(color:blue)%(authordate:relative)%09%(color:red)%(authorname)\" refs/remotes/origin/release
+	conflicted = !nvim +Conflicted
+	quickdiff = diff ':!package-lock.json'
+	diffs = diff --staged
+	last = log -1 HEAD --stat
+	cm = commit -m
+	rv = remote -v
+	d = diff
+	se = !git rev-list --all | xargs git grep -F
+	up = pull --rebase origin
+	recent-branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+	recent-local-branches = !"git reflog | grep 'checkout:' | head | awk '{print $8}' | awk '!x[$0]++'"
+	clone-for-worktrees = "!sh $HOME/bin/git-clone-bare-for-worktrees.sh"
+[branch]
+	autoSetupMerge = always
+	autoSetupRebase = always
+[color]
+	ui = true
+[color "branch"]
+	current = green
+	local = normal
+	remote = red
+	plain = normal
+[color "status"]
+	branch = green
+	header = normal dim
+	added = red
+	updated = blue
+	changed = red
+	untracked = yellow
+	nobranch = red
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = 11
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[core]
+	editor = nvim
+	whitespace = warn
+	excludesFile = ~/.gitignore
+	pager = delta
+	ignorecase = true
+[diff]
+	algorithm = patience
+	compactionHeuristic = true
+	colorMoved = default
+	tool = vimdiff
+[delta]
+	commit-decoration-style = bold yellow box ul
+	file-style = bold yellow ul
+	hunk-header-decoration-style = yellow box
+	line-numbers = true
+	; minus-color = normal "#340001"
+	; plus-color = syntax "#012800"
+	whitespace-error-style = 22 reverse
+[fetch]
+	prune = true
+	pruneTags = true
+[help]
+	autoCorrect = prompt
+[include]
+	path = ~/.gitconfig.local
+[init]
+	defaultBranch = main
+[interactive]
+	singlekey = true
+	diffFilter = delta --color-only
+[merge]
+	conflictstyle = zdiff3
+	summary = true
+	tool = diffconflicts
+[merge "bundlelock"]
+	name = lock Gemfile
+	driver = bundle install
+[merge "bundle"]
+	name = bundle
+	driver = bundle
+[pull]
+	rebase = true
+[push]
+	default = simple
+	followTags = true
+[rebase]
+	autosquash = true
+	autostash = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[user]
+	useconfigonly = true
+	name = Tim Tyrrell
+	email = tim@tyrrell.io
+[web]
+	browser = chromium
+[commit]
+	verbose = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[checkout]
+	defaultRemote = origin
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	defaultKeyCommand = ssh-add -L
+[blame]
+	markUnblamableLines = true
+	markIgnoredLines = true
+[mergetool]
+	keepBackup = false
+[mergetool "fugitive"]
+	cmd = nvim -c \"Git\" \"mergetool\"
+[mergetool "diffconflicts"]
+	cmd = nvim -c DiffConflicts \"$MERGED\" \"$BASE\" \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true
+[mergetool "vimdiff1"]
+	hideResolved = true
+[worktree]
+	guessRemote = true
