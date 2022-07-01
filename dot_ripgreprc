@@ -12,6 +12,8 @@ test:*{e2e,mocks,__tests__,_spec,__test__,test}.{ts,tsx,js,jsx}
 --glob=!.next/*
 --glob=!vendor/*
 --glob=!.sync
+--glob=!Gemfile.lock
+--glob=!npm-debug.log
 
 --smart-case
 

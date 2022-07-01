@@ -90,7 +90,7 @@
 	whitespace-error-style = 22 reverse
 [fetch]
 	prune = true
-	pruneTags = true
+	; pruneTags = true
 [help]
 	autoCorrect = prompt
 [include]

@@ -10,7 +10,7 @@ url=$1
 basename=${url##*/}
 # name=${2:-${basename%.*}} # no need to rename
 name=${basename%.*}
-default_branch=${2:-master}
+default_branch=${2:-main}
 
 mkdir $name
 cd "$name"
@@ -24,8 +24,8 @@ cd "$name"
 # new-awesome-feature
 # hotfix-bug-12
 # ...
-# git clone --bare "$url" .bare
-# echo "gitdir: ./.bare" > .git
+git clone --bare "$url" .bare
+echo "gitdir: ./.bare" > .git
 
 # Explicitly sets the remote origin fetch so we can fetch remote branches
 git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
@@ -38,6 +38,3 @@ git branch --set-upstream-to=origin/${default_branch} ${default_branch}
 
 # add default branch worktree
 git worktree add $default_branch
-echo $default_branch
-
-echo "run"

@@ -1,15 +1,39 @@
-# git worktree existing branch
-gwa() {
-  # git worktree add main
+# git worktree from HEAD
+gw_add_head() {
+  # git worktree add branch-name
+  git worktree add $1
 }
 
-# git worktree new branch
-gwab() {
-  # git worktree add -b branch-name folder-name
+# git worktree new branch from other branch
+gw_add_branch() {
+  # git worktree add -b "$name" "$worktree_path" "$(_git_branch_default)";;
+  # git worktree add -b <new_branch> <directory> [SHA1|tag|branch]
+  git worktree add -b $1 ../$2
 }
 
-# add worktree based on a branch
-# $ git worktree add worktree-name branch-name
+# add worktree of existing remote branch
+gw_add_remote() {
+  # git worktree add -b feature-tagger ../tagger origin/feature/tagger # WORKED
+
+  # git worktree add -b "$name" "$worktree_path" origin/"$name";;
+  # git worktree add <directory> <branch>
+  git worktree add -b ../$1 $2
+  git branch --set-upstream-to=origin/$1 $1
+}
+
+gw_add_track() {
+  # git worktree add -b <branch-name> <PATH> <remote>/<branch-name>
+  # git worktree add -b feature-zzz ../feature-x origin/feature-zzz
+}
+
+gw_remove() {
+  git worktree remove $1
+}
+
+gw_fuzzy_add() {
+  branch = $(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | fzf-tmux -p 90%,90%)
+  gw_add_remote $branch
+}
 
 notify() {
   if [ -z $1 ]; then
@@ -49,15 +73,6 @@ fif() {
 
 gcr() {
   git checkout -b $1 origin/$1
-}
-
-# do instead? https://github.com/tpope/vim-rhubarb/commit/964d48f
-git() {
-  if command -v hub >/dev/null; then
-    command hub "$@"
-  else
-    command git "$@"
-  fi
 }
 
 tree-git-ignore() {

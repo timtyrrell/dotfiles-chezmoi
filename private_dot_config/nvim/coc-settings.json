@@ -193,5 +193,8 @@
   "coc.preferences.rootPatterns": [
     ".git"
   ],
-  "coc.preferences.enableMessageDialog": true
+  "importCost.debug": true,
+  "coc.preferences.enableMessageDialog": true,
+  "solargraph.autoformat": true,
+  "solargraph.formatting": true
 }

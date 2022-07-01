@@ -1,0 +1,14 @@
+# == Blocks ==
+# This specifies the columns and their order when using the long and the tree
+# layout.
+# Possible values: permission, user, group, size, size_value, date, name, inode
+blocks:
+  - permission
+  - size
+  - date
+  - name
+
+# == Ignore Globs ==
+# A list of globs to ignore when listing.
+# ignore-globs:
+#   - .git

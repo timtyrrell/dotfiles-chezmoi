@@ -116,9 +116,11 @@ nnoremap <leader>> V`]>
 " reselect pasted text. gv, reselects the last visual selection
 nnoremap gp `[v`]
 
-" scroll through time instead of space TODO (find non-mouse combo)
-" map <ScrollWheelUp> :later 10m<CR>
+" scroll through time instead of space
+" map <ScrollWheelUp>   :later 10m<CR>
 " map <ScrollWheelDown> :earlier 10m<CR>
+nnoremap <Up>   :later 10m<CR>
+nnoremap <Down> :earlier 10m<CR>
 
 " Don't lose selection when shifting sidewards
 "*** seems to remove the ability to '.' ***
@@ -725,18 +727,17 @@ augroup tmuxgroups
 augroup END
 Plug 'tmux-plugins/vim-tmux'
 " https://github.com/nvim-treesitter/nvim-treesitter/issues/1019#issuecomment-812976740
-" let g:polyglot_disabled = [
-"         \ 'bash', 'comment', 'css', 'graphql',
-"         \ 'html', 'javascript', 'javascriptreact', 'jsdoc', 'json',
-"         \ 'jsonc', 'jsx', 'lua', 'python', 'regex', 'rspec', 'ruby',
-"         \ 'sh', 'svg', 'tmux', 'tsx', 'typescript', 'typescriptreact', 'yaml']
-Plug 'tpope/vim-sensible'
-" Plug 'sheerun/vim-polyglot'
-" " Plug 'sheerun/vim-polyglot', { 'commit': '2c5af8f' }
+let g:polyglot_disabled = [
+        \ 'bash', 'comment', 'css', 'graphql',
+        \ 'html', 'javascript', 'javascriptreact', 'jsdoc', 'json',
+        \ 'jsonc', 'jsx', 'lua', 'python', 'regex', 'rspec', 'ruby',
+        \ 'sh', 'svg', 'tmux', 'tsx', 'typescript', 'typescriptreact', 'yaml']
+" Plug 'tpope/vim-sensible'
+Plug 'sheerun/vim-polyglot'
 " let g:polyglot_disabled = ['sensible']
-" let g:polyglot_disabled = ['ftdetect']
-" let g:polyglot_disabled = ['autoindent']
-" let g:markdown_fenced_languages = ['ruby', 'vim']
+let g:polyglot_disabled = ['ftdetect']
+let g:polyglot_disabled = ['autoindent']
+let g:markdown_fenced_languages = ['ruby', 'vim']
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 let g:shfmt_fmt_on_save = 1
 
@@ -1051,7 +1052,8 @@ vnoremap <Leader>GB :GBrowse!<CR>
 nnoremap <Leader>GB :.GBrowse!<CR>
 
 " open project
-nnoremap <Leader>go <cmd>GBrowse main<cr>
+nnoremap <Leader>go <cmd>GBrowse master<cr>
+" nnoremap <Leader>go <cmd>GBrowse main<cr>
 
 " Add <cfile> to index and save
 nnoremap <silent><Leader>gw <cmd>Gwrite<CR>
@@ -1135,7 +1137,8 @@ set fillchars+=diff:╱
 Plug 'sindrets/diffview.nvim'
 nmap <leader>dvo :DiffviewOpen<cr>
 nmap <leader>dvp :DiffviewOpen HEAD~1<cr>
-nmap <leader>dvm :DiffviewOpen origin/main...HEAD<cr>
+" nmap <leader>dvm :DiffviewOpen origin/main...HEAD<cr>
+nmap <leader>dvm :DiffviewOpen origin/master...HEAD<cr>
 nmap <leader>dvf :DiffviewFileHistory %<cr>
 nmap <leader>dvh :DiffviewFileHistory --range=origin..HEAD<cr>
 
@@ -1317,11 +1320,11 @@ let g:browser_search_engines = {
 
 Plug 'airblade/vim-rooter'
 " add git worktree to excludes
-let g:rooter_patterns = ['!.git/worktrees', '.git', 'Makefile']
+let g:rooter_patterns = ['!.bare', 'Gemfile', '.git', 'Makefile']
 " trigger by symlinks, also
 let g:rooter_resolve_links = 1
 " to stop echo on change **KEEP ON**, echoes filename to cmdline
-let g:rooter_silent_chdir = 1
+" let g:rooter_silent_chdir = 1
 
 Plug 'dstein64/vim-startuptime'
 " gf to go deeper
@@ -1350,7 +1353,7 @@ nmap <leader>ms <Plug>MarkdownPreviewStop
 " markdown preview in nvim popup
 Plug 'ellisonleao/glow.nvim', {'branch': 'main', 'for': 'markdown'}
 nmap <leader>mv :Glow<CR>
-let g:glow_binary_path = $HOME . '/bin'
+let g:glow_binary_path = '/opt/homebrew/bin/glow'
 let g:glow_border = 'rounded'
 let g:glow_width = 120
 " q to quit, :Glow for current filepath
@@ -1438,7 +1441,7 @@ noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
 
 augroup lazy_load_wilder
   autocmd!
-  autocmd CmdlineEnter * ++once call s:wilder_init()
+  autocmd CmdlineEnter * ++once call s:wilder_init() | call wilder#main#start()
 augroup END
 
 function! s:wilder_init() abort
@@ -1641,10 +1644,10 @@ require("diffview").setup {
 }
 
 require('package-info').setup({
-  package_manager = 'npm'
+  package_manager = 'yarn'
 })
 -- Show package versions
-vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show()<CR>", { silent = true, noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show()<CR>", { silent = false, noremap = true })
 -- Hide package versions
 vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
 -- Update package on line
@@ -1820,6 +1823,7 @@ require('leap').setup {
 
 require'marks'.setup {
   default_mappings = false,
+  highlight_unlabeled = true,
   mappings = {
     set = "m",
     set_next = "m,",
@@ -3195,9 +3199,9 @@ nnoremap <silent> <Leader>fT <cmd>lua require('telescope').extensions.tele_tabby
 
 nnoremap <silent> <Leader>fp :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
-nnoremap <silent> <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-" nnoremap <silent> <Leader>fb :Buffers<CR>
-" let g:fzf_buffers_jump = 1
+" nnoremap <silent> <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <silent> <Leader>fb :Buffers<CR>
+let g:fzf_buffers_jump = 1
 
 " Lines in the current buffer
 nnoremap <silent><leader>fB <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>

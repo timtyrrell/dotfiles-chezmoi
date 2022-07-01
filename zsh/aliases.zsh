@@ -28,7 +28,7 @@ alias tmn='tmux new -s'
 alias tma='tmux attach -t'
 alias tms='tmux switch-client -t'
 alias tmls='tmux ls'
-alias tag='ta ~/code/invitae'
+alias tag='ta ~/code/brandfolder'
 alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
 # alias tkill=tmux display-popup -E "for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
 
@@ -45,11 +45,14 @@ alias kc="kubecolor"
 alias kns='kubens'
 
 # chezmoi
-alias chezd="chezmoi diff"
-alias chezp="chezmoi -v apply"
-alias cheza="chezmoi add"
-alias chezr="chezmoi remove"
-alias chezu="chezmoi unmanaged"
+alias chez_diff="chezmoi diff"
+alias chez_apply="chezmoi -v apply"
+alias chez_add="chezmoi add"
+alias chez_remove="chezmoi remove"
+alias chez_unmanaged="chezmoi unmanaged"
+
+#worktrees
+alias gw="git worktree"
 
 # kitty ssh: skitty hostname
 # to copy files on connect, edit: ~/.config/kitty/ssh.conf

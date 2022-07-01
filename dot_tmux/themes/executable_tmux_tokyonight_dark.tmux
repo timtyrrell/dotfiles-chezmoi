@@ -39,7 +39,9 @@ set -g status-left "#[fg=${black},bg=${blue},bold] #S #[fg=${blue},bg=${bg_dark}
 # spotify_track="♫ #{music_status} #{artist}: #{track} |"
 # set -g status-right '#{?#{spotify_playing},♫ #{music_status} #{artist}: #{track} |,""} #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
 # set -g status-right '#{?#{spotify_playing},#{spotify_track},} #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
-set -g status-right '♫ #{music_status} #{artist}: #{track} | #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
+# set -g status-right '♫ #{music_status} #{artist}: #{track} | #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
+# set -g status-right '#{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
+set -g status-right ''
 
 # #{?COND,A,B}
 # set -g status-right '#{?#{track},♫ #{music_status} #{artist}: #{track} |, hi}'
