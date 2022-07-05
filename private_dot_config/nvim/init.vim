@@ -579,6 +579,7 @@ let g:codi#aliases = {
   \ 'typescriptreact': 'typescript',
   \ }
 
+" alternative: https://github.com/akinsho/toggleterm.nvim, :ToggleTermSendCurrentLine, etc
 Plug 'preservim/vimux'
 let g:VimuxUseNearest = 1
 let g:VimuxOrientation = "v"
@@ -788,24 +789,18 @@ nnoremap <space><bs> :AckWindow! <C-R><C-W><CR>
 let g:loaded_matchit = 1
 Plug 'andymass/vim-matchup'
 let g:matchup_matchparen_offscreen = {'method': 'popup'}
-" ---------------------------------------------~
-"  LHS   RHS                   Mode   Module
-" -----------------------------------------------~
-"  %     |<plug>(matchup-%)|     nx     motion   - go forwards to its next matching word
-"  g%    |<plug>(matchup-g%)|    nx     motion   - go backwards to [count]th previous matching word
-"  [%    |<plug>(matchup-[%)|    nx     motion   - Go to [count]th previous outer open word
-"  ]%    |<plug>(matchup-]%)|    nx     motion   - Go to [count]th next outer close word
-"  z%    |<plug>(matchup-z%)|    nx     motion   - Go to inside [count]th nearest block
-"  a%    |<plug>(matchup-a%)|    x      text_obj - Select an |any-block|
-"  i%    |<plug>(matchup-i%)|    x      text_obj - Select the inside of an |any-block|
-"  ds%   |<plug>(matchup-ds%)|   n      surround - Delete {count}th surrounding matching words
-"  cs%   |<plug>(matchup-cs%)|   n      surround - Change {count}th surrounding matching words
+let g:matchup_text_obj_enabled = 0
 
 " tab to exit enclosing character
 Plug 'abecodes/tabout.nvim'
 
+" highlight f/F/t/T and more
+Plug 'rhysd/clever-f.vim'
+let g:clever_f_mark_char_color="CleverFCustom"
+let g:clever_f_across_no_line = 1
+map ; <Plug>(clever-f-repeat-forward)
+
 " s 2char (nvim sneak)
-" `s{char}<enter>` is the same as `f{char}`, but works over multiple lines.
 Plug 'ggandor/leap.nvim'
 
 Plug 'drmingdrmer/vim-toggle-quickfix'
@@ -908,6 +903,17 @@ Plug 'tpope/vim-unimpaired'
 
 Plug 'tpope/vim-speeddating'
 " increment/decrement dates <C-A>/<C-X>
+
+Plug 'AndrewRadev/dsf.vim'
+let g:dsf_no_mappings = 1
+nmap dsf <Plug>DsfDelete
+nmap csf <Plug>DsfChange
+nmap dsnf <Plug>DsfNextDelete
+nmap csnf <Plug>DsfNextChange
+" omap af <Plug>DsfTextObjectA
+" xmap af <Plug>DsfTextObjectA
+" omap if <Plug>DsfTextObjectI
+" xmap if <Plug>DsfTextObjectI
 
 " try https://github.com/wellle/targets.vim ?
 " https://github.com/kana/vim-textobj-user/wiki
@@ -2387,6 +2393,7 @@ command! PlugHelp call fzf#run(fzf#wrap({ 'source': sort(keys(g:plugs)), 'sink':
 " https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
 function! MyHighlights() abort
   if g:colors_name ==# 'tokyonight'
+    hi CleverFCustom cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
     hi default link CocHighlightText TabLineSel
     hi IncSearch guifg=#292e42 guibg=#bb9af7
     hi CocUnderline gui=undercurl term=undercurl
@@ -3302,6 +3309,9 @@ command! -bang -nargs=* HistorySearch call fzf#vim#search_history(fzf#vim#with_p
 " Ag PATTERN DIR
 command! -bang -nargs=+ -complete=dir AgDir call fzf#vim#ag_raw(<q-args>, <bang>0)
 
+" :Rag foo ~/my-project, or :Rag "foo bar" ~/my-project
+command! -bang -nargs=+ -complete=dir Rag call fzf#vim#ag_raw(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+
 " whole word search
 command! -bang -nargs=* AgWord call fzf#vim#ag(<q-args>, '--word-regexp', <bang>0)
 
@@ -3383,15 +3393,15 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 " autocmd FileType fzf call s:FzfFileType()
 " Switch from any fzf mode to :Files on the fly and transfer the search query.
 function! s:FzfFallback()
-    if &filetype != 'FZF'
-        return
-    endif
-    " Extract from first space to cursor position of previous fzf buffer prompt
-    let query = getline('.')[stridx(getline('.'), ' ') : col('.') - 1]
-    echo query
-    close
-    sleep 1m
-    call fzf#vim#files('.', {'options': ['-q', query]})
+  if &filetype != 'FZF'
+    return
+  endif
+  " Extract from first space to cursor position of previous fzf buffer prompt
+  let query = getline('.')[stridx(getline('.'), ' ') : col('.') - 1]
+  echo query
+  close
+  sleep 1m
+  call fzf#vim#files('.', {'options': ['-q', query]})
 endfunction
 tnoremap <c-space> <c-\><c-n>c:call <sid>FzfFallback()<cr>
 
