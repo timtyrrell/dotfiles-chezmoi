@@ -727,16 +727,16 @@ augroup tmuxgroups
   autocmd BufWritePost .tmux.conf execute ':!tmux source-file %'
 augroup END
 Plug 'tmux-plugins/vim-tmux'
+Plug 'gpanders/editorconfig.nvim'
 " https://github.com/nvim-treesitter/nvim-treesitter/issues/1019#issuecomment-812976740
 let g:polyglot_disabled = [
         \ 'bash', 'comment', 'css', 'graphql',
         \ 'html', 'javascript', 'javascriptreact', 'jsdoc', 'json',
         \ 'jsonc', 'jsx', 'lua', 'python', 'regex', 'rspec', 'ruby',
         \ 'sh', 'svg', 'tmux', 'tsx', 'typescript', 'typescriptreact', 'yaml']
-" Plug 'tpope/vim-sensible'
 Plug 'sheerun/vim-polyglot'
 " let g:polyglot_disabled = ['sensible']
-let g:polyglot_disabled = ['ftdetect']
+" let g:polyglot_disabled = ['ftdetect']
 let g:polyglot_disabled = ['autoindent']
 let g:markdown_fenced_languages = ['ruby', 'vim']
 Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }

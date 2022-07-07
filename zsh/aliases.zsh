@@ -9,6 +9,8 @@ alias rd='rmdir'
 alias tree='tree-git-ignore'
 alias cl='clear'
 
+alias cat='bat'
+
 #vim
 alias vi='nvim'
 alias vim='nvim'

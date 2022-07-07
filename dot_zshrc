@@ -192,7 +192,8 @@ unset DELTA_PAGER
 export PAGER='less'
 export EDITOR='nvim -u NORC'
 export VISUAL='nvim -u NORC'
-export MANPAGER='nvim +Man!'
+# export MANPAGER='nvim +Man!'
+export MANPAGER='nvim --clean +Man!'
 # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANWIDTH=999
 
