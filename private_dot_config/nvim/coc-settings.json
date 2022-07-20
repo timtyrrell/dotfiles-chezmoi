@@ -36,6 +36,9 @@
   "cssmodules.camelCase": true,
   "cssmodules.hintName": "cssmodule",
   "prettier.requireConfig": true,
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
   "eslint.autoFixOnSave": true,
   "eslint.validate": [
     "javascript",
@@ -51,11 +54,10 @@
   ],
   "coc.preferences.formatOnSaveFiletypes": [
     "json",
-    "javascript",
-    "javascriptreact",
     "typescript",
     "typescriptreact",
     "vimwiki",
+    "markdown",
     "sass"
   ],
   "semanticTokens.filetypes": ["*"],
@@ -114,13 +116,17 @@
     "html",
     "handlebars",
     "htmldjango",
-    "blade"
+    "slim",
+    "eruby"
   ],
-  "javascript.preferences.quoteStyle": "double",
+  "html.format.templating": true,
+  "javascript.format.enabled": false,
+  "typescript.format.enabled": false,
+  "javascript.preferences.quoteStyle": "single",
   "javascript.suggestionActions.enabled": false,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-  "typescript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "single",
   "javascript.preferences.importModuleSpecifier": "shortest",
   "typescript.preferences.importModuleSpecifier": "shortest",
   "javascript.inlayHints.parameterNames.enabled": "none",

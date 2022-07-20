@@ -1,23 +1,19 @@
 # git worktree from HEAD
-gw_add_head() {
+gw_add() {
   # git worktree add branch-name
   git worktree add $1
 }
 
 # git worktree new branch from other branch
 gw_add_branch() {
-  # git worktree add -b "$name" "$worktree_path" "$(_git_branch_default)";;
   # git worktree add -b <new_branch> <directory> [SHA1|tag|branch]
   git worktree add -b $1 ../$2
 }
 
 # add worktree of existing remote branch
 gw_add_remote() {
-  # git worktree add -b feature-tagger ../tagger origin/feature/tagger # WORKED
-
-  # git worktree add -b "$name" "$worktree_path" origin/"$name";;
   # git worktree add <directory> <branch>
-  git worktree add -b ../$1 $2
+  git worktree add ../$1 $2
   git branch --set-upstream-to=origin/$1 $1
 }
 
@@ -30,7 +26,7 @@ gw_remove() {
   git worktree remove $1
 }
 
-gw_fuzzy_add() {
+gw_fuzzy_remote() {
   branch = $(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | fzf-tmux -p 90%,90%)
   gw_add_remote $branch
 }

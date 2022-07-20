@@ -11,6 +11,9 @@ alias cl='clear'
 
 alias cat='bat'
 
+# copy the last zsh command to clipboard
+alias clc='echo !! | pbcopy'
+
 #vim
 alias vi='nvim'
 alias vim='nvim'
@@ -33,6 +36,11 @@ alias tmls='tmux ls'
 alias tag='ta ~/code/brandfolder'
 alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
 # alias tkill=tmux display-popup -E "for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
+
+# rails
+alias be="bundle exec"
+alias rs='bundle exec rails s'
+alias rc='bundle exec rails c'
 
 # docker
 alias dc='docker-compose'
@@ -158,7 +166,6 @@ alias tmux_plugins_update="~/.tmux/plugins/tpm/bin/update_plugins all"
 alias tmux_plugins_clean="~/.tmux/plugins/tpm/bin/clean_plugins"
 
 # random alias
-alias be="bundle exec"
 alias nvm="fnm"
 alias strat="start"
 alias ns="npm start"

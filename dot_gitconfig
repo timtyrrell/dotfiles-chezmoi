@@ -75,6 +75,7 @@
 	excludesFile = ~/.gitignore
 	pager = delta
 	ignorecase = true
+	fsmonitor = true
 [diff]
 	algorithm = patience
 	compactionHeuristic = true

@@ -56,8 +56,8 @@ bindkey '^ '      forward-char
 bindkey '^n'      forward-word
 bindkey '^p'      backward-word
 
-# remove normal/insert mode switch delay
-export KEYTIMEOUT=5
+# remove normal/insert mode switch delay, 10ms for key sequences
+export KEYTIMEOUT=1
 
 # ci", ci', ci`, di", etc
 autoload -U select-quoted
@@ -205,6 +205,7 @@ export FZF_TMUX_OPTS="-p -w 90% -h 60%"
 export FZF_TMUX_POP_UP_OPTS="-p 90%,90%"
 
 # default fzf
+export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
 export FZF_DEFAULT_COMMAND='rg --files'
 # files
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules'"

@@ -12,3 +12,5 @@ blocks:
 # A list of globs to ignore when listing.
 # ignore-globs:
 #   - .git
+
+display: all

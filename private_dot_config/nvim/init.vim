@@ -116,6 +116,34 @@ nnoremap <leader>> V`]>
 " reselect pasted text. gv, reselects the last visual selection
 nnoremap gp `[v`]
 
+" yank-paste -> paste the last yank
+nnoremap yp "0p
+nnoremap yP "0P
+
+lua << EOF
+  -- use black hole register when deleting empty line
+  local function smart_dd()
+    if vim.api.nvim_get_current_line():match("^%s*$") then
+      return "\"_dd"
+    else
+      return "dd"
+    end
+  end
+  vim.keymap.set( "n", "dd", smart_dd, { noremap = true, expr = true } )
+
+  -- deleting empty lines in visual mode
+  local function smart_d()
+    local l, c = unpack(vim.api.nvim_win_get_cursor(0))
+    for _, line in ipairs(vim.api.nvim_buf_get_lines(0, l - 1, l, true)) do
+      if line:match("^%s*$") then
+        return "\"_d"
+      end
+    end
+    return "d"
+  end
+  vim.keymap.set("v", "d", smart_d, { noremap = true, expr = true } )
+EOF
+
 " scroll through time instead of space
 " map <ScrollWheelUp>   :later 10m<CR>
 " map <ScrollWheelDown> :earlier 10m<CR>
@@ -249,6 +277,9 @@ augroup cmd_msg_cls
   autocmd CmdlineLeave : call timer_start(10000, funcref('s:empty_message'))
 augroup END
 
+" remove delay hitting ESC to cancel, etc
+set timeoutlen=1000 ttimeoutlen=0
+
 " hide line showing switch in insert/normal mode
 set noshowmode
 set noruler
@@ -269,10 +300,6 @@ set breakindentopt=shift:2
 " also recording jump points for movements larger than five lines
 nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
 nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
-
-" use neovim nightly filetype detection
-let g:do_filetype_lua = 1
-let g:did_load_filetypes = 0
 
 augroup numbertoggle
   autocmd!
@@ -302,6 +329,9 @@ nnoremap - <C-x>
 
 " dot repetition over visual line selections.
 xnoremap . :norm.<CR>
+
+" executes the last recorded macro
+nnoremap Q @q
 
 " run macro over visual lines (using qq to record)
 xnoremap Q :'<,'>:normal @q<CR>
@@ -653,6 +683,7 @@ let g:db_ui_force_echo_notifications = 1
 
 " testing
 Plug 'vim-test/vim-test'
+Plug 'tpope/vim-dispatch'
 
 " debugging
 Plug 'mfussenegger/nvim-dap'
@@ -795,9 +826,10 @@ let g:matchup_text_obj_enabled = 0
 Plug 'abecodes/tabout.nvim'
 
 " highlight f/F/t/T and more
-Plug 'rhysd/clever-f.vim'
 let g:clever_f_mark_char_color="CleverFCustom"
+Plug 'rhysd/clever-f.vim'
 let g:clever_f_across_no_line = 1
+let g:clever_f_mark_direct = 1
 map ; <Plug>(clever-f-repeat-forward)
 
 " s 2char (nvim sneak)
@@ -918,6 +950,10 @@ nmap csnf <Plug>DsfNextChange
 " try https://github.com/wellle/targets.vim ?
 " https://github.com/kana/vim-textobj-user/wiki
 Plug 'kana/vim-textobj-user'
+
+Plug 'beloglazov/vim-textobj-quotes'
+" iq or aq - ', ", or ` quotes that currently surround the cursor, are in front of the cursor, or behind (in that order of preference)
+
 Plug 'kana/vim-textobj-line', { 'on': ['<Plug>(textobj-line-i', '<Plug>(textobj-line-a']}
 xmap al <Plug>(textobj-line-a)
 omap al <Plug>(textobj-line-a)
@@ -1357,7 +1393,7 @@ nmap <leader>mp <Plug>MarkdownPreview
 nmap <leader>ms <Plug>MarkdownPreviewStop
 
 " markdown preview in nvim popup
-Plug 'ellisonleao/glow.nvim', {'branch': 'main', 'for': 'markdown'}
+Plug 'ellisonleao/glow.nvim', {'for': 'markdown'}
 nmap <leader>mv :Glow<CR>
 let g:glow_binary_path = '/opt/homebrew/bin/glow'
 let g:glow_border = 'rounded'
@@ -1440,10 +1476,13 @@ map <Leader><space> :nohl<cr>
 " do not jump from item on * search
 nnoremap * *``<Cmd>lua require('hlslens').start()<CR>
 nnoremap * m`:keepjumps normal! *``<cr><Cmd>lua require('hlslens').start()<CR>
-noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
+
+noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'nzz')<CR>
             \<Cmd>lua require('hlslens').start()<CR>
-noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
+            \<Cmd>Beacon<CR>
+noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'Nzz')<CR>
             \<Cmd>lua require('hlslens').start()<CR>
+            \<Cmd>Beacon<CR>
 
 augroup lazy_load_wilder
   autocmd!
@@ -1548,7 +1587,23 @@ require('cinnamon').setup({
   always_scroll = true,
 })
 require('regexplainer').setup {}
+
 require('harpoon').setup {}
+-- autocmd for opening file in vsplit:
+local group = vim.api.nvim_create_augroup("Harpoon Augroup", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "harpoon",
+    group = group,
+    callback = function()
+        vim.keymap.set("n", "<C-V>", function()
+            local curline = vim.api.nvim_get_current_line()
+            local working_directory = vim.fn.getcwd() .. "/"
+            vim.cmd("vs")
+            vim.cmd("e " .. working_directory .. curline)
+        end, { noremap = true, silent = true })
+    end,
+})
+
 require('tabout').setup {}
 require('nvim-web-devicons').setup {}
 require('which-key').setup {}
@@ -1685,7 +1740,8 @@ require('auto-session').setup {
   auto_save_enabled = true,
   auto_restore_enabled = true,
   auto_session_use_git_branch = true,
-  auto_session_suppress_dirs = {'~/', '~/code'},
+  auto_session_suppress_dirs = {'~/', '~/code', '~/code/timtyrrell', '~/code/brandfolder'},
+  -- auto_session_allow_dirs = {'~/code/*', '~/.local/share/chezmoi'},
   pre_save_cmds = {"lua require'nvim-tree'.setup()", "tabdo NvimTreeClose", "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*"}
 }
 
@@ -2107,8 +2163,8 @@ require('numb').setup {
 }
 
 require('nvim-treesitter.configs').setup {
-  ensure_installed = "all",
-  -- ensure_installed = { "bash", "comment", "css", "graphql", "html", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
+  auto_install = true,
+  ensure_installed = { "bash", "comment", "css", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
   ignore_install = { "phpdoc" },
   highlight = {
     enable = true,
@@ -2394,6 +2450,7 @@ command! PlugHelp call fzf#run(fzf#wrap({ 'source': sort(keys(g:plugs)), 'sink':
 function! MyHighlights() abort
   if g:colors_name ==# 'tokyonight'
     hi CleverFCustom cterm=nocombine ctermfg=0 ctermbg=9 gui=nocombine guifg=Black guibg=#ccff88
+    hi CleverFDefaultLabel cterm=nocombine ctermfg=0 ctermbg=9 gui=bold guifg=#ffff60
     hi default link CocHighlightText TabLineSel
     hi IncSearch guifg=#292e42 guibg=#bb9af7
     hi CocUnderline gui=undercurl term=undercurl
@@ -3203,12 +3260,16 @@ nnoremap <silent> <Leader>fF :Files<space>
 " nmap <c-a-p> :cd ~/projects<cr>:Files<cr> " airblade/vim-rooter sets the current path and this switches to a new project
 
 nnoremap <silent> <Leader>fT <cmd>lua require('telescope').extensions.tele_tabby.list()<CR>
+" nnoremap <silent> <Leader>fT <cmd>Windows<CR>
 
 nnoremap <silent> <Leader>fp :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
 " nnoremap <silent> <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <silent> <Leader>fb :Buffers<CR>
 let g:fzf_buffers_jump = 1
+
+" select buffers to delete/close
+nnoremap <silent> <leader>bd :BD<CR>
 
 " Lines in the current buffer
 nnoremap <silent><leader>fB <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>
@@ -3252,8 +3313,6 @@ nnoremap <silent> <leader>fM <cmd>lua require('telescope.builtin').keymaps()<cr>
 nnoremap <silent> <leader>fs <cmd>lua require('telescope.builtin').spell_suggest()<cr>
 
 nnoremap <silent> <leader>fr <cmd>lua require('telescope.builtin').resume()<cr>
-
-nnoremap <silent> <leader>bd :BD<CR>
 
 " start file search in current dir
 " nnoremap <silent> <leader>fd <cmd>lua require('telescope.builtin')
