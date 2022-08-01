@@ -138,11 +138,11 @@ fstash() {
   done
 }
 
-# fgst - pick files from `git status -s`
 is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
 
+# fgst - pick files from `git status -s`
 fgst() {
   is_in_git_repo || return
 
@@ -370,17 +370,13 @@ pods() {
         --bind 'ctrl-/:change-preview-window(80%,border-bottom|hidden|)' \
         --bind 'enter:execute:kubectl exec -it --namespace {1} {2} -- bash > /dev/tty' \
         --bind 'ctrl-o:execute:${EDITOR:-vim} <(kubectl logs --all-containers --namespace {1} {2}) > /dev/tty' \
-        --bind 'ctrl-r:reload:$FZF_DEFAULT_COMMAND' \
+        --bind 'ctrl-r:reload:(eval "$FZF_DEFAULT_COMMAND")' \
         --preview-window up:follow \
         --preview 'kubectl logs --follow --all-containers --tail=10000 --namespace {1} {2}' "$@"
 }
 
 ###################################
 # https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
-is_in_git_repo() {
-  git rev-parse HEAD > /dev/null 2>&1
-}
-
 fzf-tmux-popup() {
   fzf-tmux -p 90%,90% --border --bind ctrl-/:toggle-preview "$@"
 }

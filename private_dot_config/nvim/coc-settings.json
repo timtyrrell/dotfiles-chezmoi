@@ -77,6 +77,7 @@
   "coc.source.emoji.filetypes": [
     "markdown", "jsonc"
   ],
+  "coc.source.file.trimSameExts": [".ts", ".js", ".tst", ".jsx"],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.floatConfig": {
     "border": true,
@@ -148,12 +149,10 @@
     "typescript": ["javascript"],
     "typescriptreact": ["typescript"]
   },
-  "suggest.enablePreselect": false,
-  "suggest.noselect": true,
-  "suggest.selection": "recentlyUsed",
-  "suggest.defaultSortMethod": "none",
-  "suggest.enablePreview": true,
-  "suggest.floatEnable": true,
+  "suggest.enablePreselect": true,
+  "suggest.noselect": false,
+  "suggest.selection": "first",
+  "suggest.defaultSortMethod": "length",
   "suggest.removeDuplicateItems": true,
   "suggest.snippetIndicator": "+",
   "suggest.triggerCompletionWait" : 30,

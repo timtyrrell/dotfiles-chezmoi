@@ -150,16 +150,20 @@ EOF
 nnoremap <Up>   :later 10m<CR>
 nnoremap <Down> :earlier 10m<CR>
 
-" Don't lose selection when shifting sidewards
 "*** seems to remove the ability to '.' ***
+" Re-select blocks after indenting in visual/select mode
 " xnoremap < <gv
 " xnoremap > >gv
+" xnoremap > >gv| ?
 " move cursor with it
 " vnoremap <expr> > ">gv"..&shiftwidth.."l"
 " vnoremap <expr> < "<gv"..&shiftwidth.."h"
 " move cursor to beginning of line
 " vnoremap > >gv^
 " vnoremap < <gv^
+" or
+" vnoremap <Tab> >gv
+" vnoremap <S-Tab> <gv
 
 " set shell=/usr/local/bin/bash
 
@@ -219,10 +223,10 @@ set wildignore+=**/.git/*
 " give low priority to files matching the defined patterns.
 set suffixes+=.lock,.scss,.sass,.min.js,.less,.json
 
-let mapleader = ','
+" controls the behavior when switching between buffers. Mostly for |quickfix| commands
+set switchbuf=useopen,usetab
 
-" save a shift in normal mode
-" nnoremap ; :
+let mapleader = ','
 
 " switch back and forth with two most recent files in buffer
 " nnoremap <Backspace> <C-^>
@@ -232,7 +236,7 @@ let mapleader = ','
 " go forward to next newest buffer
 " nnoremap <silent> <tab> <c-i<cr>
 
-" nnoremap <Leader><Tab> :buffer<Space><Tab>
+" nnoremap <Leader><Tab>  :buffer<Space><Tab>
 " nnoremap <silent> <c-n> :bnext<CR>
 " nnoremap <silent> <c-p> :bprev<CR>
 " nnoremap <silent> <c-x> :bdelete<CR>
@@ -296,6 +300,7 @@ set number
 set relativenumber
 set breakindent
 set breakindentopt=shift:2
+
 " display line movements unless preceded by a count
 " also recording jump points for movements larger than five lines
 nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
@@ -500,7 +505,11 @@ nnoremap <silent> <Leader>jj :set ft=json<CR>:%!jq .<CR>
 nnoremap <Enter> :w<Enter>
 nnoremap <leader><Enter> :w !sudo tee %<Enter>
 " Keep default CR behaviour for quickfix list
-autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+augroup quickfix
+  autocmd!
+  autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+augroup END
+
 " can check type, not just name like:
 " another option
 " autocmd FileType qf nnoremap <buffer> <cr> <cr>
@@ -696,13 +705,13 @@ Plug 'mfussenegger/nvim-dap'
 " else
 "     let g:python3_host_prog=substitute(system("which python3"), "\n", '', 'g')
 " endif
-Plug 'mfussenegger/nvim-dap-python'
 Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'David-Kunz/jester'
 
 " syntax
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'm-demare/hlargs.nvim'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'nvim-treesitter/playground', { 'on': ['TSHighlightCapturesUnderCursor', 'TSNodeUnderCursor']}
 " :TSHighlightCapturesUnderCursor
@@ -719,9 +728,9 @@ Plug 'nvim-treesitter/playground', { 'on': ['TSHighlightCapturesUnderCursor', 'T
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
-Plug 'mfussenegger/nvim-ts-hint-textobject'
+Plug 'mfussenegger/nvim-treehopper'
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
-vnoremap <silent> m :lua require('tsht').nodes()<CR>
+xnoremap <silent> m :lua require('tsht').nodes()<CR>
 
 Plug 'mizlan/iswap.nvim'
 nmap <leader>sw <Plug>ISwapWith
@@ -742,8 +751,8 @@ set list listchars=tab:→\ ,space:⋅,trail:•,nbsp:␣,extends:▶,precedes:�
 let g:indent_blankline_char = '▏'
 " let g:indent_blankline_char_blankline = '┆'
 " let g:indent_blankline_char_list = ['|', '¦', '┆', '┊']
-let g:indent_blankline_filetype_exclude = ['checkhealth', 'NvimTree', 'vim-plug', 'man', 'help', 'lspinfo', '', 'GV', 'git']
-let g:indent_blankline_buftype_exclude = ['terminal', 'nofile', 'quickfix']
+let g:indent_blankline_filetype_exclude = ['checkhealth', 'NvimTree', 'vim-plug', 'man', 'help', 'lspinfo', '', 'GV', 'git', 'packer']
+let g:indent_blankline_buftype_exclude = ['terminal', 'nofile', 'quickfix', 'prompt']
 let g:indent_blankline_bufname_exclude = ['README.md', '.*\.py']
 let g:indent_blankline_show_first_indent_level = v:true
 let g:indent_blankline_show_trailing_blankline_indent = v:false
@@ -924,6 +933,7 @@ augroup jsconsolecmds
   " autocmd FileType typescriptreact,javascript,javascriptreact,typescript let b:surround_{char2nr('e')} = '${\r}'
   " move word under cursor up or down a line wrapped in a console.log
   " or use: https://github.com/meain/vim-printer
+  autocmd FileType typescriptreact,javascript,javascriptreact,typescript :inoreabbrev <buffer> cons console.log("");<esc>F"
   autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <leader>cO "zyiwOconsole.log(z)<Esc>
   autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <leader>co "zyiwoconsole.log(z)<Esc>
 augroup END
@@ -1068,15 +1078,16 @@ nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
 
 nnoremap <leader>gr :Gread<cr>:update<cr>
 " :Gread main:file.js to replace file from one in another branch
+" add? git checkout origin/master -- %
 
 " git grep 'foo bar' [branch/SHA]
 " git log --grep='foobar' to search commit messages
 " git log -Sfoobar (when 'foobar' was added/removed)
-nnoremap <leader>gg :Gcgrep! -q<space>
-nnoremap <Leader>g/ :Gcgrep! -Hnri --quiet<Space>
+nnoremap <leader>gg :Glgrep! -q<space>
+nnoremap <Leader>g/ :Glrep! -Hnri --quiet<Space>
 nnoremap <Leader>g? :Git! log --grep=
 " nnoremap <Leader>gS :Git! log -S<Space>
-nnoremap <Leader>g* :Gcgrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
+nnoremap <Leader>g* :Glgrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>
 
 nnoremap <silent><leader>gc <cmd>Git commit<CR>
 nnoremap <silent><Leader>gP <cmd>Git -p push<CR>
@@ -1800,6 +1811,9 @@ require('bqf').setup({
 })
 
 require('nvim-tree').setup {
+  git = {
+    ignore = false,
+  },
   disable_netrw       = false,
   hijack_netrw        = false,
   ignore_ft_on_setup  = {"startify"},
@@ -1878,8 +1892,7 @@ require('leap').setup {
     next_match    = ';',
     prev_match    = ',',
     next_group    = '<space>',
-    prev_group    = '<tab>',
-    eol           = '<space>',
+    prev_group    = '<tab>'
   },
 }
 
@@ -2202,6 +2215,11 @@ require('nvim-treesitter.configs').setup {
         ["iP"] = "@parameter.inner",
         ["aP"] = "@parameter.outer",
       },
+      selection_modes = {
+        ['@parameter.outer'] = 'v', -- charwise
+        ['@function.outer'] = 'V', -- linewise
+        ['@class.outer'] = '<c-v>', -- blockwise
+      },
     },
     move = {
       enable = true,
@@ -2239,6 +2257,8 @@ require('nvim-treesitter.configs').setup {
     enable = true,
   },
 }
+
+require('hlargs').setup()
 
 require('hlslens').setup({
   nearest_only = true
@@ -2464,6 +2484,12 @@ function! MyHighlights() abort
     hi default link CocHintVirtualText LspDiagnosticsVirtualTextHint
     hi default link CocCodeLens LspCodeLens
     hi NormalFloat guifg=#c0caf5 guibg=#292e42
+
+    " defaults
+    " hi CocSearch ctermfg=12 guifg=#18A3FF
+    " hi CocMenuSel ctermbg=109 guibg=#d0af68
+    hi CocMenuSel guibg=#bb9af7
+
     " chentoast/marks.nvim'
     hi MarkVirtTextHL cterm=bold ctermfg=15 ctermbg=9 gui=bold guifg=#ffffff guibg=#f00077
   end
@@ -2558,76 +2584,133 @@ let g:fzf_colors = {
       \ 'header': ['fg', 'Blue']
       \ }
 
+
+" TODO: move to rails specific filetype folder
+nnoremap <Leader>aa  :A<CR>
+nnoremap <Leader>ab :Ebuilder<Space>
+nnoremap <Leader>ac :Econtroller<Space>
+nnoremap <Leader>ah :Ehelper<Space>
+nnoremap <Leader>ai :Einitializer<Space>
+nnoremap <Leader>aj :Ejavascript<Space>
+nnoremap <Leader>am :Emodel<Space>
+nnoremap <Leader>as :Estylesheets<Space>
+nnoremap <Leader>at :Espec<Space>
+nnoremap <Leader>av :Eview<Space>
+
 " https://github.com/junegunn/fzf.vim/issues/392
 let g:projectionist_ignore_term = 1
+
+let g:rails_projections = {
+  \    'app/views/*.html.slim': {
+  \      'type': 'view',
+  \      'alternate': 'app/controllers/{dirname}_controller.rb',
+  \    },
+  \ }
 
 let g:projectionist_heuristics = {}
 let g:projectionist_heuristics['package.json'] = {
   \   '*.js': {
   \     'alternate': [
   \       '{dirname}/{basename}.test.js',
+  \       '{dirname}/__tests__/{basename}.js',
   \       '{dirname}/__tests__/{basename}.test.js',
-  \       '{dirname}/__test__/{basename}_tests.js',
-  \       '{dirname}/{basename}.module.scss',
-  \       '{dirname}/{basename}.styl',
+  \       '{dirname}/../{basename}.js',
   \     ],
-  \     'type': 'source',
+  \     'related': [
+  \       '{dirname}/{basename}.module.scss',
+  \       '{dirname}/styles/{basename}.module.scss',
+  \     ],
+  \     'type': 'jssource',
   \   },
   \   '*.test.js': {
   \     'alternate': [
   \       '{dirname}/{basename}.js',
   \       '{dirname}/../{basename}.js',
   \     ],
-  \     'type': 'test',
+  \     'type': 'jstest',
   \   },
   \   '*.ts': {
   \     'alternate': [
   \       '{dirname}/{basename}.test.ts',
-  \       '{dirname}/{basename}.test.tsx',
-  \       '{dirname}/__test__/{basename}_tests.ts',
+  \       '{dirname}/__tests__/{basename}.ts',
   \       '{dirname}/__tests__/{basename}.test.ts',
-  \       '{dirname}/{basename}.styl',
+  \       '{dirname}/../{basename}.ts',
   \     ],
-  \     'type': 'source',
+  \     'related': [
+  \       '{dirname}/{basename}.module.scss',
+  \       '{dirname}/styles/{basename}.module.scss',
+  \     ],
+  \     'type': 'tssource',
   \   },
   \   '*.test.ts': {
   \     'alternate': [
   \       '{dirname}/{basename}.ts',
-  \       '{dirname}/{basename}.tsx',
   \       '{dirname}/../{basename}.ts',
-  \       '{dirname}/../{basename}.tsx',
   \     ],
-  \     'type': 'test',
+  \     'type': 'tstest',
+  \   },
+  \   '*.jsx': {
+  \     'alternate': [
+  \       '{dirname}/{basename}.test.jsx',
+  \       '{dirname}/__tests__/{basename}.jsx',
+  \       '{dirname}/__tests__/{basename}.test.jsx',
+  \       '{dirname}/../{basename}.jsx',
+  \     ],
+  \     'related': [
+  \       '{dirname}/{basename}.module.scss',
+  \       '{dirname}/styles/{basename}.module.scss',
+  \     ],
+  \     'type': 'jsxsource',
+  \   },
+  \   '*.test.jsx': {
+  \     'alternate': [
+  \       '{dirname}/{basename}.jsx',
+  \       '{dirname}/../{basename}.jsx',
+  \     ],
+  \     'type': 'jsxtest',
   \   },
   \   '*.tsx': {
   \     'alternate': [
-  \       '{dirname}/{basename}.test.ts',
   \       '{dirname}/{basename}.test.tsx',
-  \       '{dirname}/__test__/{basename}_tests.tsx',
+  \       '{dirname}/__tests__/{basename}.tsx',
   \       '{dirname}/__tests__/{basename}.test.tsx',
+  \       '{dirname}/../{basename}.tsx',
   \     ],
-  \     'type': 'source',
+  \     'related': [
+  \       '{dirname}/{basename}.module.scss',
+  \       '{dirname}/styles/{basename}.module.scss',
+  \     ],
+  \     'type': 'tsxsource',
   \   },
   \   '*.test.tsx': {
   \     'alternate': [
+  \       '{dirname}/{basename}.tsx',
+  \       '{dirname}/../{basename}.tsx',
+  \     ],
+  \     'type': 'tsxtest',
+  \   },
+  \   '*.scss': {
+  \     'alternate': [
+  \       '{dirname}/{basename}.js',
+  \       '{dirname}/{basename}.jsx',
   \       '{dirname}/{basename}.ts',
   \       '{dirname}/{basename}.tsx',
+  \       '{dirname}/../{basename}.js',
+  \       '{dirname}/../{basename}.jsx',
   \       '{dirname}/../{basename}.ts',
   \       '{dirname}/../{basename}.tsx',
   \     ],
-  \     'type': 'test',
+  \     'type': 'scss',
   \   },
-  \   '*.styl': {
+  \   'package.json' : {
   \     'alternate': [
-  \       '{dirname}/{basename}.js',
-  \       '{dirname}/{basename}.ts',
-  \       '{dirname}/{basename}.tsx',
-  \     ],
-  \     'type': 'stylus',
-  \   },
-  \   'package.json' : { 'alternate': 'package-lock.json' },
+  \       'package-lock.json',
+  \       'yarn.lock',
+  \      ],
+  \    },
   \   'package-lock.json' : { 'alternate': 'package.json' },
- \ }
+  \   'yarn.lock' : { 'alternate': 'package.json' },
+  \}
 " let g:projectionist_heuristics = {
 "     \'src/*.js': {
 "     \    'type': 'component',
@@ -2769,9 +2852,6 @@ nnoremap <silent><leader>vr <cmd>call execute('source $MYVIMRC')<cr><cmd>lua req
 lua << EOF
 -- mfussenegger/nvim-dap
 local dap = require('dap')
-require('dap-python').setup('~/.local/share/virtualenvs/debugpy/bin/python')
-require('dap-python').test_runner = 'pytest'
-
 -- dap.set_log_level('TRACE')
 
 dap.adapters.node2 = {
@@ -2864,7 +2944,6 @@ vim.api.nvim_set_keymap('n', '<leader>td', ':lua require"jester".debug({ path_to
 EOF
 
 " vim-test
-let test#python#pytest#options = '-p no:warnings'
 let test#strategy = 'vimux'
 nmap <silent> <leader>tt :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
@@ -2890,11 +2969,6 @@ vnoremap <leader>due :lua require'dapui'.eval()<cr>
 nnoremap <leader>duf :lua require'dapui'.float_element()<cr>
 nnoremap <leader>dus :lua require'dapui'.float_element("scopes")<cr>
 nnoremap <leader>dur :lua require'dapui'.float_element("repl")<cr>
-
-" nvim-dap-python
-nnoremap <leader>dpm :lua require('dap-python').test_method()<CR>
-nnoremap <leader>dpc :lua require('dap-python').test_class()<CR>
-vnoremap <leader>dps <ESC>:lua require('dap-python').debug_selection()<CR>
 
 " dap node
 nnoremap <leader>dan :lua require'debugHelper'.attachToNode()<CR>
@@ -2965,59 +3039,65 @@ augroup END
 " leave space for git, diagnostics and marks
 set signcolumn=auto:5
 
-" use C-j, C-k to move in completion list
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " also allow <tab>/<s-tab> to move in completion list.
 " <tab> /<s-tab> snippet mappings take precedence
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ CheckBackspace() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Insert <tab> when previous text is space, refresh completion if not.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-" function! CheckBackspace() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
+" also use C-j, C-k to move in completion list
+inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 
 " Use <c-space> to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use <cr> to confirm completion, this will select first item on <cr>
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <silent> [G <Plug>(coc-diagnostic-prev-error)
-nmap <silent> ]G <Plug>(coc-diagnostic-next-error)
+inoremap <silent><expr> <CR>
+      \ coc#pum#visible() ?
+      \ coc#_select_confirm() :
+      \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" navigate chunks of current buffer
-nmap [h <Plug>(coc-git-prevchunk)
-nmap ]h <Plug>(coc-git-nextchunk)
-" :CocCommand git.chunkStage
-" :CocCommand git.chunkUnstage
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
+nmap <silent> [D <Plug>(coc-diagnostic-prev-error)
+nmap <silent> ]D <Plug>(coc-diagnostic-next-error)
 
-" navigate conflicts of current buffer
-nmap [k <Plug>(coc-git-prevconflict)
-nmap ]k <Plug>(coc-git-nextconflict)
+nmap [c <Plug>(coc-git-prevchunk)
+nmap ]c <Plug>(coc-git-nextchunk)
 
-nmap <silent> <space>gs <Plug>(coc-git-chunkinfo)
+nmap [g <Plug>(coc-git-prevconflict)
+nmap ]g <Plug>(coc-git-nextconflict)
+
+nmap <silent> <space>ghs <cmd>CocCommand git.chunkStage<cr>
+nmap <silent> <space>ghu <cmd>CocCommand git.chunkUnstage<cr>
+nmap <silent> <space>gu  <cmd>CocCommand git.chunkUndo<cr>
+vmap <silent> <space>gu  <cmd>CocCommand git.chunkUndo<cr>
+nmap <silent> <space>gb  <cmd>CocCommand git.showBlameDoc<cr>
+nmap <silent> <space>gi  <Plug>(coc-git-chunkinfo)
+
 omap <silent> ig <Plug>(coc-git-chunk-inner)
 xmap <silent> ig <Plug>(coc-git-chunk-inner)
-nmap <silent> <space>uc :CocCommand git.chunkUndo<cr>
-vmap <silent> <space>uc :CocCommand git.chunkUndo<cr>
 
-" GoTo code navigation.
+" local declaration
 nmap <silent> gd <Plug>(coc-definition)
+" global declaration
 nmap <silent> gD <Plug>(coc-declaration)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gu <Plug>(coc-references-used)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> <space>gi <Plug>(coc-implementation)
-nmap <silent> <space>gu <Plug>(coc-references-used)
+nmap <silent> gm <Plug>(coc-implementation)
 
-nmap <silent> <space>go <Plug>(coc-refactor)
-nmap <silent> <space>cn <Plug>(coc-rename)
+nmap <space>go <Plug>(coc-refactor)
+nmap <space>cn <Plug>(coc-rename)
 
 nmap <space>cf <Plug>(coc-fix-current)
 nmap <space>ce <Plug>(coc-codelens-action)
@@ -3028,10 +3108,12 @@ nmap <space>cl <Plug>(coc-codeaction-line)
 vmap <space>cs <Plug>(coc-codeaction-selected)
 nmap <space>cs <Plug>(coc-codeaction-selected)
 
-nmap <space>co  <cmd>CocOutline<cr>
+" incoming calls
 nmap <space>cki <cmd>CHI<cr>
+" outgoing calls
 nmap <space>cko <cmd>CHO<cr>
-nmap <space>cg  :<C-u>CocSearch -w <C-R><C-W><cr>
+nmap <space>co  <cmd>CocOutline<cr>
+nmap <space>cw  :<C-u>CocSearch -w <C-R><C-W><cr>
 nmap <space>cr  :<C-u>CocRestart<CR>
 
 " autocmd VimEnter,Tabnew *
@@ -3056,6 +3138,9 @@ endfunction
 " nmap <space> :<C-u>CocCommand eslint.executeAutofix<cr>
 " nmap <space> :<C-u>CocCommand tsserver.organizeImports<cr>
 " nmap <space> :<C-u>CocCommand tsserver.findAllFileReferences<cr>
+command! -nargs=0 TscGTSD  :call CocAction('runCommand', 'tsserver.goToSourceDefinition')
+" ? autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <silent> gd :TscGTSD<cr>
+command! -nargs=0 Tsc      :call CocAction('runCommand', 'tsserver.watchBuild')
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 command! -nargs=0 Format   :call CocActionAsync('format')
 command! -nargs=? Fold     :call CocAction('fold', <f-args>)
@@ -3076,10 +3161,10 @@ nnoremap <silent> K :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+  elseif CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
@@ -3168,13 +3253,11 @@ function! s:coc_qf_jump2loc(locs) abort
   endif
 endfunction
 
-
 augroup CocGroup
   autocmd!
-  " Highlight the symbol and its references when holding the cursor.
+  " Highlight the symbol and its references when holding the cursor
   autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  " Setup formatexpr specified filetype(s).
+  " Setup formatexpr specified filetype(s)
   autocmd FileType typescript,json setl formatexpr=CocActionAsync('formatSelected')
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
@@ -3195,8 +3278,8 @@ augroup CocGroup
   autocmd FileType TelescopePrompt let b:coc_pairs_disabled = ["'"]
 
   " make sure to kill coc pid when closing nvim (not sure if needed)
-  autocmd VimLeavePre * if get(g:, 'coc_process_pid', 0)
-      \	| call system('kill -9 '.g:coc_process_pid) | endif
+  " autocmd VimLeavePre * if get(g:, 'coc_process_pid', 0)
+  "     \	| call system('kill -9 '.g:coc_process_pid) | endif
   " run this also?
   " :CocCommand workspace.clearWatchman
 
@@ -3251,18 +3334,14 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.7 } }
 " !^music	inverse-prefix-exact-match	Items that do not start with music
 " !.mp3$	inverse-suffix-exact-match	Items that do not end with .mp3
 
-" nnoremap <leader>ff <cmd>lua require('telescope.builtin').git_files()<cr>
 " nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <silent> <Leader>ff <cmd>Files<CR>
 
 " to set search folder
 nnoremap <silent> <Leader>fF :Files<space>
-" nmap <c-a-p> :cd ~/projects<cr>:Files<cr> " airblade/vim-rooter sets the current path and this switches to a new project
 
 nnoremap <silent> <Leader>fT <cmd>lua require('telescope').extensions.tele_tabby.list()<CR>
 " nnoremap <silent> <Leader>fT <cmd>Windows<CR>
-
-nnoremap <silent> <Leader>fp :call fzf#vim#files('', { 'source': g:FzfFilesSource(), 'options': '--tiebreak=index'})<CR>
 
 " nnoremap <silent> <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <silent> <Leader>fb :Buffers<CR>
@@ -3301,10 +3380,10 @@ nnoremap <silent> <leader>fS <cmd>lua require('telescope.builtin').search_histor
 " nnoremap <silent> <Leader>fS :HistorySearch<CR>
 nnoremap <silent> <Leader>fg <cmd>lua require('telescope.builtin').git_status()<cr>
 " nnoremap <silent> <Leader>fg :GFiles?<CR>
-nnoremap <silent> <leader>fc <cmd>lua require('telescope.builtin').git_commits()<cr>
-" nnoremap <silent> <Leader>fc :Commits<CR>
-nnoremap <silent> <leader>fC <cmd>lua require('telescope.builtin').git_bcommits()<cr>
-" nnoremap <silent> <Leader>fC :BCommits<CR>
+" nnoremap <silent> <leader>fC <cmd>lua require('telescope.builtin').git_bcommits()<cr>
+nnoremap <silent> <Leader>fc :BCommits<CR>
+" nnoremap <silent> <leader>fC <cmd>lua require('telescope.builtin').git_commits()<cr>
+nnoremap <silent> <Leader>fC :Commits<CR>
 nnoremap <silent> <leader>fm <cmd>lua require('telescope.builtin').marks()<cr>
 " nnoremap <silent> <Leader>fm :Marks<CR>
 nnoremap <silent> <leader>fM <cmd>lua require('telescope.builtin').keymaps()<cr>
@@ -3330,10 +3409,10 @@ nnoremap <silent> <Leader>fd :Files <C-R>=expand('%:h')<CR><CR>
 nnoremap <silent> <Leader>rw :RgLines <C-R><C-W><CR>
 
 " Rg with any params (filetypes)
-nnoremap <silent> <leader>rf :RG **/*.
+nnoremap <leader>rf :RG **/*.
 
 " Rg with dir autocomplete
-nnoremap <silent> <leader>rd :RGdir<Space>
+nnoremap <leader>rd :RGdir<Space>
 
 " Only search NON-test files defined in .ripgreprc
 nnoremap <silent> <leader>rt :RG --type-not test<CR>
@@ -3513,8 +3592,7 @@ endfunction
 command! Changes call Changes()
 
 nnoremap <silent> <leader>fj :Jumps<CR>
-" mnemonic 'moDified'
-nnoremap <silent> <leader>fD :Changes<CR>
+nnoremap <silent> <leader>fJ :Changes<CR>
 " FZF JUMPS/CHANGES
 
 " Fzf display mappings
@@ -3566,16 +3644,6 @@ function! JsFzfImport()
         \ )
 endfunction
 " inoremap <expr> <c-x><c-j> JsFzfImport()
-" sort a list of files by the proximity to a given file
-function! g:FzfFilesSource()
-  let l:base = fnamemodify(expand('%'), ':h:.:S')
-  let l:proximity_sort_path = $HOME . '/.cargo/bin/proximity-sort'
-  if base == '.'
-    return 'rg --files'
-  else
-    return printf('rg --files | %s %s', l:proximity_sort_path, expand('%'))
-  endif
-endfunction
 
 " :e a new file and include a directory that doesn't exist, create it
 augroup Mkdir
@@ -3616,10 +3684,10 @@ let g:tmux_navigator_disable_when_zoomed = 1
 " i_ i. i: i, i; i| i/ i\ i* i+ i- i#
 " a_ a. a: a, a; a| a/ a\ a* a+ a- a#
 for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '-', '#' ]
-	execute 'xnoremap i' . char . ' :<C-u>normal! T' . char . 'vt' . char . '<CR>'
-	execute 'onoremap i' . char . ' :normal vi' . char . '<CR>'
-	execute 'xnoremap a' . char . ' :<C-u>normal! F' . char . 'vf' . char . '<CR>'
-	execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
+  execute 'xnoremap i' . char . ' :<C-u>normal! T' . char . 'vt' . char . '<CR>'
+  execute 'onoremap i' . char . ' :normal vi' . char . '<CR>'
+  execute 'xnoremap a' . char . ' :<C-u>normal! F' . char . 'vf' . char . '<CR>'
+  execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
 endfor
 
 " change word movement?

@@ -182,7 +182,6 @@ alias brew-tmux-head="brew reinstall tmux"
 alias brew-install="brew bundle install --global"
 alias brew-outdated="brew update && echo 'OUTDATED:' && brew outdated"
 alias brewup="brew update; brew upgrade; brew cleanup"
-alias crate-update="cargo install-update -a"
 alias ghu="gh extension upgrade --all"
 alias zsh-update="zcomet self-update && zcomet update"
 

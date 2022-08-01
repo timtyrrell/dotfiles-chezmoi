@@ -9,3 +9,4 @@ junit
 .snyk
 notebooks
 poetry.lock
+locales
