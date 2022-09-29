@@ -1,3 +1,17 @@
+local branch_name="$(git rev-parse --show-toplevel 2> /dev/null | rev | cut -d'/' -f1 | rev)"
+
+# to create branch in a worktree not `main` from `main`
+# gco -b tt/delete-ancient-editorconfig main
+#
+# to create a new worktree from main
+# gco -b tt/delete-ancient-editorconfig main
+#
+# add branch from remote??? TEST IT
+# git worktree add ../their-feature origin/zw/babel
+#
+# sync from current worktree folder to another
+# git ls-files --others | rsync --links --files-from - . ../my-feature
+
 # git worktree from HEAD
 gw_add() {
   # git worktree add branch-name
@@ -69,18 +83,6 @@ fif() {
 
 gcr() {
   git checkout -b $1 origin/$1
-}
-
-tree-git-ignore() {
-    # tree respecting gitignore
-
-    local ignored=$(git ls-files -ci --others --directory --exclude-standard)
-    local ignored_filter=$(echo "$ignored" \
-                    | egrep -v "^#.*$|^[[:space:]]*$" \
-                    | sed 's~^/~~' \
-                    | sed 's~/$~~' \
-                    | tr "\\n" "|")
-    tree --prune -I ".git|${ignored_filter: : -1}" "$@"
 }
 
 in_tmux () {

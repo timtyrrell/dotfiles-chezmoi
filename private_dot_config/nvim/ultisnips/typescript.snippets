@@ -6,13 +6,58 @@ snippet int "interface"
 interface ${1} {
 }
 endsnippet
+
 snippet nspc "namespace"
 namespace ${1} {
 }
 endsnippet
+
 priority -49
 snippet fun "function (named)" b
 function ${1:function_name} (${2:argument}: ${3:argument_type}) {
 	${VISUAL}$0
 }
+endsnippet
+
+snippet napi "next api"
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+type ${1:Type} = {
+  $0
+}
+
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<$1>
+) {
+
+}
+endsnippet
+
+snippet npage "next page"
+import type { NextPage } from 'next'
+
+const ${1:Pagename}: NextPage = () => {
+  return (
+	  $0
+  )
+}
+
+export default $1
+endsnippet
+
+snippet rtfts "React Test File" b
+import { render, screen } from '@testing-library/react'
+import { ${1:`!v expand('%:t:r')`} } from "../$1";
+
+describe("$1", () => {
+	test("renders the component", async () => {
+    render(<$1 />)
+    const $2 = screen.getByRole('$2', {
+      name: /$3\/i,
+    })
+
+    expect($2).toBeInTheDocument()
+	});
+});
 endsnippet

@@ -1,12 +1,10 @@
-alias ls='lsd'
-alias ll='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
+alias ls="exa --all --icons --no-permissions --git --header --no-user --classify --group-directories-first"
+alias ll="ls -lh"
 alias lt='ls --tree'
-alias lart='ls -lart'
+alias lart='ll --sort=mod'
 alias md='mkdir -p'
 alias rd='rmdir'
-alias tree='tree-git-ignore'
+alias tree='exa -T --level=5'
 alias cl='clear'
 
 alias cat='bat'
@@ -41,6 +39,9 @@ alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' |
 alias be="bundle exec"
 alias rs='bundle exec rails s'
 alias rc='bundle exec rails c'
+alias wds='./bin/webpack-dev-server'
+alias sk='./bin/sidekiq.sh'
+alias ng='/ngrok.sh'
 
 # docker
 alias dc='docker-compose'
@@ -128,15 +129,15 @@ alias gcop='git checkout -p' # interactive hunk revert
 alias gres='git restore --staged .'
 alias gappend='git add . && git commit --amend -C HEAD'
 alias gamend='git commit --amend -C HEAD'
-alias gappendyolo='git add . && HUSKY_SKIP_HOOKS=1 git commit --amend -C HEAD'
-alias gclean 'git clean -fd'
+alias gappendyolo='git add . && git commit --amend -C HEAD --no-verify'
+alias gclean='git clean -fd'
 alias unstage='git restore --staged .'
 alias grestore="git restore --staged . && git restore ."
 alias reset_authors='git commit --amend --reset-author -C HEAD'
 alias grhr="git_reset_hard_remote"
 alias grhl="git_reset_hard_local"
-alias stash="git add . && git add stash"
-alias wip="git add . && HUSKY_SKIP_HOOKS=1 gc -m 'wip [ci skip]'"
+alias stash="git stash -u"
+alias wip="git add . && gc -m 'wip [ci skip]' --no-verify"
 alias undo="git reset HEAD~1 --mixed"
 alias unwip="undo"
 # alias unwip="git reset --soft 'HEAD^' && git restore --staged ."

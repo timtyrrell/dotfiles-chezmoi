@@ -48,6 +48,7 @@ Plug 'lukas-reineke/lsp-format.nvim'
 " utils
 Plug 'windwp/nvim-autopairs'
 Plug 'windwp/nvim-ts-autotag'
+Plug 'lvimuser/lsp-inlayhints.nvim'
 
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -58,6 +59,7 @@ Plug 'nvim-telescope/telescope-dap.nvim'
 Plug 'pwntester/octo.nvim'
 Plug 'nvim-telescope/telescope-node-modules.nvim'
 Plug 'lewis6991/gitsigns.nvim'
+Plug 'Kasama/nvim-custom-diagnostic-highlight'
 
 Plug 'kyazdani42/nvim-tree.lua'
 

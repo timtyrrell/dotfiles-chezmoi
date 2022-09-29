@@ -1,3 +1,4 @@
+# [ -z "$ZPROF" ] || zmodload zsh/zprof
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
   # exit 1
@@ -8,12 +9,7 @@ fi
 
 eval $(/opt/homebrew/bin/brew shellenv)
 export PATH="/opt/homebrew/bin:$PATH"
-
-
-# use postgresql@13
 export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
-
-# use homebrew sqlite install
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
 
 fpath=(
@@ -111,8 +107,8 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 # history
 HISTFILE=~/.zsh_history
-HISTSIZE=10000000
-SAVEHIST=10000000
+HISTSIZE=100000
+SAVEHIST=100000
 
 # options https://gist.github.com/mattmc3/c490d01751d6eb80aa541711ab1d54b1
 # changing dirs
@@ -130,14 +126,15 @@ setopt hist_expire_dups_first  # expire a duplicate event first when trimming hi
 setopt hist_ignore_all_dups    # Delete old recorded entry if new entry is a duplicate
 setopt hist_find_no_dups       # don't display a previously found event
 setopt hist_ignore_dups        # don't record an event that was just recorded again
-setopt hist_ignore_space       # don't record an event starting with a space
+# setopt hist_ignore_space       # don't record an event starting with a space
+unsetopt hist_ignore_space
 setopt hist_reduce_blanks      # remove superfluous blanks from each command line being added to the history list
 setopt hist_save_no_dups       # don't write a duplicate event to the history file
 setopt inc_append_history      # write to the history file immediately, not when the shell exits
-setopt share_history         # Share history between all sessions
+setopt share_history           # Share history between all sessions
 
 # input/output
-setopt interactive_comments     # Allow comments even in interactive shells
+setopt interactive_comments    # Allow comments even in interactive shells
 
 # job control
 setopt auto_resume             # attempt to resume existing job before creating a new process (vim!)
@@ -185,8 +182,8 @@ if [ -z "$TMUX" ]; then
   bindkey -M vicmd "^Z" fg-widget
   bindkey -M viins "^Z" fg-widget
 fi
+# bindkey -s '^z' 'fg^M'
 
-# default apps
 # I have no idea why I have to unset this but otherwise I don't get LESS paging
 unset DELTA_PAGER
 export PAGER='less'
@@ -197,14 +194,13 @@ export MANPAGER='nvim --clean +Man!'
 # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANWIDTH=999
 
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-
 # tmux
 export FZF_TMUX=1 # open in pop-up
 export FZF_TMUX_OPTS="-p -w 90% -h 60%"
 export FZF_TMUX_POP_UP_OPTS="-p 90%,90%"
 
 # default fzf
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
 export FZF_DEFAULT_COMMAND='rg --files'
 # files
@@ -307,9 +303,8 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
 zcomet load romkatv/powerlevel10k
 zcomet load aloxaf/fzf-tab
-zcomet load sudosubin/zsh-poetry
 zcomet load zsh-vi-more/vi-motions
-zcomet load mattmc3/zman
+# zcomet load mattmc3/zman
 zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zdharma-continuum/fast-syntax-highlighting
@@ -363,7 +358,7 @@ zstyle ':fzf-tab:*' accept-line ctrl-x
 
 local preview_command='
 if [[ -d $realpath ]]; then
-  lsd --color always --icon always --depth 2 --tree $realpath
+  exa -a --icons --tree --level=1 --color=always $realpath
 elif [[ -f $realpath ]]; then
   bat --pager=never --color=always --line-range :80 $realpath
 else
@@ -382,6 +377,7 @@ zstyle ':fzf-tab:complete:*' fzf-preview $preview_command
 	# fzf-preview 'echo ${(P)word}'
 
 # zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color always --icon always --depth 2 --tree $realpath'
+# zstyle ':fzf-tab:complete:exa:*' extra-opts --preview=$extract'preview_file_or_folder.sh $realpath' --preview-window=right:40%
 # zstyle ':fzf-tab:complete:git-checkout:argument-rest' fzf-preview '
 # [[ $group == "[recent branches]" || $group == "[local head]" ]] && git log --max-count=3 -p $word | delta
 # '
@@ -410,12 +406,22 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$(pyenv root)"
+# export PATH="$PYENV_ROOT/shims:$PATH"
+# eval "$(pyenv init -)"
 
 source <(stern --completion=zsh)
 
 # fnm
 eval "$(fnm --version-file-strategy=recursive --log-level=quiet env --use-on-cd)"
+
+# directly executing the command (CTRL-X CTRL-R)
+fzf-history-widget-accept() {
+  fzf-history-widget
+  zle accept-line
+}
+zle     -N     fzf-history-widget-accept
+bindkey '^X^R' fzf-history-widget-accept
 
 ### some plugin above stomps the pbcopy yank so I moved it near the bottom
 # vi-mode yank
@@ -440,16 +446,17 @@ function vi-put-before-pbcopy {
 zle -N vi-put-before-pbcopy
 bindkey -M vicmd 'P' vi-put-before-pbcopy
 
-# directly executing the command (CTRL-X CTRL-R)
-fzf-history-widget-accept() {
-  fzf-history-widget
-  zle accept-line
-}
-zle     -N     fzf-history-widget-accept
-bindkey '^X^R' fzf-history-widget-accept
-
 # Run compinit and compile its cache
 zcomet compinit
 
+# in case I need java
+# If you need to have openjdk first in your PATH, run:
+# echo 'export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"' >> ~/.zshrc
+
+# For compilers to find openjdk you may need to set:
+# export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+# [ -z "$ZPROF" ] || zprof
