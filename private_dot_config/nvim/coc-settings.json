@@ -53,8 +53,8 @@
     "typescriptreact"
   ],
   "coc.preferences.formatOnSaveFiletypes": [
-    "json",
-    "jsonc",
+    // "json",
+    // "jsonc",
     "javascript",
     "javascriptreact",
     "typescript",
@@ -79,9 +79,15 @@
   "typescript.referencesCodeLens.enable": true,
   "typescript.referencesCodeLens.showOnAllFunctions": false,
   "coc.source.emoji.filetypes": [
-    "markdown", "jsonc"
+    "markdown",
+    "jsonc"
   ],
-  "coc.source.file.trimSameExts": [".ts", ".js", ".tst", ".jsx"],
+  "coc.source.file.trimSameExts": [
+    ".ts",
+    ".js",
+    ".tst",
+    ".jsx"
+  ],
   "diagnostic.checkCurrentLine": true,
   "diagnostic.floatConfig": {
     "border": true,
@@ -131,6 +137,8 @@
   "javascript.suggestionActions.enabled": false,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "typescript.preferences.quoteStyle": "single",
   "javascript.preferences.importModuleSpecifier": "shortest",
   "typescript.preferences.importModuleSpecifier": "shortest",
@@ -149,9 +157,15 @@
   "signature.preferShownAbove": false,
   "signature.target": "float",
   "snippets.extends": {
-    "javascriptreact": ["javascript"],
-    "typescript": ["javascript"],
-    "typescriptreact": ["typescript"]
+    "javascriptreact": [
+      "javascript"
+    ],
+    "typescript": [
+      "javascript"
+    ],
+    "typescriptreact": [
+      "typescript"
+    ]
   },
   "suggest.enablePreselect": false,
   "suggest.noselect": true,
@@ -159,7 +173,7 @@
   "suggest.defaultSortMethod": "length",
   "suggest.removeDuplicateItems": true,
   "suggest.snippetIndicator": "+",
-  "suggest.triggerCompletionWait" : 30,
+  "suggest.triggerCompletionWait": 30,
   "suggest.completionItemKindLabels": {
     "default": "",
     "text": "",
@@ -205,7 +219,9 @@
     ".git"
   ],
   "snippet.nextPlaceholderOnDelete": true,
-  "jest.customFlags": [""],
+  "jest.customFlags": [
+    ""
+  ],
   "jest.binCommand": "node_modules/.bin/jest",
   "importCost.debug": true,
   "coc.preferences.enableMessageDialog": true,

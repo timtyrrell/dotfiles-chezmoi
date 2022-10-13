@@ -32,20 +32,45 @@ export LESS=FRX
 # telescope and less? https://github.com/nvim-telescope/telescope.nvim/issues/253#issuecomment-730071741
 # export LESS=iMRS
 
+bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol
+
 export XDG_CONFIG_HOME=$HOME/.config
 
 # make with the pretty colors
 autoload colors; colors
 
 # TODO: replace with https://github.com/jeffreytse/zsh-vi-mode ??
+# https://rm-rf.ca/posts/2020/zsh-vi-mode/
 #vim binding
 bindkey -v
-bindkey -M vicmd '^r' history-incremental-search-backward
-bindkey -M viins '^r' history-incremental-search-backward
+# bindkey -M vicmd '^r' history-incremental-search-backward
+# bindkey -M viins '^r' history-incremental-search-backward
+
+# incremental search in vi command mode
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
+# navigate matches in incremental search
+bindkey -M viins '^R' history-incremental-pattern-search-backward
+bindkey -M viins '^F' history-incremental-pattern-search-forward
+
+# beginning search with arrow keys and j/k
+# autoload -U up-line-or-beginning-search
+# autoload -U down-line-or-beginning-search
+# zle -N up-line-or-beginning-search
+# zle -N down-line-or-beginning-search
+
+# bindkey "^[OA" up-line-or-beginning-search
+# bindkey "^[OB" down-line-or-beginning-search
+# bindkey "^[[A" up-line-or-beginning-search # Up
+# bindkey "^[[B" down-line-or-beginning-search # Down
+# bindkey ‘^P’ up-line-or-beginning-search
+# bindkey ‘^N’ down-line-or-beginning-search
+# bindkey -M vicmd "k" up-line-or-beginning-search
+# bindkey -M vicmd "j" down-line-or-beginning-search
 
 # https://github.com/zsh-users/zsh-autosuggestions#key-bindings
 bindkey  "^[[H"   beginning-of-line # Home key
-bindkey  "^[[F"   end-of-line # End key
+bindkey  "^[[F"   end-of-line       # End key
 # bindkey '^ '      autosuggest-accept # ctrl + space to accept the current suggestion. right arrow or EOL, also works
 bindkey '^x'      autosuggest-execute # ctrl + x to execute the current suggestion
 bindkey '^ '      forward-char
@@ -304,6 +329,7 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 zcomet load romkatv/powerlevel10k
 zcomet load aloxaf/fzf-tab
 zcomet load zsh-vi-more/vi-motions
+zcomet load kutsan/zsh-system-clipboard
 # zcomet load mattmc3/zman
 zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions

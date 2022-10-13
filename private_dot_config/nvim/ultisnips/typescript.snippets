@@ -61,3 +61,24 @@ describe("$1", () => {
 	});
 });
 endsnippet
+
+snippet nfcomponent "next component"
+import { FunctionComponent } from 'react';
+import styled from 'styled-components';
+
+interface $1Props {}
+
+const Unstyled$1: FunctionComponent<$1Props> = () => {
+  return (
+    $0
+  )
+}
+
+const Styled$1 = styled(Unstyled$1)``;
+
+export const ${1:Componentname}: FunctionComponent<$1Props> = (props) => {
+  return (
+    <Styled$1 {...props} />
+  )
+};
+endsnippet

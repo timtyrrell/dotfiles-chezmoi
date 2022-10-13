@@ -64,6 +64,10 @@ alias chez_unmanaged="chezmoi unmanaged"
 
 #worktrees
 alias gw="git worktree"
+alias gwa="git worktree add"
+alias gwl="git worktree list"
+alias gwr="git worktree remove"
+alias gwp="git worktree prune"
 
 # kitty ssh: skitty hostname
 # to copy files on connect, edit: ~/.config/kitty/ssh.conf

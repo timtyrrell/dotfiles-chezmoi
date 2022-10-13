@@ -122,10 +122,6 @@ nnoremap <leader>> V`]>
 " reselect pasted text. gv, reselects the last visual selection
 nnoremap gp `[v`]
 
-" yank-paste -> paste the last yank
-nnoremap yp "0p
-nnoremap yP "0P
-
 lua << EOF
   -- use black hole register when deleting empty line
   local function smart_dd()
@@ -254,7 +250,6 @@ let mapleader = ','
 " Numbered tab: 7gt
 nnoremap <leader>tc :tabclose<cr>
 nnoremap <leader>tn :tabnew<cr>
-" nnoremap <leader>tl :tablast<CR>
 nnoremap <leader>to :tabonly<cr>
 nnoremap <leader>tm :tabmove<Space>
 nnoremap <leader>1 1gt
@@ -266,7 +261,7 @@ nnoremap <leader>6 6gt
 nnoremap <leader>7 7gt
 nnoremap <leader>8 8gt
 nnoremap <leader>9 9gt
-nnoremap <leader>0 10gt
+nnoremap <leader>0 tablast<CR>
 " open current file in new tab
 nnoremap <leader>tw :tabnew %<cr>
 
@@ -629,18 +624,21 @@ Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 nmap <leader>sr <Plug>SnipRun
 vmap <leader>sr <Plug>SnipRun
 
-
 Plug 'meain/vim-printer'
 let g:vim_printer_print_below_keybinding = '<leader>co'
 let g:vim_printer_print_above_keybinding = '<leader>cO'
 
 let g:vim_printer_items = {
       \ 'javascript': 'console.log("{$}:", {$})',
-      \ }
-
-let g:vim_printer_items = {
+      \ 'typescriptreact': 'console.log("{$}:", {$})',
+      \ 'typescript': 'console.log("{$}:", {$})',
+      \ 'javascriptreact': 'console.log("{$}:", {$})',
       \ 'ruby': 'puts "{$}", {$}'
       \ }
+
+" let g:vim_printer_items = {
+"       \ 'ruby': 'puts "{$}", {$}'
+"       \ }
 
 " alternative: https://github.com/akinsho/toggleterm.nvim, :ToggleTermSendCurrentLine, etc
 " or https://github.com/numToStr/FTerm.nvim, or https://github.com/voldikss/vim-floaterm
@@ -761,6 +759,8 @@ xnoremap <silent> m :lua require('tsht').nodes()<CR>
 
 Plug 'mizlan/iswap.nvim'
 nmap <leader>sw <Plug>ISwapWith
+
+Plug 'ThePrimeagen/refactoring.nvim'
 
 Plug 'lukas-reineke/indent-blankline.nvim'
 " fix blank line color issue
@@ -895,9 +895,8 @@ Plug 'christoomey/vim-system-copy'
 " cV is mapped to paste the content of system clipboard to the next line.
 " other option: Plug 'ojroques/vim-oscyank'
 
-" Plug 'tpope/vim-bundler' " use 'solargraph bundle' instead
-"bundle bopen
-"
+" Plug 'tpope/vim-bundler' " use 'solargraph bundle' instead bundle bopen
+
 Plug 'AndrewRadev/switch.vim'
 
 Plug 'tpope/vim-commentary'
@@ -955,18 +954,6 @@ Plug 'tpope/vim-surround'
 " ds" : delete surrounding "
 " dst : delete surrounding tag (HTML)
 " in case I need to unmap them: https://github.com/mgarort/dotvim/blob/e67260d70377c28a0d0a08d8f3733adb05d5d4bd/vimrc#L987-L1000
-
-augroup jsconsolecmds
-  autocmd!
-  "wrap in console.log - yswc or yssc TODO: broken also??
-  " autocmd FileType typescriptreact,javascript,javascriptreact,typescript let b:surround_{char2nr('c')} = 'console.log(\r)'
-  " autocmd FileType typescriptreact,javascript,javascriptreact,typescript let b:surround_{char2nr('e')} = '${\r}'
-  " move word under cursor up or down a line wrapped in a console.log
-  " or use: https://github.com/meain/vim-printer
-  " autocmd FileType typescriptreact,javascript,javascriptreact,typescript :inoreabbrev <buffer> cons console.log("");<esc>F"
-  " autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <leader>cO "zyiwOconsole.log(z)<Esc>
-  " autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <leader>co "zyiwoconsole.log(z)<Esc>
-augroup END
 
 Plug 'tpope/vim-unimpaired'
 " prev conflict/patch: [n , next conflict/patch: ]n , paste toggle: yop
@@ -1329,14 +1316,8 @@ nnoremap <silent> <leader>er :NvimTreeRefresh<CR>
 
 " https://levelup.gitconnected.com/git-worktrees-the-best-git-feature-youve-never-heard-of-9cd21df67baf
 Plug 'ThePrimeagen/git-worktree.nvim'
-" -- Creates a worktree.  Requires the path, branch name, and the upstream
-" :lua require("git-worktree").create_worktree("feat-69", "main", "origin")
-
-" -- switches to an existing worktree.  Requires the path name
-" :lua require("git-worktree").switch_worktree("feat-69")
-
-" -- deletes to an existing worktree.  Requires the path name
-" :lua require("git-worktree").delete_worktree("feat-69")
+nnoremap <silent><space>wl :lua require('telescope').extensions.git_worktree.git_worktrees()<CR>
+nnoremap <silent><space>wb :lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>
 
 Plug 'MunifTanjim/nui.nvim'
 Plug 'bennypowers/nvim-regexplainer'
@@ -1375,11 +1356,7 @@ if !&diff
       \]
 endif
 
-Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
-let g:registers_window_border = "double"
-let g:registers_show_empty_registers = 0
-let g:registers_delay = 1000
-" let g:system_clip = 1
+" Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 
 Plug 'chentoast/marks.nvim'
 
@@ -1408,10 +1385,10 @@ Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'itchyny/lightline.vim' |
           \ Plug 'konart/vim-lightline-coc'
 
-" Plug 'timtyrrell/tokyonight.nvim'
 Plug 'folke/tokyonight.nvim'
 " Plug 'EdenEast/nightfox.nvim'
 " Plug 'andersevenrud/nordic.nvim'
+" Plug 'catppuccin/nvim'
 
 " center all windows, including splits
 Plug 'jmckiern/vim-venter'
@@ -1480,6 +1457,7 @@ let g:glow_border = 'rounded'
 let g:glow_width = 120
 " q to quit, :Glow for current filepath
 
+" Plug 'adelarsq/image_preview.nvim'
 " Plug 'ekickx/clipboard-image.nvim'
 " Plug 'edluffy/hologram.nvim'
 Plug 'ferrine/md-img-paste.vim'
@@ -1507,9 +1485,6 @@ let g:scratch_top = 1
 let g:scratch_horizontal = 1
 let g:scratch_no_mappings = 1
 nmap <leader>sp :ScratchPreview<CR>
-
-" fix CursorHold perf bug
-Plug 'antoinemadec/FixCursorHold.nvim'
 
 " learning
 Plug 'folke/which-key.nvim'
@@ -1743,11 +1718,40 @@ require("other-nvim").setup({
   }
 })
 
+require('refactoring').setup({})
+require("telescope").load_extension("refactoring")
+
+-- remap to open the Telescope refactoring menu in visual mode
+vim.api.nvim_set_keymap(
+  "v",
+  "<space>rr",
+  "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+  { noremap = true }
+)
+-- vim.api.nvim_set_keymap(
+--   "v",
+--   "<space>rr",
+--   ":lua require('refactoring').select_refactor()<CR>",
+--   { noremap = true, silent = true, expr = false }
+-- )
+
 require'sniprun'.setup({
   display = {
     "NvimNotify",
   },
 })
+
+-- local registers = require("registers")
+-- registers.setup({
+--   show_empty = false,
+--   window = {
+--     border = "double",
+--     transparency = 90,
+--   },
+--   bind_keys = {
+--     registers = registers.apply_register({ delay = 1 }),
+--   },
+-- })
 
 require('cinnamon').setup({
   centered = false,
@@ -1795,7 +1799,6 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require('coverage').setup {}
-require('tabout').setup {}
 require('nvim-web-devicons').setup {}
 require('which-key').setup {}
 require('headlines').setup {
@@ -2318,6 +2321,8 @@ require("git-worktree").setup({
   clear_jumps_on_change = false, -- this is handled by auto-session
   update_on_change = false,
 })
+-- Sync worktrees with vim session files
+-- https://github.com/ThePrimeagen/git-worktree.nvim/issues/13#issuecomment-1222855331
 worktree.on_tree_change(function(op, metadata)
   if op == worktree.Operations.Switch then
     vim.api.nvim_command("RestoreSession")
@@ -2400,13 +2405,22 @@ parser_config.markdown.filetype_to_parsername = "octo"
 require('numb').setup {
    show_numbers = true,
    show_cursorline = true,
-   centered_peeking = true
+   centered_peeking = true,
+   hide_relativenumbers = true
 }
 
 require('nvim-treesitter.configs').setup {
   auto_install = true,
   ensure_installed = { "bash", "comment", "css", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
   ignore_install = { "phpdoc" },
+  -- disable slow treesitter highlight for large files
+  disable = function(lang, buf)
+    local max_filesize = 100 * 1024 -- 100 KB
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+    if ok and stats and stats.size > max_filesize then
+      return true
+    end
+  end,
   highlight = {
     enable = true,
     disable = { },
@@ -2494,11 +2508,11 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-require('hlargs').setup()
-
-require("nvim-treesitter.highlight").set_custom_captures {
-  ["hlargs.namedparam"] = "Hlargs",
-}
+require('hlargs').setup({
+  extras = {
+    named_parameters = true,
+  },
+})
 
 require('hlslens').setup({
   nearest_only = true
@@ -3196,6 +3210,7 @@ vim.api.nvim_set_keymap('n', '<leader>td', ':lua require"jester".debug({ cmd = "
 -- vim.api.nvim_set_keymap('n', '<leader>tf', ':lua require"jester".run_file({ cmd = "./node_modules/.bin/jest -t '$result' -- $file" })<cr>', {})
 -- vim.api.nvim_set_keymap('n', '<leader>d_', ':lua require"jester".debug_last({ path_to_jest = "node_modules/.bin/jest" })<cr>', {})
 -- vim.api.nvim_set_keymap('n', '<leader>df', ':lua require"jester".debug_file({ path_to_jest = "node_modules/.bin/jest" })<cr>', {})
+
 EOF
 
 " vim-test
@@ -3290,7 +3305,7 @@ augroup END
 " leave space for git, diagnostics and marks
 set signcolumn=auto:5
 
-function! CheckBackSpace() abort
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -3299,11 +3314,11 @@ endfunction
 " <tab> /<s-tab> snippet mappings take precedence
 " Insert <tab> when previous text is space, refresh completion if not.
 " *** this conflicts with 'abecodes/tabout.nvim'***
-" inoremap <silent><expr> <TAB>
-"       \ coc#pum#visible() ? coc#pum#next(1) :
-"       \ CheckBackSpace() ? "\<Tab>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " also use C-j, C-k to move in completion list
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
@@ -3993,6 +4008,13 @@ endfunction
 " `:TabMessage message` to output :messages to new tab to copy
 " `:TabMessage ls` to output buffer list to new tab to copy
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+
+lua << EOF
+
+-- loaded after nvim-treesitter and any completion that already uses your tabkey.
+-- require('tabout').setup {}
+
+EOF
 
 " vimwiki & friends
 let g:vim_markdown_new_list_item_indent = 0
