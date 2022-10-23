@@ -1,5 +1,8 @@
 local branch_name="$(git rev-parse --show-toplevel 2> /dev/null | rev | cut -d'/' -f1 | rev)"
 
+# show top level git dir
+# git rev-parse --show-toplevel 2> /dev/null
+
 # to create branch in a worktree not `main` from `main`
 # gco -b tt/delete-ancient-editorconfig main
 #

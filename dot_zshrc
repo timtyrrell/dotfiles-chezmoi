@@ -449,28 +449,27 @@ fzf-history-widget-accept() {
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
 
-### some plugin above stomps the pbcopy yank so I moved it near the bottom
 # vi-mode yank
-function vi-yank-pbcopy {
-  zle vi-yank
-  echo "$CUTBUFFER" | pbcopy
-}
-zle -N vi-yank-pbcopy
-bindkey -M vicmd 'y' vi-yank-pbcopy
+# function vi-yank-pbcopy {
+#   zle vi-yank
+#   echo "$CUTBUFFER" | pbcopy
+# }
+# zle -N vi-yank-pbcopy
+# bindkey -M vicmd 'y' vi-yank-pbcopy
 
-function vi-put-after-pbcopy {
-  CUTBUFFER=$(pbpaste)
-  zle vi-put-after
-}
-zle -N vi-put-after-pbcopy
-bindkey -M vicmd 'p' vi-put-after-pbcopy
+# function vi-put-after-pbcopy {
+#   CUTBUFFER=$(pbpaste)
+#   zle vi-put-after
+# }
+# zle -N vi-put-after-pbcopy
+# bindkey -M vicmd 'p' vi-put-after-pbcopy
 
-function vi-put-before-pbcopy {
-  CUTBUFFER=$(pbpaste)
-  zle vi-put-before
-}
-zle -N vi-put-before-pbcopy
-bindkey -M vicmd 'P' vi-put-before-pbcopy
+# function vi-put-before-pbcopy {
+#   CUTBUFFER=$(pbpaste)
+#   zle vi-put-before
+# }
+# zle -N vi-put-before-pbcopy
+# bindkey -M vicmd 'P' vi-put-before-pbcopy
 
 # Run compinit and compile its cache
 zcomet compinit

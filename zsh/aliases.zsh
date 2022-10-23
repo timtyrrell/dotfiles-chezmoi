@@ -12,6 +12,9 @@ alias cat='bat'
 # copy the last zsh command to clipboard
 alias clc='echo !! | pbcopy'
 
+# needed for ranger to run in tmux
+alias ranger='TERM=xterm-256color ranger'
+
 #vim
 alias vi='nvim'
 alias vim='nvim'
@@ -95,6 +98,7 @@ alias gnap='git add -N --ignore-removal . && gap && gref'
 alias gb="git branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate"
 alias gc='git commit -v'
 alias gca='git commit -a -v'
+alias gce='git commit -m "This is a blank commit" --allow-empty'
 alias gcf='git commit --fixup'
 alias gcl='git clean -f -d'
 alias gd='git diff'
