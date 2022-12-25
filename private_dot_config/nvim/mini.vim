@@ -3,16 +3,6 @@ filetype plugin indent on
 syntax on
 set hidden
 
-"sessions
-set sessionoptions-=buffers
-set sessionoptions-=help
-set sessionoptions-=folds
-set sessionoptions-=blank
-
-" nvim/shada is dumb with marks, don't save for new session
-" https://www.reddit.com/r/neovim/comments/q7bgwo/comment/hghwogp/?context=3
-set shada=!,'0,f0,<50,s10,h
-
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'rmagatti/auto-session'

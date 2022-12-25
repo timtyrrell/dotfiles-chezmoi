@@ -97,7 +97,8 @@ endfunction
 
 augroup LibGroup
   autocmd!
-  autocmd BufRead,BufNewFile init.vim nnoremap <buffer> <silent> gx :call PlugGx()<cr>
+  autocmd BufRead,BufNewFile *.vim nnoremap <buffer> <silent> gx :call PlugGx()<cr>
+  autocmd BufRead,BufNewFile *.lua nnoremap <buffer> <silent> gx :call PlugGx()<cr>
   autocmd BufRead,BufNewFile package.json nnoremap <buffer> <silent> gx :call PackageJsonGx()<cr>
   autocmd FileType vim-plug nnoremap <buffer> <silent> gx :call PlugGx()<cr>
   autocmd FileType vim-plug call s:setup_extra_keys()

@@ -27,7 +27,6 @@
 	lart = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
 	sha = rev-parse HEAD
 	releases = for-each-ref --sort=authordate --format=\"%(color:white)%(color:bold)%(refname:lstrip=-2)%09%(color:blue)%(authordate:relative)%09%(color:red)%(authorname)\" refs/remotes/origin/release
-	conflicted = !nvim +Conflicted
 	quickdiff = diff ':!package-lock.json'
 	diffs = diff --staged
 	last = log -1 HEAD --stat
@@ -36,6 +35,7 @@
 	d = diff
 	se = !git rev-list --all | xargs git grep -F
 	up = pull --rebase origin
+	p = pull
 	recent-branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 	recent-local-branches = !"git reflog | grep 'checkout:' | head | awk '{print $8}' | awk '!x[$0]++'"
 	clone-for-worktrees = "!sh $HOME/bin/git-clone-bare-for-worktrees.sh"

@@ -54,19 +54,18 @@ bindkey -M viins '^R' history-incremental-pattern-search-backward
 bindkey -M viins '^F' history-incremental-pattern-search-forward
 
 # beginning search with arrow keys and j/k
-# autoload -U up-line-or-beginning-search
-# autoload -U down-line-or-beginning-search
-# zle -N up-line-or-beginning-search
-# zle -N down-line-or-beginning-search
-
-# bindkey "^[OA" up-line-or-beginning-search
-# bindkey "^[OB" down-line-or-beginning-search
-# bindkey "^[[A" up-line-or-beginning-search # Up
-# bindkey "^[[B" down-line-or-beginning-search # Down
-# bindkey ‘^P’ up-line-or-beginning-search
-# bindkey ‘^N’ down-line-or-beginning-search
-# bindkey -M vicmd "k" up-line-or-beginning-search
-# bindkey -M vicmd "j" down-line-or-beginning-search
+autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+# up/down arrow to complete history for commands matching my beginning input
+bindkey -M viins '^[[A' up-line-or-beginning-search
+bindkey -M vicmd '^[[A' up-line-or-beginning-search
+bindkey -M viins '^[OA' up-line-or-beginning-search
+bindkey -M vicmd '^[OA' up-line-or-beginning-search
+bindkey -M viins '^[[B' down-line-or-beginning-search
+bindkey -M vicmd '^[[B' down-line-or-beginning-search
+bindkey -M viins '^[OB' down-line-or-beginning-search
+bindkey -M vicmd '^[OB' down-line-or-beginning-search
 
 # https://github.com/zsh-users/zsh-autosuggestions#key-bindings
 bindkey  "^[[H"   beginning-of-line # Home key
@@ -171,6 +170,7 @@ setopt nonomatch               # tell zsh to pass the unevaluated argument like 
 setopt prompt_subst            # parameter expansion, command substitution and arithmetic expansion are performed in prompts
 
 # don't append failed command to ~/.zsh_history
+# this excludes commands that don't exist, assuming that the first word is the command name...
 zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 # Bindings
@@ -250,7 +250,7 @@ export FZF_YANK_COMMAND="--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+a
 export FZF_HIDE_PREVIEW="--preview-window=:hidden"
 export FZF_SHOW_PREVIEW="
 --preview '([[ -f {} ]] && (bat --style=full --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
---preview-window cycle
+--preview-window 'right,50%,border-left,<50(up,50%,border-bottom)'
 --bind '\:toggle-preview'
 --bind 'ctrl-u:preview-half-page-up'
 --bind 'ctrl-d:preview-half-page-down'
@@ -272,7 +272,7 @@ export FZF_DEFAULT_OPTS="
 --header '$FZF_HEADER_DEFAULT'
 --bind 'ctrl-s:select-all'
 --bind 'alt-d:deselect-all'
---preview-window cycle
+--preview-window 'right,50%,border-left,<50(up,50%,border-bottom)'
 --bind '\:toggle-preview'
 --bind 'ctrl-u:preview-half-page-up'
 --bind 'ctrl-d:preview-half-page-down'
@@ -307,11 +307,12 @@ source $HOME/zsh/aliases.zsh --source_only
 typeset -aU path
 
 # export PATH="$HOME/Library/Python/2.7/bin:$PATH"
-export PATH="$(yarn global bin):$PATH"
+# export PATH="$(yarn global bin):$PATH"
+export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
 #export GOPATH="${HOME>/.go
-export GOROOT="$(brew --prefix golang)/libexec"
+export GOROOT="/opt/homebrew/opt/go/libexec"
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH
 export PATH=$PATH:$GOROOT/bin
@@ -329,7 +330,7 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 zcomet load romkatv/powerlevel10k
 zcomet load aloxaf/fzf-tab
 zcomet load zsh-vi-more/vi-motions
-zcomet load kutsan/zsh-system-clipboard
+# zcomet load kutsan/zsh-system-clipboard
 # zcomet load mattmc3/zman
 zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions
@@ -369,6 +370,9 @@ zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':fzf-tab:*' show-group brief
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-pad 200 200
+zstyle ':fzf-tab:*' popup-min-size 50 8
+zstyle ':fzf-tab:*' fzf-min-height 50
+
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 # use input as query string when completing zlua

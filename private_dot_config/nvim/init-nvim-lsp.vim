@@ -26,7 +26,6 @@ Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 " Plug 'rcarriga/cmp-dap'
 
 Plug 'onsails/lspkind-nvim'
-Plug 'nvim-lua/lsp_extensions.nvim'
 Plug 'glepnir/lspsaga.nvim' " or https://github.com/ray-x/navigator.lua?
 " Plug 'kyazdani42/nvim-web-devicons'
 " Plug 'folke/trouble.nvim'

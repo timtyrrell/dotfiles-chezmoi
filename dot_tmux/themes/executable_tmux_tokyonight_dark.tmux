@@ -9,8 +9,8 @@ set -g pane-border-style "fg=#3b4261"
 set -g pane-active-border-style "fg=#7aa2f7"
 
 # set inactive/active window styles
-# set -g window-style 'bg=#16161e'
-set -g window-active-style 'bg=#1a1b26'
+set -g window-style 'bg=#16161e'
+set -g window-active-style "bg=#1a1b26"
 
 set -g pane-border-lines heavy
 set -g pane-border-indicators both

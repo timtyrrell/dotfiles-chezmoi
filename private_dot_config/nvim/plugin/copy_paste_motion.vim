@@ -97,8 +97,8 @@
 " <C-x><C-d> - function names
 
 " send change arguments to blackhole registry
-nnoremap c "_c
-nnoremap C "_C
+" nnoremap c "_c
+" nnoremap C "_C
 
 " copy paragraph
 " nnoremap cp vap:t'><CR>
@@ -109,6 +109,10 @@ inoremap <C-v> <C-r>*
 " Indent/dedent what you just pasted
 nnoremap <leader>< V`]<
 nnoremap <leader>> V`]>
+
+" Reverse the <C-r>/<C-r><C-o> meanings - make <C-r>" default to a repeatable behavior for text changes and keep indention
+inoremap <C-r> <C-r><C-o>
+inoremap <C-r><C-o> <C-r>
 
 " reselect pasted text. gv, reselects the last visual selection
 nnoremap gp `[v`]
@@ -140,8 +144,9 @@ EOF
 " Plug 'kana/vim-textobj-user'
 " https://github.com/kana/vim-textobj-user/wiki
 
-" Plug 'beloglazov/vim-textobj-quotes'
-" iq or aq - ', ", or ` quotes that currently surround the cursor, are in front of the cursor, or behind (in that order of preference)
+" Plug 'rhysd/vim-textobj-anyblock'
+" ib is a union of i(, i{, i[, i', i" and i<.
+" ab is a union of a(, a{, a[, a', a" and a<.
 
 " Plug 'kana/vim-textobj-line', { 'on': ['<Plug>(textobj-line-i', '<Plug>(textobj-line-a']}
 xmap al <Plug>(textobj-line-a)
@@ -155,16 +160,6 @@ omap il <Plug>(textobj-line-i)
 " <count>ii  (I)nner (I)ndentation level (no line above).
 " <count>aI  (A)n (I)ndentation level and lines above/below.
 " <count>iI  (I)nner (I)ndentation level (no lines above/below)
-
-" Plug 'vimtaku/vim-textobj-keyvalue', {'on': ['<Plug>(textobj-key-a', '<Plug>(textobj-key-i', '<Plug>(textobj-value-a', '<Plug>(textobj-value-i']}
-xmap ak <Plug>(textobj-key-a)
-omap ak <Plug>(textobj-key-a)
-xmap ik <Plug>(textobj-key-i)
-omap ik <Plug>(textobj-key-i)
-xmap av <Plug>(textobj-value-a)
-omap av <Plug>(textobj-value-a)
-xmap iv <Plug>(textobj-value-i)
-omap iv <Plug>(textobj-value-i)
 
 " add motions for words_like_this, etc
 " i_ i. i: i, i; i| i/ i\ i* i+ i- i#
@@ -181,26 +176,6 @@ endfor
 " ^   ^            ^        ^    ^     ^  ^           ^
 " nnoremap w /\W\zs\w<CR>
 " nnoremap W ?\W\zs\w<CR>
-
-" get highlight info
-" :call GetSyntax() to find highlight group
-function! GetSyntaxID()
-    return synID(line('.'), col('.'), 1)
-endfunction
-
-function! GetSyntaxParentID()
-    return synIDtrans(GetSyntaxID())
-endfunction
-
-function! GetSyntax()
-    echo synIDattr(GetSyntaxID(), 'name')
-    exec "hi ".synIDattr(GetSyntaxParentID(), 'name')
-endfunction
-
-" Output the current syntax group
-nnoremap <leader>bg :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<cr>
 
 " change/delete surrounding function call
 " Plug 'AndrewRadev/dsf.vim'

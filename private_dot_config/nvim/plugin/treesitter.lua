@@ -1,6 +1,6 @@
 require('nvim-treesitter.configs').setup {
   auto_install = true,
-  ensure_installed = { "bash", "comment", "css", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
+  ensure_installed = { "bash", "comment", "css", "embedded_template", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
   ignore_install = { "phpdoc" },
   -- disable slow treesitter highlight for large files
   disable = function(lang, buf)
@@ -10,6 +10,9 @@ require('nvim-treesitter.configs').setup {
       return true
     end
   end,
+  endwise = {
+    enable = true,
+  },
   highlight = {
     enable = true,
     disable = { },
@@ -41,8 +44,8 @@ require('nvim-treesitter.configs').setup {
         ["ic"] = "@class.inner",
         ["af"] = "@function.outer",
         ["if"] = "@function.inner",
-        ["ab"] = "@block.outer",
-        ["ib"] = "@block.inner",
+        -- ["ab"] = "@block.outer",
+        -- ["ib"] = "@block.inner",
         ["aS"] = "@statement.outer",
         ["iS"] = "@statement.inner",
         ["aC"] = "@conditional.outer",
@@ -81,12 +84,6 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
-  playground = {
-    enable = true,
-    disable = {},
-    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-    persist_queries = false -- Whether the query persists across vim sessions
-  },
   query_linter = {
     enable = false,
     use_virtual_text = true,
@@ -121,4 +118,4 @@ require('hlslens').setup({
 -- <cr>: Go to current node in code buffer
 
 -- loaded after nvim-treesitter and any completion that already uses your tabkey.
--- require('tabout').setup {}
+require('tabout').setup {}

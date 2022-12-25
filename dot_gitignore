@@ -16,3 +16,4 @@ tags
 algo/
 *.bak
 config/solargraph_definitions.rb
+*.http

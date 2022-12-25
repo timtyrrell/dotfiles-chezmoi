@@ -107,7 +107,7 @@ xnoremap Q :'<,'>:normal @q<CR>
 " https://www.reddit.com/r/neovim/comments/tsol2n/why_macros_are_so_slow_compared_to_emacs/
 " overload @ key to execute the macro avoiding any auto command that may be triggred during insert mode or text change
 " :noautocmd normal 10000@q
-xnoremap @ :<C-U>execute "noautocmd '<,'>norm! " . v:count1 . "@" . getcharstr()<cr>
+xnoremap @ <Cmd>execute "noautocmd '<,'>norm! " . v:count1 . "@" . getcharstr()<cr>
 
 " backup/undo management
 set nobackup
@@ -192,8 +192,8 @@ set sessionoptions-=blank
 " results with those ^: sessionoptions=blank,curdir,tabpages,winsize,terminal
 
 " split windows
-nnoremap <C-w>- :new<cr>
-nnoremap <C-w><bar> :vnew<cr>
+nnoremap <C-w>- <cmd>new<cr>
+nnoremap <C-w><bar> <cmd>vnew<cr>
 
 function! InsertFilePath()
   execute 'normal i'.expand('%:p:h').'/'
@@ -216,6 +216,9 @@ nnoremap <leader>cf :cd %:p:h<cr>
 " open file under cursor anywhere on line
 " https://www.reddit.com/r/vim/comments/mcxha4/remapping_gf_to_open_a_file_from_anywhere_on_the/
 nnoremap gf ^f/gf
+
+" https://www.reddit.com/r/vim/comments/ydjpkg/using_gf_command_on_file_in_bash_script/
+set isfname-==
 
 " open file under cursor in vertical split
 map <C-w>f <C-w>vgf
@@ -297,28 +300,23 @@ Plug 'kazhala/close-buffers.nvim'
 " undo tree visualizer
 Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 
-Plug 'NTBBloodbath/rest.nvim'
+Plug 'rest-nvim/rest.nvim'
 map <leader>rr <Plug>RestNvim
 map <leader>rp <Plug>RestNvimPreview
 map <leader>rL <Plug>RestNvimLast
 
 Plug 'rmagatti/auto-session'
 
-Plug 'shivamashtikar/tmuxjump.vim'
-
-Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
-nmap <leader>sr <Plug>SnipRun
-vmap <leader>sr <Plug>SnipRun
-
+" https://github.com/andrewferrier/debugprint.nvim/tree/main#alternative-feature-comparison
 Plug 'meain/vim-printer'
 let g:vim_printer_print_below_keybinding = '<leader>co'
 let g:vim_printer_print_above_keybinding = '<leader>cO'
 
 let g:vim_printer_items = {
-      \ 'javascript': 'console.log("{$}:", {$})',
-      \ 'typescriptreact': 'console.log("{$}:", {$})',
-      \ 'typescript': 'console.log("{$}:", {$})',
-      \ 'javascriptreact': 'console.log("{$}:", {$})',
+      \ 'javascript': "console.log('{$}:', {$});",
+      \ 'typescriptreact': "console.log('{$}:', {$});",
+      \ 'typescript': "console.log('{$}:', {$});",
+      \ 'javascriptreact': "console.log('{$}:', {$});",
       \ 'ruby': 'puts "{$}", {$}'
       \ }
 
@@ -363,13 +361,6 @@ nmap <leader>vb ggVG<leader>vs<CR>
 " run file
 nmap <Leader>vf :call VimuxRunCommand("clear; node " . bufname("%"))<CR>
 
-" REPL
-" vnoremap <leader>rn :w !node<Enter>
-" vnoremap <leader>rr :w !ruby<Enter>
-" vnoremap <leader>rp :w !python<Enter>
-
-Plug 'ThePrimeagen/harpoon'
-
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 let g:db_ui_show_database_icon = 1
@@ -385,22 +376,21 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'David-Kunz/jester'
+" Plug 'mxsdev/nvim-dap-vscode-js'
 
 " syntax
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'm-demare/hlargs.nvim'
 Plug 'windwp/nvim-ts-autotag'
-Plug 'nvim-treesitter/playground', { 'on': ['TSHighlightCapturesUnderCursor', 'TSNodeUnderCursor']}
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
-Plug 'mfussenegger/nvim-treehopper'
-omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
-xnoremap <silent> m :lua require('tsht').nodes()<CR>
+Plug 'RRethy/nvim-treesitter-endwise'
 
-Plug 'mizlan/iswap.nvim'
-nmap <leader>sw <Plug>ISwapWith
+Plug 'mfussenegger/nvim-treehopper'
+omap     <silent> m <Cmd>lua require('tsht').nodes()<CR>
+xnoremap <silent> m :lua require('tsht').nodes()<CR>
 
 Plug 'ThePrimeagen/refactoring.nvim'
 
@@ -424,19 +414,15 @@ Plug 'sheerun/vim-polyglot'
 " let g:polyglot_disabled = ['sensible']
 " let g:polyglot_disabled = ['ftdetect']
 let g:polyglot_disabled = ['autoindent']
-let g:markdown_fenced_languages = ['ruby', 'sh', 'js', 'ts', 'jsx', 'json']
-Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
-let g:shfmt_fmt_on_save = 1
+let g:markdown_fenced_languages = ['ruby', 'sh', 'javascript', 'typescript', 'json']
 
 Plug 'AndrewRadev/splitjoin.vim'
 " gS to split a one-liner into multiple lines
 " gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
 
 "removes trailing whitespace on save
-Plug 'rondale-sc/vim-spacejam'
-let g:spacejam_filetypes = '*'
+Plug 'mcauley-penney/tidy.nvim'
 
-Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'tyru/open-browser.vim'
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 let g:openbrowser_default_search = 'duckduckgo'
@@ -459,14 +445,12 @@ Plug 'andymass/vim-matchup'
 " tab to exit enclosing character
 Plug 'abecodes/tabout.nvim'
 
-Plug 'chaoren/vim-wordmotion'
+" Plug 'chaoren/vim-wordmotion'
 
 Plug 'ggandor/leap.nvim'
 Plug 'ggandor/flit.nvim'
 
 Plug 'drmingdrmer/vim-toggle-quickfix'
-
-Plug 'andythigpen/nvim-coverage'
 
 Plug 'gabrielpoca/replacer.nvim'
 
@@ -478,26 +462,10 @@ let g:tmux_navigator_preserve_zoom = 1
 
 Plug 'christoomey/vim-system-copy'
 
-Plug 'AndrewRadev/switch.vim'
-let g:switch_mapping = "-"
-
 Plug 'tpope/vim-commentary'
 
 "Vim sugar for the UNIX shell commands
 Plug 'tpope/vim-eunuch'
-
-"json motions
-Plug 'tpope/vim-jdaddy'
-" ij                      Text object for innermost JSON number, string, array, object, or keyword (including but not limited to true/false/null).
-" aj                      Text object for outermost JSON object or array.
-" gqij                    Replace the innermost JSON with a pretty printed version.
-" gqaj                    Replace the outermost JSON with a pretty printed version.
-" ["x]gwij                Merge the JSON from the register into the innermost JSON.  Merging extends objects, concatenates strings and arrays, and adds numbers.
-" ["x]gwaj                Merge the JSON from the register into the outermost JSON.
-
-Plug 'mogelbrod/vim-jsonpath', { 'on': 'JsonPath'}
-" :JsonPath: Echoes the path to the identifier under the cursor.
-" :JsonPath path.to.prop
 
 " try https://github.com/kana/vim-altr/blob/master/doc/altr.txt ?
 Plug 'tpope/vim-projectionist'
@@ -506,7 +474,6 @@ Plug 'rgroli/other.nvim'
 "gf support
 Plug 'tpope/vim-apathy'
 
-" Plug 'tpope/vim-bundler' " use 'solargraph bundle' instead bundle bopen
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
 Plug 'tpope/vim-bundler'
@@ -540,25 +507,15 @@ Plug 'tpope/vim-unimpaired'
 " [<Space> and ]<Space> add newlines before and after the cursor line
 " [e and ]e exchange the current line with the one above or below it.
 
-Plug 'tpope/vim-speeddating'
-" increment/decrement dates <C-A>/<C-X>
-
 " change/delete surrounding function call
 Plug 'AndrewRadev/dsf.vim'
 
 " try https://github.com/wellle/targets.vim ?
 " https://github.com/kana/vim-textobj-user/wiki
 Plug 'kana/vim-textobj-user'
-
-Plug 'beloglazov/vim-textobj-quotes'
-
-Plug 'kana/vim-textobj-line', { 'on': ['<Plug>(textobj-line-i', '<Plug>(textobj-line-a']}
-
+Plug 'kana/vim-textobj-line'
 Plug 'michaeljsmith/vim-indent-object'
-
-Plug 'vimtaku/vim-textobj-keyvalue', {'on': ['<Plug>(textobj-key-a', '<Plug>(textobj-key-i', '<Plug>(textobj-value-a', '<Plug>(textobj-value-i']}
-
-" Plug 'rhysd/vim-textobj-anyblock', { 'on': ['<Plug>(textobj-anyblock-i', '<Plug>(textobj-anyblock-a']}
+Plug 'rhysd/vim-textobj-anyblock'
 
 " https://github.com/mlaursen/vim-react-snippets#cheatsheet
 Plug 'mlaursen/vim-react-snippets', { 'branch': 'main' }
@@ -575,6 +532,7 @@ Plug 'whiteinge/diffconflicts'
 
 " Use a (usually) better diff algorithm.
 set diffopt+=indent-heuristic
+set diffopt+=linematch:60
 
 " disable showing '------' for empty line in difftool
 set fillchars+=diff:╱
@@ -602,11 +560,13 @@ Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope-dap.nvim'
 Plug 'nvim-telescope/telescope-github.nvim'
-Plug 'princejoogie/dir-telescope.nvim'
 Plug 'nvim-telescope/telescope-node-modules.nvim'
 Plug 'dhruvmanila/telescope-bookmarks.nvim'
-Plug 'xiyaowong/telescope-emoji.nvim'
+Plug 'ANGkeith/telescope-terraform-doc.nvim'
 Plug 'LinArcX/telescope-env.nvim'
+
+" or use? https://github.com/nvim-telescope/telescope.nvim/issues/2201#issuecomment-1284691502
+Plug 'princejoogie/dir-telescope.nvim'
 
 Plug 'pwntester/octo.nvim'
 " Plug 'ldelossa/litee.nvim'
@@ -619,10 +579,10 @@ Plug 'pwntester/octo.nvim'
 
 Plug 'fannheyward/telescope-coc.nvim'
 
+Plug 'windwp/nvim-spectre'
+
 Plug 'norcalli/nvim-terminal.lua'
 " https://github.com/akinsho/toggleterm.nvim
-
-Plug 'mrjones2014/dash.nvim', { 'do': 'make install', 'on': ['Dash', 'DashWord']}
 
 Plug 'kyazdani42/nvim-web-devicons' " for file icons, nvim-tree and others
 
@@ -634,8 +594,6 @@ nnoremap <silent> <leader>er :NvimTreeRefresh<CR>
 Plug 'ThePrimeagen/git-worktree.nvim'
 
 Plug 'MunifTanjim/nui.nvim'
-Plug 'bennypowers/nvim-regexplainer'
-" needs MunifTanjim/nui.nvim, also
 Plug 'vuki656/package-info.nvim'
 
 Plug 'tpope/vim-scriptease'
@@ -645,7 +603,8 @@ Plug 'tpope/vim-scriptease'
 " :Messages load messages into quickfix
 
 " smooth scroll
-Plug 'declancm/cinnamon.nvim'
+" Plug 'declancm/cinnamon.nvim'
+Plug 'karb94/neoscroll.nvim'
 
 Plug 'Konfekt/FastFold'
 " Plug 'Jorengarenar/vim-syntaxMarkerFold' ?
@@ -656,17 +615,12 @@ Plug 'danilamihailov/beacon.nvim'
 
 Plug 'tamton-aquib/duck.nvim'
 
-" Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
+Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
 
 Plug 'chentoast/marks.nvim'
 
 " displays colors for words/hex
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
-" appearence and insight
-Plug 'ryanoasis/vim-devicons'
-let g:WebDevIconsOS = 'Darwin'
-Plug 'bryanmylee/vim-colorscheme-icons'
 
 " massive cmdline improvement
 function! UpdateRemotePlugins(...)
@@ -679,20 +633,22 @@ Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 Plug 'romgrk/fzy-lua-native', { 'do': 'make' }
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
-Plug 'itchyny/lightline.vim' |
-          \ Plug 'konart/vim-lightline-coc'
+Plug 'nvim-lualine/lualine.nvim'
+
+" Plug 'nvim-zh/colorful-winsep.nvim'
 
 Plug 'folke/tokyonight.nvim'
 " Plug 'EdenEast/nightfox.nvim'
 " Plug 'andersevenrud/nordic.nvim'
 " Plug 'catppuccin/nvim'
+" Plug 'bluz71/vim-nightfly-guicolors'
 
 " center all windows, including splits
 Plug 'jmckiern/vim-venter'
 
 " center current buffer only
 Plug 'folke/zen-mode.nvim'
-Plug 'folke/twilight.nvim'
+" Plug 'folke/twilight.nvim'
 
 Plug 'folke/trouble.nvim'
 
@@ -719,11 +675,8 @@ Plug 'dstein64/vim-startuptime'
 " Plug 'tweekmonster/startuptime.vim'
 
 Plug 'vimwiki/vimwiki', { 'branch': 'dev', 'for': 'markdown', 'on': 'VimwikiMakeDiaryNote' }
-
 Plug 'mattn/calendar-vim'
-
 Plug 'alok/notational-fzf-vim'
-
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 
 " markdown preview in nvim popup
@@ -732,14 +685,8 @@ Plug 'ellisonleao/glow.nvim', {'for': 'markdown'}
 " Plug 'adelarsq/image_preview.nvim'
 " Plug 'ekickx/clipboard-image.nvim'
 " Plug 'edluffy/hologram.nvim'
-Plug 'ferrine/md-img-paste.vim'
-
-" horizontal lines for vimwiki
-" Plug 'lukas-reineke/headlines.nvim'
-
+" Plug 'img-paste-devs/img-paste.vim'
 " Plug 'LudoPinelli/comment-box.nvim'
-
-Plug 'mtth/scratch.vim'
 
 Plug 'folke/which-key.nvim'
 
@@ -756,58 +703,18 @@ set shada=!,'0,f0,<50,s10,h
 
 lua << EOF
 
-require'sniprun'.setup({
-  display = {
-    "NvimNotify",
-  },
-})
-
--- local registers = require("registers")
--- registers.setup({
---   show_empty = false,
---   window = {
---     border = "double",
---     transparency = 90,
---   },
---   bind_keys = {
---     registers = registers.apply_register({ delay = 1 }),
---   },
--- })
-
-require('regexplainer').setup {}
-
-require('terminal').setup {}
-
-require('package-info').setup({
-  package_manager = 'yarn'
-})
--- Show package versions
-vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show()<CR>", { silent = false, noremap = true })
--- Hide package versions
-vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
--- Update package on line
-vim.api.nvim_set_keymap("n", "<leader>nu", ":lua require('package-info').update()<CR>", { silent = true, noremap = true })
--- Delete package on line
-vim.api.nvim_set_keymap("n", "<leader>nd", ":lua require('package-info').delete()<CR>", { silent = true, noremap = true })
--- Install a new package
-vim.api.nvim_set_keymap("n", "<leader>ni", ":lua require('package-info').install()<CR>", { silent = true, noremap = true })
--- Reinstall dependencies
-vim.api.nvim_set_keymap("n", "<leader>nr", ":lua require('package-info').reinstall()<CR>", { silent = true, noremap = true })
--- Install a different package version
-vim.api.nvim_set_keymap("n", "<leader>np", ":lua require('package-info').change_version()<CR>", { silent = true, noremap = true })
-
 require('auto-session').setup {
   -- cwd_change_handling = {
   --   restore_upcoming_session = false,
   -- },
-  log_level = 'info',
+  log_level = 'error',
   auto_session_enabled = true,
   auto_save_enabled = true,
   auto_restore_enabled = true,
   auto_session_use_git_branch = true,
   auto_session_suppress_dirs = {'~/', '~/code', '~/code/timtyrrell', '~/code/brandfolder'},
   -- auto_session_allow_dirs = {'~/code/*', '~/.local/share/chezmoi'},
-  pre_save_cmds = {"lua require'nvim-tree'.setup()", "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
+  pre_save_cmds = {close_nvim_tree, "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
 }
 
 require('rest-nvim').setup({
@@ -829,10 +736,6 @@ require('rest-nvim').setup({
   -- Jump to request line on run
   jump_to_request = false,
 })
-
--- treesitter markdown parser with octo buffers
-local ft_to_parser = require "nvim-treesitter.parsers".filetype_to_parsername
-ft_to_parser.octo = "markdown"
 
 EOF
 
@@ -926,9 +829,6 @@ augroup yarngroup
   autocmd!
   autocmd BufReadCmd /zip:*.yarn/cache/*.zip/* call OpenZippedFile(expand('<afile>'))
 augroup END
-
-" Disable tmux navigator when zooming the Vim pane
-let g:tmux_navigator_disable_when_zoomed = 1
 
 function! TabMessage(cmd)
   redir => message

@@ -11,6 +11,8 @@
 " nnoremap gdh :diffget //2<CR> (left key)
 " nnoremap gdl :diffget //3<CR> (right key)
 " jump conflicts: ]c [c
+" move to the conflict markers with ]n and [n mappings and visually select with V]n and then delete; or delete a block with d]n
+" If you are using `git mergetool`, you can use :diffget RE to get the remote changes and :diffget LO to get the local changes
 "
 " When I'm in a 3-way diff and hit ,ga, vim opens a new tab and diffs the file in the active window against the common ancestor. When I'm done reading the diff, I just :tabclose and I'm right back to where I was.
 " nnoremap <leader>ga :tab sp \| Gvedit :1 \| windo diffthis<CR>
@@ -39,8 +41,6 @@ nnoremap <leader>gB :%Git blame<cr>
 " o     jump to patch or blob in horizontal split
 " O     jump to patch or blob in new tab
 " -     reblame at commit
-" ~     reblame at commit~[count]
-" P     reblame at commit^[count]
 
 nnoremap <leader>gd :Gdiff<cr>
 
@@ -64,7 +64,7 @@ nnoremap <silent><Leader>ge :Gedit <bar> only<CR>
 " :Gedit main:file.js to open file version in another branch
 " :Gedit " go back to normal file from read-only view in Gstatus window
 
-nnoremap <leader>gr :Gread<cr>:update<cr>
+nnoremap <leader>gr :Gread<cr>:noautocmd update<cr>
 " :Gread main:file.js to replace file from one in another branch
 " add? git checkout origin/master -- %
 
@@ -156,7 +156,6 @@ nnoremap <leader>gs :tab Git<CR>
 
 " put changed file names from previous commit into the quickfix list
 command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}'))
-
 
 " diff on file
 nnoremap <leader>dvf <Cmd>DiffviewFileHistory <cr>
@@ -274,6 +273,10 @@ require('octo').setup({
     },
 })
 
+-- treesitter markdown parser with octo buffers
+local ft_to_parser = require "nvim-treesitter.parsers".filetype_to_parsername
+ft_to_parser.octo = "markdown"
+
 -- require('litee.lib').setup({
 --     tree = {
 --         icon_set = "nerd"
@@ -359,6 +362,7 @@ require("diffview").setup {
       ["<leader>cb"] = actions.conflict_choose("base"),   -- Choose the BASE version of a conflict
       ["<leader>ca"] = actions.conflict_choose("all"),    -- Choose all the versions of a conflict
       ["dx"]         = actions.conflict_choose("none"),   -- Delete the conflict region
+      -- or use <leader>dl and <leader>dr (mnemonics for diff left, and diff right)?
     },
     diff1 = { --[[ Mappings in single window diff layouts ]] },
     diff2 = { --[[ Mappings in 2-way diff layouts ]] },
@@ -478,4 +482,3 @@ endfunction
 
 command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_
                 \ | diffthis | wincmd p | diffthis
-

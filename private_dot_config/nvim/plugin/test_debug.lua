@@ -5,7 +5,7 @@ local dap = require('dap')
 dap.adapters.node2 = {
   type = 'executable',
   command = 'node',
-    args = {os.getenv('HOME') .. '/code/vscode-node-debug2/out/src/nodeDebug.js'},
+  args = {os.getenv('HOME') .. '/code/vscode-node-debug2/out/src/nodeDebug.js'},
 }
 
 -- note: chrome has to be started with a remote debugging port: --remote-debugging-port=9222
@@ -96,20 +96,10 @@ dap.listeners.before.event_exited["dapui_config"] = function()
   dapui.close()
 end
 
--- David-Kunz/jester
-vim.api.nvim_set_keymap('n', '<leader>td', ':lua require"jester".debug({ cmd = "yarn jest" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>t_', ':lua require"jester".run_last({ cmd = "./node_modules/.bin/jest -t '$result' -- $file" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>tt', ':lua require"jester".run({ cmd = "./node_modules/.bin/jest -t '$result' -- $file" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>t_', ':lua require"jester".run_last({ cmd = "./node_modules/.bin/jest -t '$result' -- $file" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>tf', ':lua require"jester".run_file({ cmd = "./node_modules/.bin/jest -t '$result' -- $file" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>d_', ':lua require"jester".debug_last({ path_to_jest = "node_modules/.bin/jest" })<cr>', {})
--- vim.api.nvim_set_keymap('n', '<leader>df', ':lua require"jester".debug_file({ path_to_jest = "node_modules/.bin/jest" })<cr>', {})
-
 -- nvim-telescope/telescope-dap.nvim
 -- map('n', '<leader>ds', '<cmd>lua require'telescope'.extensions.dap.frames{}<CR>')
 -- map('n', '<leader>dc', '<cmd>lua require'telescope'.extensions.dap.commands{}<CR>')
 -- map('n', '<leader>db', '<cmd>lua require'telescope'.extensions.dap.list_breakpoints{}<CR>')
-
 
 require("jester").setup({
   cmd = "yarn jest --no-watchman -t '$result' -- $file yarn test:local", -- run command
@@ -136,19 +126,13 @@ require("jester").setup({
 
 vim.cmd [[
   " vim-test
-  let test#strategy = 'vimux'
   " let test#strategy = 'toggleterm'
+  let test#strategy = 'vimux'
   nmap <silent> <leader>tt :TestNearest<CR>
   nmap <silent> <leader>tf :TestFile<CR>
   nmap <silent> <leader>tl :TestLast<CR>
   nmap <silent> <leader>tv :TestVisit<CR>
   nmap <silent> <leader>ts :TestSuite<CR>
-
-  augroup move_these_to_ftplugin
-    autocmd!
-    " autocmd FileType javascript,typescript, nnoremap <buffer> <C-]> :TernDef<CR>
-    " autocmd BufWritePost *.jsx,*.js CocCommand eslint.executeAutofix
-  augroup END
 
   " dap-ui
   nnoremap <leader>dq  :lua require'dapui'.toggle()<CR>

@@ -68,6 +68,8 @@ let g:glow_width = 120
 
 lua << EOF
 require("tokyonight").setup({
+  hide_inactive_statusline = false,
+  lualine_bold = true,
   style = "night",
   styles = {
     comments = { italic = true },
@@ -206,19 +208,17 @@ require('marks').setup {
 -- :MarksQFListAll
 
 require('zen-mode').setup {
+  twilight = { enabled = false },
   window = {
     backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
-    width = .5, -- width of the Zen window
+    width = .8, -- width of the Zen window
     height = 1, -- height of the Zen window
   },
 }
 
 require("trouble").setup { mode = "loclist" }
 
-require('cinnamon').setup({
-  centered = false,
-  always_scroll = true,
-})
+require('neoscroll').setup {}
 
 require('numb').setup {
    show_numbers = true,
@@ -230,8 +230,96 @@ require('nvim-web-devicons').setup {}
 require('which-key').setup {}
 
 -- tamton-aquib/duck.nvim
-vim.keymap.set('n', '<leader>ddd', function() require("duck").hatch() end, {})
+vim.keymap.set('n', '<leader>ddd', function() require("duck").hatch("🦆", 10) end, {}) -- A pretty fast duck
+vim.keymap.set('n', '<leader>ddc', function() require("duck").hatch("🐈", 0.75) end, {}) -- Quite a mellow cat
 vim.keymap.set('n', '<leader>ddk', function() require("duck").cook() end, {})
+
+--- @param trunc_width number trunctates component when screen width is less then trunc_width
+--- @param trunc_len number truncates component to trunc_len number of chars
+--- @param hide_width number hides component when window width is smaller then hide_width
+--- @param no_ellipsis boolean whether to disable adding '...' at end after truncation
+--- return function that can format the component accordingly
+local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
+  return function(str)
+    local win_width = vim.fn.winwidth(0)
+    if hide_width and win_width < hide_width then return ''
+    elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+       return str:sub(1, trunc_len) .. (no_ellipsis and '' or '...')
+    end
+    return str
+  end
+end
+
+require('lualine').setup {
+  theme = 'tokyonight',
+  sections = {
+    lualine_a = {},
+    lualine_b = {
+      {'FugitiveHead', icon = '', fmt=trunc(90, 30, 50)},
+      {'diff'},
+      {'diagnostics'}
+    },
+    lualine_c = {{'filename', path = 1}},
+    lualine_x = {{'filetype', fmt=trunc(90, 30, 50)}},
+    lualine_y = {{'progress', fmt=trunc(90, 30, 50)}},
+    lualine_z = {{'location', fmt=trunc(90, 30, 50)}}
+  },
+  inactive_sections = {
+    lualine_a = {{'filename', path = 1}},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {
+    lualine_a = {{'tabs', mode = 3}},
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {'windows'}
+  },
+  extensions = {'fugitive', 'fzf', 'man', 'mundo', 'nvim-dap-ui', 'nvim-tree', 'quickfix'}
+}
+
+local registers = require("registers")
+registers.setup({
+  show_empty = false,
+  window = {
+    border = "double",
+    transparency = 90,
+  },
+  bind_keys = {
+    registers = registers.apply_register({ delay = 1 }),
+  },
+})
+
+require('terminal').setup {}
+
+require('package-info').setup({
+  package_manager = 'yarn'
+})
+-- Show package versions
+vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show()<CR>", { silent = false, noremap = true })
+-- Hide package versions
+vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
+-- Update package on line
+vim.api.nvim_set_keymap("n", "<leader>nu", ":lua require('package-info').update()<CR>", { silent = true, noremap = true })
+-- Delete package on line
+vim.api.nvim_set_keymap("n", "<leader>nd", ":lua require('package-info').delete()<CR>", { silent = true, noremap = true })
+-- Install a new package
+vim.api.nvim_set_keymap("n", "<leader>ni", ":lua require('package-info').install()<CR>", { silent = true, noremap = true })
+-- Reinstall dependencies
+vim.api.nvim_set_keymap("n", "<leader>nr", ":lua require('package-info').reinstall()<CR>", { silent = true, noremap = true })
+-- Install a different package version
+vim.api.nvim_set_keymap("n", "<leader>np", ":lua require('package-info').change_version()<CR>", { silent = true, noremap = true })
+-- Toggle dependency versions
+vim.keymap.set({ "n" }, "<LEADER>nt", require("package-info").toggle, { silent = true, noremap = true })
+
+local function close_nvim_tree()
+  require('nvim-tree.view').close()
+end
 
 EOF
 

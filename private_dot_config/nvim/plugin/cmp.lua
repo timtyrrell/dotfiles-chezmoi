@@ -1,0 +1,54 @@
+-- local lspkind = require('lspkind')
+
+-- require("cmp_nvim_ultisnips").setup {}
+-- local cmp_ultisnips_mappings = require("cmp_nvim_ultisnips.mappings")
+
+-- local cmp = require'cmp'
+
+-- cmp.setup({
+--   snippet = {
+--     expand = function(args)
+--       vim.fn["UltiSnips#Anon"](args.body)
+--     end,
+--   },
+--   sources = {
+--     { name = 'nvim_lsp' },
+--     { name = 'buffer' },
+--     { name = "ultisnips" },
+--     { name = "rg" },
+--     { name = 'npm', keyword_length = 4 },
+--   },
+--   window = {
+--     -- completion = cmp.config.window.bordered(),
+--     -- documentation = cmp.config.window.bordered(),
+--   },
+--   mapping = cmp.mapping.preset.insert({
+--     ['<C-b>']     = cmp.mapping.scroll_docs(-4),
+--     ['<C-f>']     = cmp.mapping.scroll_docs(4),
+--     ['<C-Space>'] = cmp.mapping.complete(),
+--     ['<C-e>']     = cmp.mapping.abort(),
+--     ['<CR>']      = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+--     ["<C-j>"]     = cmp.mapping(
+--       function(fallback)
+--         cmp_ultisnips_mappings.expand_or_jump_forwards(fallback)
+--       end,
+--       { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
+--     ),
+--     ["<C-k>"]   = cmp.mapping(
+--       function(fallback)
+--         cmp_ultisnips_mappings.jump_backwards(fallback)
+--       end,
+--       { "i", "s", --[[ "c" (to enable the mapping in command mode) ]] }
+--     ),
+--   }),
+--   formatting = {
+--     format = lspkind.cmp_format({
+--       mode = 'symbol',
+--       maxwidth = 50,
+--       ellipsis_char = '...',
+--       before = function (entry, vim_item)
+--         return vim_item
+--       end
+--     })
+--   }
+-- })

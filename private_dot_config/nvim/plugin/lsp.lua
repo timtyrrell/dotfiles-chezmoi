@@ -1,0 +1,284 @@
+-- require("mason").setup()
+-- local mason = require("mason-lspconfig")
+-- mason.setup({
+--   -- ensure_installed = {
+--   --   "bashls",
+--   --   "cssls",
+--   --   "cssmodules_ls",
+--   --   "diagnosticls",
+--   --   "dockerls",
+--   --   "emmet_ls",
+--   --   "eslint",
+--   --   "graphql",
+--   --   "html",
+--   --   "jsonls",
+--   --   "marksman",
+--   --   "solargraph",
+--   --   "sqlls",
+--   --   "sumneko_lua",
+--   --   "terraformls",
+--   --   "tsserver",
+--   --   "vimls",
+--   --   "yamlls"
+--   -- },
+--   automatic_installation = false,
+--   ui = {
+-- 		icons = {
+-- 			package_installed = "✓",
+-- 			package_pending = "➜",
+-- 			package_uninstalled = "✗",
+-- 		},
+-- 	},
+-- })
+
+-- require('mason-tool-installer').setup {
+--   -- https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+--   ensure_installed = {
+--     "bash-language-server",
+--     "css-lsp",
+--     "cssmodules-language-server",
+--     "diagnostic-languageserver",
+--     "dockerfile-language-server",
+--     "emmet-ls",
+--     "eslint-lsp",
+--     "graphql-language-service-cli",
+--     "html-lsp",
+--     "json-lsp",
+--     "marksman",
+--     "solargraph",
+--     "sqlls",
+--     "lua-language-server",
+--     "terraform-ls",
+--     "typescript-language-server",
+--     "vim-language-server",
+--     "yaml-language-server"
+--   },
+
+--   auto_update = true,
+--   run_on_start = true,
+--   start_delay = 3000, -- 3 second delay
+-- }
+
+-- -- Set up lspconfig
+-- local nvim_lsp = require('lspconfig')
+-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+-- local lsp_flags = {
+--   -- This is the default in Nvim 0.7+
+--   debounce_text_changes = 150,
+-- }
+
+-- local lsp_formatting = function(bufnr)
+--   vim.lsp.buf.format({
+--     filter = function(client)
+--         -- apply whatever logic you want (in this example, we'll only use null-ls)
+--         return client.name == "null-ls"
+--     end,
+--     bufnr = bufnr,
+--   })
+-- end
+
+-- -- if you want to set up formatting on save, you can use this as a callback
+-- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+-- local opts = { noremap=true, silent=true }
+-- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+-- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+-- vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+-- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
+
+-- local on_attach = function(client, bufnr)
+--   -- null-ls config, format on save
+--   if client.supports_method("textDocument/formatting") then
+--     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+--     vim.api.nvim_create_autocmd("BufWritePre", {
+--       group = augroup,
+--       buffer = bufnr,
+--       callback = function()
+--           lsp_formatting(bufnr)
+--       end,
+--     })
+--   end
+
+--   -- Enable completion triggered by <c-x><c-o>
+--   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+--   -- Mappings.
+--   -- See `:help vim.lsp.*` for documentation on any of the below functions
+--   local bufopts = { noremap=true, silent=true, buffer=bufnr }
+--   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+--   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+--   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+--   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+--   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+--   vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+--   vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+--   vim.keymap.set('n', '<space>wl', function()
+--     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+--   end, bufopts)
+--   vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+--   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+--   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+--   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+--   -- vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+--   -- Highlight symbol under cursor
+--   if client.server_capabilities.documentHighlightProvider then
+--     vim.cmd [[
+--       hi! LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+--       hi! LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+--       hi! LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+--     ]]
+--     vim.api.nvim_create_augroup('lsp_document_highlight', {
+--       clear = false
+--     })
+--     vim.api.nvim_clear_autocmds({
+--       buffer = bufnr,
+--       group = 'lsp_document_highlight',
+--     })
+--     vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+--       group = 'lsp_document_highlight',
+--       buffer = bufnr,
+--       callback = vim.lsp.buf.document_highlight,
+--     })
+--     vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+--       group = 'lsp_document_highlight',
+--       buffer = bufnr,
+--       callback = vim.lsp.buf.clear_references,
+--     })
+--   end
+
+-- end
+
+-- for _,lsp in ipairs(mason.get_installed_servers()) do
+--   nvim_lsp[lsp].setup {
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+--     flags = lsp_flags,
+--   }
+-- end
+
+-- local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+-- for type, icon in pairs(signs) do
+--   local hl = "DiagnosticSign" .. type
+--   vim.fn.sign_define(hl, { text = icon, texthl= hl, numhl = hl })
+-- end
+
+-- local config = {
+--   virtual_text = false,
+--   signs = {
+--     active = signs,
+--     min = vim.diagnostic.severity.ERROR,
+--   },
+--   update_in_insert = false,
+--   underline = true,
+--   severity_sort = true,
+--   float = {
+--     focusable = false,
+--     style = "minimal",
+--     border = "rounded",
+--     source = "always",
+--     header = "",
+--     prefix = "",
+--   },
+-- }
+-- vim.diagnostic.config(config)
+-- vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+
+-- -- only show Errors in the gutter,
+-- -- local orig_set_signs = vim.lsp.diagnostic.set_signs
+-- -- local set_signs_limited = function(diagnostics, bufnr, client_id, sign_ns, opts)
+-- --   opts = opts or {}
+-- --   opts.severity_limit = "Error"
+-- --   orig_set_signs(diagnostics, bufnr, client_id, sign_ns, opts)
+-- -- end
+-- -- vim.lsp.diagnostic.set_signs = set_signs_limited
+
+-- require("typescript").setup({
+--   disable_commands = false, -- prevent the plugin from creating Vim commands
+--   debug = false, -- enable debug logging for commands
+--   go_to_source_definition = {
+--       fallback = true, -- fall back to standard LSP definition on failure
+--   },
+-- })
+-- -- ^ adds
+-- -- TypescriptAddMissingImports
+-- -- TypescriptOrganizeImports
+-- -- TypescriptRemoveUnused
+-- -- TypescriptFixAll
+-- -- TypescriptRenameFile
+-- -- TypescriptGoToSourceDefinition
+
+-- -- capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- nvim_lsp.emmet_ls.setup({
+--   -- on_attach = on_attach,
+--   capabilities = capabilities,
+--   filetypes = { 'html', 'typescriptreact', 'javascriptreact', 'css', 'sass', 'scss', 'less' },
+--   init_options = {
+--     html = {
+--       options = {
+--         -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+--         ["bem.enabled"] = true,
+--       },
+--     },
+--   }
+-- })
+
+-- nvim_lsp.sumneko_lua.setup {
+--   settings = {
+--     Lua = {
+--       diagnostics = {
+--         globals = {'vim'},
+--       },
+--       workspace = {
+--         library = {
+--           [vim.fn.expand "$VIMRUNTIME/lua"] = true,
+--           [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true
+--         }
+--       },
+--     },
+--   },
+-- }
+
+-- nvim_lsp.jsonls.setup {
+--   settings = {
+--     json = {
+--       schemas = require('schemastore').json.schemas(),
+--       validate = { enable = true },
+--     },
+--   },
+-- }
+
+-- -- require('lint').linters_by_ft = {
+-- --   markdown = {'vale',}
+-- -- }
+
+-- -- -- lint on save
+-- -- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+-- --   callback = function()
+-- --     require("lint").try_lint()
+-- --   end,
+-- -- })
+
+-- local npairs = require("nvim-autopairs")
+-- local Rule = require('nvim-autopairs.rule')
+
+-- npairs.setup({
+--   enable_check_bracket_line = false, --Don't add pairs if it already has a close pair in the same line
+--   ignored_next_char = "[%w%.]", -- will ignore alphanumeric and `.` symbol
+--   check_ts = true,
+--   ts_config = {
+--     lua = {'string'},-- it will not add a pair on that treesitter node
+--     javascript = {'template_string'},
+--   }
+-- })
+
+-- local ts_conds = require('nvim-autopairs.ts-conds')
+
+-- -- press % => %% only while inside a comment or string
+-- npairs.add_rules({
+--   Rule("%", "%", "lua")
+--     :with_pair(ts_conds.is_ts_node({'string','comment'})),
+--   Rule("$", "$", "lua")
+--     :with_pair(ts_conds.is_not_ts_node({'function'}))
+-- })

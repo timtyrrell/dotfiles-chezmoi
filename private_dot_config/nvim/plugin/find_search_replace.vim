@@ -344,6 +344,7 @@ function! AbsolutePathNoExtension()
 endfunction
 inoremap <expr> <c-x><c-f> AbsolutePathNoExtension()
 
+" or this: https://gosukiwi.github.io/vim/2022/10/26/vim-relative-file-autocomplete.html
 function! s:generate_relative_js(path)
   let target = getcwd() . '/' . (join(a:path))
   let base = expand('%:p:h')
@@ -382,12 +383,26 @@ nnoremap <leader>rs :%s/\<<C-r>=expand("<cword>")<CR>\>/
 vnoremap <leader>rl "9y:s/<c-r>9//g<left><left>
 nnoremap <leader>rl viw"9y:s/<c-r>9//g<left><left>
 
+" Search for the word under
+" stay at current match
+" Change the search matches
+" . to repeat on next match
+nnoremap cn *``cgn
+nnoremap cN *``cgN
+
 " searches for the word under my cursor and performs cgn
-nmap cg* *Ncgn
+" nmap cg* *Ncgn
 " nnoremap g. /\V\C<C-r>"<CR>cgn<C-a><Esc>
 " improvement on the above line, support delete (dw, etc), and multiline operations (ie, dd, cip, etc).
 " searches for the text that I just replaced, jump to the next match and replace that with the new inserted text
 nnoremap c. :call setreg('/',substitute(@", '\%x00', '\\n', 'g'))<cr>:exec printf("norm %sgn%s", v:operator, v:operator != 'd' ? '<c-a>':'')<cr>
+
+" operate on "last motion"
+" ik ak = last change pseudo text object
+xnoremap ik `]o`[
+onoremap ik <Cmd>normal vik<cr>
+onoremap ak <Cmd>normal vikV<cr>
+" to comment out lines from last motion, `gcak`
 
 " Find and Replace in *all* files
 function! FindAndReplace( ... )
@@ -427,8 +442,8 @@ function! s:wilder_init() abort
 
   cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
   cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
-  cmap <expr> <c-k> wilder#in_context() ? wilder#next() : "\<c-j>"
-  cmap <expr> <c-j> wilder#in_context() ? wilder#previous() : "\<c-k>"
+  cmap <expr> <c-j>   wilder#in_context() ? wilder#next() :     "\<c-j>"
+  cmap <expr> <c-k>   wilder#in_context() ? wilder#previous() : "\<c-k>"
 
   " '-I' to ignore respect .gitignore, '-H' show hidden files
   call wilder#set_option('pipeline', [
@@ -466,9 +481,12 @@ function! s:wilder_init() abort
 
   let s:highlighters = [ wilder#lua_fzy_highlighter() ]
 
-  let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-        \ 'reverse': 1,
+  let s:experimental_popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_palette_theme({
         \ 'border': 'rounded',
+        \ 'max_height': '75%',
+        \ 'min_height': 0,
+        \ 'prompt_position': 'top',
+        \ 'reverse': v:false,
         \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
         \ 'highlights': { 'accent': 'Statement'},
         \ 'highlighter': s:highlighters,
@@ -486,21 +504,103 @@ function! s:wilder_init() abort
         \ ],
         \ }))
 
-  let s:wildmenu_renderer = wilder#wildmenu_renderer(
-        \ wilder#wildmenu_lightline_theme({
-        \   'highlighter': s:highlighters,
-        \   'highlights': { 'accent': 'Statement'},
-        \   'separator': ' · ',
+  let s:popupmenu_renderer = wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+        \ 'border': 'rounded',
+        \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
+        \ 'highlights': { 'accent': 'Statement'},
+        \ 'highlighter': s:highlighters,
+        \ 'reverse': v:false,
+        \ 'left': [
+        \   ' ',
+        \   wilder#popupmenu_devicons(),
+        \   wilder#popupmenu_buffer_flags({
+        \     'flags': ' a + ',
+        \     'icons': {'+': '', 'a': '', 'h': ''},
+        \   }),
+        \ ],
+        \ 'right': [
+        \   ' ',
+        \   wilder#popupmenu_scrollbar(),
+        \ ],
         \ }))
 
+  let s:wildmenu_renderer = wilder#wildmenu_renderer({
+        \ 'highlighter': s:highlighters,
+        \ 'highlights': { 'accent': 'Statement'},
+        \ 'separator': ' · ',
+        \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
+        \ 'right': [' ', wilder#wildmenu_index()],
+        \ })
+
+        " \ ':': s:experimental_popupmenu_renderer,
   call wilder#set_option('renderer', wilder#renderer_mux({
         \ ':': s:popupmenu_renderer,
         \ '/': s:popupmenu_renderer,
-        \ 'substitute': s:wildmenu_renderer,
+        \ 'substitute': s:popupmenu_renderer,
         \ }))
+
 endfunction
 
+call wilder#set_option('renderer', wilder#wildmenu_renderer({
+      \ 'highlighter': wilder#basic_highlighter(),
+      \ 'separator': ' · ',
+      \ 'left': [' ', wilder#wildmenu_spinner(), ' '],
+      \ 'right': [' ', wilder#wildmenu_index()],
+      \ }))
+
+" wilder workaround based on https://github.com/neovim/neovim/issues/14304
+" function! SetShortmessF(on) abort
+"   if a:on
+"     set shortmess+=F
+"   else
+"     set shortmess-=F
+"   endif
+"   return ''
+" endfunction
+
+" nnoremap <expr> : SetShortmessF(1) . ':'
+
+" augroup WilderShortmessFix
+"   autocmd!
+"   autocmd CmdlineLeave * call SetShortmessF(0)
+" augroup END
+" wilder workaround based on https://github.com/neovim/neovim/issues/14304
+
+
+nnoremap <leader>S <cmd>lua require('spectre').open()<CR>
+"search current word
+nnoremap <leader>sw <cmd>lua require('spectre').open_visual({select_word=true})<CR>
+vnoremap <leader>s <esc>:lua require('spectre').open_visual()<CR>
+"  search in current file
+nnoremap <leader>sp viw:lua require('spectre').open_file_search()<cr>
+" run command :Spectre
+
 lua << EOF
+
+-- local function grep_string()
+--   vim.g.grep_string_mode = true
+--   vim.ui.input({ prompt = 'Grep string', default = fn.expand("<cword>") },
+--     function(value)
+--       if value ~= nil then
+--         require('telescope.builtin').grep_string({ search = value })
+--       end
+--       vim.g.grep_string_mode = false
+--     end)
+-- end
+-- vim.keymap.set(
+--   {"n","x"},
+--   "<leader>/",
+--   "grep_string",
+--   { noremap = true }
+-- )
+-- vim.api.nvim_set_keymap(
+--   "n",
+--   "<leader>/",
+--   "grep_string",
+--   { noremap = true }
+-- )
+
+require('spectre').setup()
 
 local actions = require "telescope.actions"
 local action_layout = require "telescope.actions.layout"
@@ -508,13 +608,23 @@ local action_layout = require "telescope.actions.layout"
 ------------------------------
 require('telescope').setup {
   defaults = {
-    path_display = {"smart"},
-    wrap_results = true,
+    cache_picker = {num_pickers = 10},
+    dynamic_preview_title = true,
+    layout_strategy = "vertical",
     layout_config = {
-      horizontal = {
-        prompt_position = "top"
-      },
+      vertical = {
+        width = 0.9, height = 0.9, preview_height = 0.6, preview_cutoff = 0, prompt_position = "top", mirror = true
+      }
     },
+    path_display = {"smart", shorten = {len = 3}},
+    wrap_results = true,
+    -- path_display = {"smart"},
+    -- wrap_results = true,
+    -- layout_config = {
+    --   horizontal = {
+    --     prompt_position = "top"
+    --   },
+    -- },
     sorting_strategy = "ascending",
     mappings = {
       n = {
@@ -527,6 +637,9 @@ require('telescope').setup {
         ['<c-d>'] = actions.delete_buffer,
       },
       i = {
+        -- ["<cr>"] = function(bufnr)
+        --   require("telescope.actions.set").edit(bufnr, "tab drop")
+        -- end,
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
         ["<M-p>"] = action_layout.toggle_preview,
@@ -554,6 +667,9 @@ require('telescope').setup {
       -- end,
     },
     live_grep = {
+      mappings = {
+        i = { ["<c-f>"] = require('telescope.actions').to_fuzzy_refine },
+      },
       only_sort_text = true,
       -- https://www.reddit.com/r/neovim/comments/udx0fi/telescopebuiltinlive_grep_and_operator/
       on_input_filter_cb = function(prompt)
@@ -600,10 +716,11 @@ require('telescope').setup {
     bookmarks = {
       selected_browser = 'chrome',
     },
+    -- file_browser = {layout_strategy = "horizontal", sorting_strategy = "ascending"},
+    heading = {treesitter = true},
+    ["ui-select"] = {require("telescope.themes").get_dropdown({})}
   }
 }
-require("telescope").load_extension("ui-select")
-
 -- local M = {}
 
 -- function M.project_files()
@@ -654,7 +771,7 @@ require('telescope').load_extension('gh')
 -- | `<c-r>` | request run rerun                            |
 -- Telescope gh gist
 -- Telescope gh issues
-require('telescope').load_extension('coc')
+-- require('telescope').load_extension('coc')
 require("telescope").load_extension("git_worktree")
 
 local worktree = require("git-worktree")
@@ -672,9 +789,12 @@ end)
 
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('bookmarks')
-require("telescope").load_extension("emoji")
 require('telescope').load_extension('env')
 require("telescope").load_extension("notify")
+require("telescope").load_extension("ui-select")
+
+require('telescope').load_extension('terraform_doc')
+
 
 -- require('telescope').load_extension('neoclip')
 -- require('neoclip').setup({
@@ -697,25 +817,6 @@ require("telescope").load_extension("notify")
 
 -- nvim-telescope/telescope-dap.nvim
 require('telescope').load_extension('dap')
-
-require('coverage').setup {}
-
-require('harpoon').setup {}
-
--- autocmd for opening file in vsplit:
-local group = vim.api.nvim_create_augroup("Harpoon Augroup", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "harpoon",
-    group = group,
-    callback = function()
-        vim.keymap.set("n", "<C-V>", function()
-            local curline = vim.api.nvim_get_current_line()
-            local working_directory = vim.fn.getcwd() .. "/"
-            vim.cmd("vs")
-            vim.cmd("e " .. working_directory .. curline)
-        end, { noremap = true, silent = true })
-    end,
-})
 
 vim.cmd([[
     hi link BqfPreviewBorder Statement
@@ -838,7 +939,7 @@ require('nvim-tree').setup {
 }
 
 local leap = require "leap"
-leap.setup {
+-- leap.setup {
   -- case_sensitive = true,
   -- {
   --   repeat_search = '<enter>',
@@ -850,7 +951,7 @@ leap.setup {
   --   multi_accept = '<enter>',
   --   multi_revert = '<backspace>',
   -- }
-}
+-- }
 leap.add_default_mappings()
 
 vim.keymap.del({'x', 'o'}, 'x')
@@ -924,34 +1025,6 @@ vim.api.nvim_set_keymap(
 
 EOF
 
-" Plug 'ThePrimeagen/harpoon'
-" left index finger
-nnoremap <silent>\f :lua require("harpoon.ui").toggle_quick_menu()<CR>
-nnoremap <silent>\d :lua require("harpoon.cmd-ui").toggle_quick_menu()<CR>
-
-" lift the finger to do sth "dangerous"
-nnoremap <silent>\g :lua require("harpoon.mark").add_file()<CR>
-nnoremap <silent>\f :lua require("harpoon.mark").add_file()<CR>
-
-" right home row, no finger lifting required
-nnoremap <silent>\j :lua require("harpoon.ui").nav_file(1)<CR>
-nnoremap <silent>\k :lua require("harpoon.ui").nav_file(2)<CR>
-nnoremap <silent>\l :lua require("harpoon.ui").nav_file(3)<CR>
-nnoremap <silent>\; :lua require("harpoon.ui").nav_file(4)<CR>
-
-nnoremap <silent>\n :lua require("harpoon.ui").nav_next()<CR>
-nnoremap <silent>\p :lua require("harpoon.ui").nav_prev()<CR>
-
-nnoremap <silent>\tj :lua require("harpoon.tmux").gotoTerminal(1)<CR>
-nnoremap <silent>\tk :lua require("harpoon.tmux").gotoTerminal(2)<CR>
-nnoremap <silent>\cj :lua require("harpoon.tmux").sendCommand(1, 1)<CR>
-nnoremap <silent>\ck :lua require("harpoon.tmux").sendCommand(1, 2)<CR>
-
-
-" Plug 'shivamashtikar/tmuxjump.vim'
-nmap <leader>jf :TmuxJumpFile<cr>
-" :TmuxJumpFile js & :TmuxJumpFirst js
-
 " Plug 'mileszs/ack.vim'
 let g:ackprg = 'rg --vimgrep'
 " Don't jump to first match
@@ -1005,78 +1078,81 @@ local rails_controller_patterns = {
 require("other-nvim").setup({
   rememberBuffers = false,
   mappings = {
-    {
-      pattern = "/src/(.*)/.*.js$",
-      target = "/src/%1/\\(*.css\\|*.scss\\)",
-    },
-    {
-      pattern = "/src/(.*)/.*.ts$",
-      target = "/src/%1/\\(*.css\\|*.scss\\)",
-    },
-    {
-      pattern = "/app/models/(.*).rb",
-      target = {
-        { target = "/spec/factories/%1.rb", context = "factories" },
-        { target = "/app/controllers/**/%1_controller.rb", context = "controller", transformer = "pluralize" },
-        { target = "/app/views/%1/**/*.html.*", context = "view", transformer = "pluralize" },
-      },
-    },
-    {
-      pattern = "/app/controllers/.*/(.*)_controller.rb",
-      target = rails_controller_patterns,
-    },
-    {
-      pattern = "/app/controllers/(.*)_controller.rb",
-      target = rails_controller_patterns,
-    },
-    {
-      pattern = "/app/views/(.*)/.*.html.*",
-      target = {
-        { target = "/spec/factories/%1.rb", context = "factories", transformer = "singularize" },
-        { target = "/app/models/%1.rb", context = "models", transformer = "singularize" },
-        { target = "/app/controllers/**/%1_controller.rb", context = "controller", transformer = "pluralize" },
-      },
-    },
-    {
-      pattern = "/app/models/(.*).rb",
-      target = "/spec/models/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/controllers/(.*).rb",
-      target = "/spec/controllers/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/channels/(.*).rb",
-      target = "/test/channels/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/mailers/(.*).rb",
-      target = "/spec/mailers/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/serializers/(.*).rb",
-      target = "/spec/serializers/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/services/(.*).rb",
-      target = "/spec/services/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/app/workers/(.*).rb",
-      target = "/spec/workers/%1_test.rb",
-      context = "spec"
-    },
-    {
-      pattern = "/lib/(.*).rb",
-      target = "/spec/lib/%1_test.rb",
-      context = "spec"
-    },
+    "rails",
+  },
+  mappings = {
+  --   {
+  --     pattern = "/src/(.*)/.*.js$",
+  --     target = "/src/%1/\\(*.css\\|*.scss\\)",
+  --   },
+  --   {
+  --     pattern = "/src/(.*)/.*.ts$",
+  --     target = "/src/%1/\\(*.css\\|*.scss\\)",
+  --   },
+  --   {
+  --     pattern = "/app/models/(.*).rb",
+  --     target = {
+  --       { target = "/spec/factories/%1.rb", context = "factories" },
+  --       { target = "/app/controllers/**/%1_controller.rb", context = "controller", transformer = "pluralize" },
+  --       { target = "/app/views/%1/**/*.html.*", context = "view", transformer = "pluralize" },
+  --     },
+  --   },
+  --   {
+  --     pattern = "/app/controllers/.*/(.*)_controller.rb",
+  --     target = rails_controller_patterns,
+  --   },
+  --   {
+  --     pattern = "/app/controllers/(.*)_controller.rb",
+  --     target = rails_controller_patterns,
+  --   },
+  --   {
+  --     pattern = "/app/views/(.*)/.*.html.*",
+  --     target = {
+  --       { target = "/spec/factories/%1.rb", context = "factories", transformer = "singularize" },
+  --       { target = "/app/models/%1.rb", context = "models", transformer = "singularize" },
+  --       { target = "/app/controllers/**/%1_controller.rb", context = "controller", transformer = "pluralize" },
+  --     },
+  --   },
+  --   {
+  --     pattern = "/app/models/(.*).rb",
+  --     target = "/spec/models/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/controllers/(.*).rb",
+  --     target = "/spec/controllers/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/channels/(.*).rb",
+  --     target = "/test/channels/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/mailers/(.*).rb",
+  --     target = "/spec/mailers/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/serializers/(.*).rb",
+  --     target = "/spec/serializers/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/services/(.*).rb",
+  --     target = "/spec/services/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/app/workers/(.*).rb",
+  --     target = "/spec/workers/%1_test.rb",
+  --     context = "spec"
+  --   },
+  --   {
+  --     pattern = "/lib/(.*).rb",
+  --     target = "/spec/lib/%1_test.rb",
+  --     context = "spec"
+  --   },
   }
 })
 

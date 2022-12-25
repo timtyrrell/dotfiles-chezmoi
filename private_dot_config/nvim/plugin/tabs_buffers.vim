@@ -20,16 +20,16 @@ nnoremap <leader>tn  :tabnew<cr>
 nnoremap <leader>to  :tabonly<cr>
 nnoremap <leader>tmp :-tabmove<CR>
 nnoremap <leader>tmn :+tabmove<CR>
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
-nnoremap <leader>0 tablast<CR>
+nnoremap <leader>1   1gt
+nnoremap <leader>2   2gt
+nnoremap <leader>3   3gt
+nnoremap <leader>4   4gt
+nnoremap <leader>5   5gt
+nnoremap <leader>6   6gt
+nnoremap <leader>7   7gt
+nnoremap <leader>8   8gt
+nnoremap <leader>9   9gt
+nnoremap <leader>0   :tablast<CR>
 " open current file in new tab
 " :help CTRL-W_T
 
@@ -44,11 +44,6 @@ map <leader>Bdh :BDelete hidden<CR>
 map <leader>Bda :BDelete all<CR>
 map <leader>Bdt :BDelete this<CR>
 map <leader>Bdn :BDelete nameless<CR>
-
-" Plug 'AndrewRadev/undoquit.vim'
-"<c-w>u reopen windo
-"<c-w>U reopen tab with all windows
-
 
 " Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 nmap <Leader>mt :MundoToggle<CR>

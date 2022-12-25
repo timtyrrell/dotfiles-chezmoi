@@ -26,6 +26,9 @@ alias nv='nvim -u ~/.config/nvim/init-nvim-lsp.vim'
 alias ndebug='nvim -V9myVim.log'
 alias nvim-startuptime='rm /tmp/vim.log; nvim --startuptime /tmp/vim.log -c "quit" && cat /tmp/vim.log'
 
+# edit zsh history
+alias zedit='fc -W; nvim "$HISTFILE"; fc -R'
+
 alias wl='watchman watch-list'
 alias wda='watchman watch-del-all'
 
@@ -106,16 +109,15 @@ alias gds='git diff --staged'
 alias gdc='git diff --cached'
 alias glod='git log --oneline --decorate'
 alias glola='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
-alias gp='git push'
+alias gpush='git push'
 alias gpf='git pushf'
-alias gpu='git pull'
+alias gp='git pull'
 alias gput='git fetch --tags -f && git pull'
 alias gpr='git pull --rebase'
 alias pulls='git browse -- pulls'
 alias branches='git browse -- branches'
-# alias open-PLACEHOLDER='git browse PLACEHOLDER'
 alias gst='git status -sb'
-alias gstl='git status'
+alias gsta='git status'
 alias ghst='gh pr status'
 alias ghpr='gh pr list | fzf-tmux -p 90%,90% --preview "gh pr diff --color=always {+1}" |  { read first rest ; echo $first ; } | xargs gh pr checkout'
 alias ghd='gh pr list | fzf-tmux -p 90%,90% --preview "gh pr diff --color=always {+1}" |  { read first rest ; echo $first ; } | xargs gh pr diff'
@@ -155,7 +157,7 @@ alias gup="git up"
 alias hokey="pokey"
 alias sha="git rev-parse HEAD"
 alias cannonball="git add . && git commit --amend -C HEAD && git push --force-with-lease"
-alias cannonballyolo="git add . && HUSKY_SKIP_HOOKS=1 git commit --amend -C HEAD && git push --force-with-lease"
+alias cannonballyolo="git add . && HUSKY=0 git commit --amend -C HEAD && git push --force-with-lease"
 alias fix='nvim +/HEAD `git diff --name-only | uniq`'
 
 # https://github.com/gennaro-tedesco/gh-f
@@ -173,6 +175,12 @@ alias ghpr_combineyolo='gh combine-prs --query "author:app/dependabot" --skip-pr
 alias tmux_plugins_install="~/.tmux/plugins/tpm/bin/install_plugins"
 alias tmux_plugins_update="~/.tmux/plugins/tpm/bin/update_plugins all"
 alias tmux_plugins_clean="~/.tmux/plugins/tpm/bin/clean_plugins"
+
+# frum
+alias rbl="frum local"
+alias rbg="frum global"
+alias rbu="frum uninstall"
+alias rbv="frum versions"
 
 # random alias
 alias nvm="fnm"

@@ -1,13 +1,12 @@
 let g:coc_enable_locationlist = 0
           " \ 'coc-import-cost',
+          " \ 'coc-coverage',
 let g:coc_global_extensions = [
-          \ 'coc-coverage',
           \ 'coc-css',
           \ 'coc-cssmodules',
           \ 'coc-db',
           \ 'coc-docker',
           \ 'coc-emmet',
-          \ 'coc-emoji',
           \ 'coc-eslint',
           \ 'coc-git',
           \ 'coc-html',
@@ -50,24 +49,6 @@ set shortmess+=F
 " shortmess=filnxtToOFsIc
 " shortmess=aoOcSF
 
-" wilder workaround based on https://github.com/neovim/neovim/issues/14304
-function! SetShortmessF(on) abort
-  if a:on
-    set shortmess+=F
-  else
-    set shortmess-=F
-  endif
-  return ''
-endfunction
-
-nnoremap <expr> : SetShortmessF(1) . ':'
-
-augroup WilderShortmessFix
-  autocmd!
-  autocmd CmdlineLeave * call SetShortmessF(0)
-augroup END
-" wilder workaround based on https://github.com/neovim/neovim/issues/14304
-
 " leave space for git, diagnostics and marks
 set signcolumn=auto:5
 
@@ -80,11 +61,11 @@ endfunction
 " <tab> /<s-tab> snippet mappings take precedence
 " Insert <tab> when previous text is space, refresh completion if not.
 " *** this conflicts with 'abecodes/tabout.nvim'***
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" inoremap <silent><expr> <TAB>
+"       \ coc#pum#visible() ? coc#pum#next(1) :
+"       \ CheckBackspace() ? "\<Tab>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " also use C-j, C-k to move in completion list
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
@@ -130,25 +111,32 @@ nmap <silent> gu <Plug>(coc-references-used)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gm <Plug>(coc-implementation)
 
-nmap <space>go <Plug>(coc-refactor)
+
 nmap <space>cn <Plug>(coc-rename)
 
-nmap <space>cf <Plug>(coc-fix-current)
-nmap <space>ce <Plug>(coc-codelens-action)
+" refactor buffer
+nmap <space>cb <Plug>(coc-refactor)
+
+nmap <silent> <space>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
+
+nmap <space>cc <Plug>(coc-fix-current)
+nmap <space>cl <Plug>(coc-codelens-action)
 nmap <space>ca <Plug>(coc-codeaction)
-nmap <space>cc <Plug>(coc-codeaction-cursor)
+nmap <space>cw <Plug>(coc-codeaction-cursor)
+nmap <space>cf <Plug>(coc-codeaction-source)
 nmap <space>cl <Plug>(coc-codeaction-line)
-" apply codeAction to the selected region. Ex: `<space>aap` for current paragraph
 vmap <space>cs <Plug>(coc-codeaction-selected)
 nmap <space>cs <Plug>(coc-codeaction-selected)
 
 " incoming calls
-nmap <space>cki <cmd>CHI<cr>
+nmap <space>cki <Cmd>CHI<cr>
 " outgoing calls
-nmap <space>cko <cmd>CHO<cr>
-nmap <space>co  <cmd>CocOutline<cr>
-nmap <space>cw  :<C-u>CocSearch -w <C-R><C-W><cr>
-nmap <space>cr  :<C-u>CocRestart<CR>
+nmap <space>cko <Cmd>CHO<cr>
+nmap <space>co  <Cmd>CocOutline<cr>
+nmap <space>cw  <Cmd>CocSearch -w <C-R><C-W><cr>
+nmap <space>cr  <Cmd>CocRestart<CR>
 
 " show outline for each tab automatically
 " autocmd VimEnter,Tabnew *
@@ -166,9 +154,9 @@ function! CheckOutline() abort
 endfunction
 
 " nmap <space> <Plug>(coc-format)
-" nmap <space> :<C-u>CocCommand eslint.executeAutofix<cr>
-" nmap <space> :<C-u>CocCommand tsserver.organizeImports<cr>
-" nmap <space> :<C-u>CocCommand tsserver.findAllFileReferences<cr>
+" nmap <space> <Cmd>CocCommand eslint.executeAutofix<cr>
+" nmap <space> <Cmd>CocCommand tsserver.organizeImports<cr>
+" nmap <space> <Cmd>CocCommand tsserver.findAllFileReferences<cr>
 command! -nargs=0 TscGTSD  :call CocAction('runCommand', 'tsserver.goToSourceDefinition')
 " ? autocmd FileType typescriptreact,javascript,javascriptreact,typescript nnoremap <buffer> <silent> gd :TscGTSD<cr>
 command! -nargs=0 Tsc      :call CocAction('runCommand', 'tsserver.watchBuild')
@@ -210,9 +198,9 @@ let g:coc_snippet_next = '<Tab>'
 let g:coc_snippet_prev = '<S-Tab>'
 
 " Do default action for next item.
-nnoremap <silent><nowait> <space>an :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <space>an <Cmd>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <space>ap :<C-u>CocPrev<CR>
+nnoremap <silent><nowait> <space>ap <Cmd>CocPrev<CR>
 
 command -nargs=0 Swagger :CocCommand swagger.render
 
@@ -229,6 +217,17 @@ let g:coc_fzf_preview='right:50%'
 let g:coc_fzf_preview_fullscreen=0
 let g:coc_fzf_preview_toggle_key='\'
 
+lua << EOF
+require("telescope").setup({
+  extensions = {
+    coc = {
+        theme = 'ivy',
+        prefer_locations = true,
+    }
+  },
+})
+require('telescope').load_extension('coc')
+EOF
 " fannheyward/telescope-coc.nvim
 " mru
 " links
@@ -247,9 +246,9 @@ nnoremap <silent><nowait> <space>zl :Telescope coc locations<CR>
 nnoremap <silent><nowait> <space>zs :Telescope coc workspace_symbols<CR>
 nnoremap <silent><nowait> <space>zS :Telescope coc document_symbols<CR>
 
-nnoremap <silent><nowait> <space>zo :<C-u>CocFzfList outline<CR>
-" nnoremap <silent><nowait> <space>zS :<C-u>CocFzfList symbols <C-R><C-W><CR>
-nnoremap <silent><nowait> <space>zy :<C-u>CocFzfList yank<CR>
+nnoremap <silent><nowait> <space>zo <Cmd>CocFzfList outline<CR>
+" nnoremap <silent><nowait> <space>zS <Cmd>CocFzfList symbols <C-R><C-W><CR>
+nnoremap <silent><nowait> <space>zy <Cmd>CocFzfList yank<CR>
 nnoremap <silent><nowait> <leader>zf :call <SID>coc_qf_diagnostic()<CR>
 
 function! s:coc_qf_diagnostic() abort
@@ -315,9 +314,7 @@ augroup CocGroup
   " run this also?
   " :CocCommand workspace.clearWatchman
 
-  " autocmd VimLeavePre * :call coc#rpc#kill()
   " autocmd VimLeave * if get(g:, 'coc_process_pid', 0) | call system('kill -9 -'.g:coc_process_pid) | endif
 
   " autocmd FileType python let b:coc_root_patterns = ['app.py']
 augroup end
-
