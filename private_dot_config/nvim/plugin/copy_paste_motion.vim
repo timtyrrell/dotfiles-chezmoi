@@ -114,7 +114,7 @@ nnoremap <leader>> V`]>
 inoremap <C-r> <C-r><C-o>
 inoremap <C-r><C-o> <C-r>
 
-" reselect pasted text. gv, reselects the last visual selection
+" `gp` reselect pasted text. `gv` reselects the last visual selection
 nnoremap gp `[v`]
 
 lua << EOF

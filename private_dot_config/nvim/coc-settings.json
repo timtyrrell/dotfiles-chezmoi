@@ -168,7 +168,7 @@
   "suggest.noselect": true,
   "suggest.selection": "first",
   "suggest.defaultSortMethod": "length",
-  "suggest.minTriggerInputLength": 3,
+  "suggest.minTriggerInputLength": 2,
   "suggest.removeDuplicateItems": true,
   "suggest.snippetIndicator": "+",
   "suggest.triggerCompletionWait": 30,

@@ -50,7 +50,7 @@ nnoremap <leader>ve :VenterToggle<CR>
 nnoremap <leader>zm :ZenMode<CR>
 
 " Plug 'folke/trouble.nvim'
-nmap <silent> gL <cmd>call coc#rpc#request('fillDiagnostics', [bufnr('%')])<CR><cmd>Trouble loclist<CR>
+" nmap <silent> gL <cmd>call coc#rpc#request('fillDiagnostics', [bufnr('%')])<CR><cmd>Trouble loclist<CR>
 
 " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 let g:mkdp_browser = 'Chrome'
@@ -82,107 +82,14 @@ require("tokyonight").setup({
 EOF
 colorscheme tokyonight
 
-" lightline
-let g:lightline = {
-    \ 'active': {
-    \   'left': [ [ 'coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok'],
-    \             [ 'paste', 'gitbranch', 'filename', 'modified'] ],
-    \   'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ],
-    \ },
-    \ 'component_function': {
-    \   'gitbranch': 'LightlineBranchformat',
-    \   'filename': 'LightlineFilenameDisplay',
-    \   'fileformat': 'LightlineFileformat',
-    \   'filetype': 'LightlineFiletype',
-    \   'lineinfo': 'LightlineLineInfo',
-    \   'percent': 'LightlinePercent',
-    \ },
-    \ 'separator': { 'left': "\ue0b4", 'right': "\ue0b6" },
-    \ 'subseparator': { 'left': "\ue0b5", 'right': "\ue0b7" },
-    \ 'tab_component_function': {
-    \   'tabnum': 'LightlineWebDevIcons',
-    \   'filename': 'LightlineTabname',
-    \ },
-    \ }
-let g:lightline#coc#indicator_warnings = ''
-let g:lightline#coc#indicator_errors = ''
-let g:lightline#coc#indicator_info = ''
-
-function! LightlinePercent() abort
-    if winwidth(0) < 60
-        return ''
-    endif
-    let l:percent = line('.') * 100 / line('$') . '%'
-    return printf('%-4s', l:percent)
-endfunction
-
-function! LightlineLineInfo()
-  return &ft =~? 'NvimTree' ? '' : printf(' %d/%d:%-2d', line('.'), line('$'), col('.'))
-endfunction
-
-function! LightlineFilenameDisplay()
-  if &ft == 'NvimTree'
-    return ''
-  else
-    return winwidth(0) > 90 ? WebDevIconsGetFileTypeSymbol(LightlineFilename()) . " ". LightlineFilename() : pathshorten(fnamemodify(expand("%"), ":."))
-  endif
-endfunction
-
-function! LightlineFilename()
-  let root = fnamemodify(get(b:, 'git_dir'), ':h')
-  let path = expand('%:p')
-  if path[:len(root)-1] ==# root
-    return path[len(root)+1:]
-  endif
-  return expand('%')
-endfunction
-
-function! LightlineTabname(n) abort
-  let l:bufnr = tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]
-  let l:fname = expand('#' . l:bufnr . ':t')
-  return l:fname == '__Mundo__' ? 'Mundo' :
-    \ l:fname == '__Mundo_Preview__' ? 'Mundo Preview' :
-    \ l:fname =~ 'FZF' ? '' :
-    \ l:fname =~ 'NvimTree' ? 'NvimTree' :
-    \ l:fname =~ '\[Plugins\]' ? 'Plugins' :
-    \ ('' != l:fname ? l:fname : '')
-endfunction
-
-function! LightlineWebDevIcons(n)
-  let l:bufnr = tabpagebuflist(a:n)[tabpagewinnr(a:n) - 1]
-  return WebDevIconsGetFileTypeSymbol(bufname(l:bufnr))
-endfunction
-
-function! LightlineFiletype()
-  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol(LightlineFilename()) : 'no ft') : ''
-endfunction
-
-function! LightlineFileformat()
-  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
-endfunction
-
-function! LightlineBranchformat()
-  try
-    if winwidth(0) > 100 && expand('%:t') !~? 'Tagbar\|NERD' && &ft !~? 'NvimTree' && exists('*FugitiveHead')
-      let mark = ' '
-      let branch = FugitiveHead()
-      return branch !=# '' ? mark.branch : ''
-    else
-      return ''
-    endif
-  catch
-    return ''
-  endtry
-endfunction
-
-let g:lightline.colorscheme = 'tokyonight'
-
-" register compoments:
-call lightline#coc#register()
-
 lua << EOF
+
+-- require("colorful-winsep").setup({
+--   no_exec_files = { "packer", "TelescopePrompt", "mason", "CompetiTest", "NvimTree" },
+-- })
+-- require('import-cost').setup()
+
+require("tidy").setup()
 
 require('marks').setup {
   default_mappings = false,
@@ -255,12 +162,12 @@ require('lualine').setup {
   sections = {
     lualine_a = {},
     lualine_b = {
-      {'FugitiveHead', icon = '', fmt=trunc(90, 30, 50)},
+      {'FugitiveHead', icon = '', fmt=trunc(100, 30, 90)},
       {'diff'},
       {'diagnostics'}
     },
     lualine_c = {{'filename', path = 1}},
-    lualine_x = {{'filetype', fmt=trunc(90, 30, 50)}},
+    lualine_x = {{'filetype', fmt=trunc(100, 30, 90)}},
     lualine_y = {{'progress', fmt=trunc(90, 30, 50)}},
     lualine_z = {{'location', fmt=trunc(90, 30, 50)}}
   },
@@ -273,7 +180,7 @@ require('lualine').setup {
     lualine_z = {}
   },
   tabline = {
-    lualine_a = {{'tabs', mode = 3}},
+    lualine_a = {{'tabs', mode = 3, max_length = vim.o.columns}},
     lualine_b = {},
     lualine_c = {},
     lualine_x = {},
@@ -298,10 +205,11 @@ registers.setup({
 require('terminal').setup {}
 
 require('package-info').setup({
+  hide_up_to_date = true,
   package_manager = 'yarn'
 })
 -- Show package versions
-vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show()<CR>", { silent = false, noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show({ force = true })<CR>", { silent = false, noremap = true })
 -- Hide package versions
 vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
 -- Update package on line

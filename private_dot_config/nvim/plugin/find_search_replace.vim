@@ -52,7 +52,7 @@ nnoremap <silent> <Leader>ff <cmd>Files<CR>
 nnoremap <silent> <Leader>fF :Files<space>
 
 " TODO: move to rails specific filetype folder
-nnoremap <Leader>aa  :A<CR>
+" nnoremap <Leader>aa  :A<CR>
 nnoremap <silent> <Leader>ea :Files app/assets<CR>
 nnoremap <silent> <Leader>ec :Files app/controllers<CR>
 nnoremap <silent> <Leader>eh :Files app/helpers<CR>
@@ -121,31 +121,163 @@ nnoremap <silent> <leader>fd <cmd>lua require('telescope.builtin')
       \ })<cr>
 " nnoremap <silent> <Leader>fd :Files <C-R>=expand('%:h')<CR><CR>
 
-" Rg current word under cursor
 " nnoremap <silent> <leader>rw <cmd>lua require('telescope.builtin')
 "       \ .grep_string({
 "       \   only_sort_text = true,
 "       \   word_match = '-w',
 "       \ })<cr>
+" Rg current word under cursor
 nnoremap <silent> <Leader>rw :RgLines <C-R><C-W><CR>
 
 " Rg with any params (filetypes)
-nnoremap <leader>rf :RG **/*.
+" nnoremap <leader>rf :RG **/*.
 
 " Rg with dir autocomplete
 nnoremap <leader>rd :RGdir<Space>
 " nnoremap <leader>rd <cmd>GrepInDirectory<CR>
 " nnoremap <leader>rd <cmd>FileInDirectory<CR>
 
-" Only search NON-test files defined in .ripgreprc
-nnoremap <silent> <leader>rt :RG --type-not test<CR>
-" nnoremap <silent> <leader>rt :RG --type-not test -g '!{cypress,test,*mocks*,__test__,__tests__}'<CR>
+" https://github.com/ranelpadon/configs/blob/6bdc3f975e5433d1d792c38f1167c16c90136579/nvim/plugins-config/fzf.vim
+" We just need a dummy command that do nothing.
+let s:rg_initial_command = 'true'
 
-" Only search test files defined in .ripgreprc
-nnoremap <silent> <leader>rT :RG --type test<CR>
+let s:rg_colors = ' --colors line:fg:red --colors path:fg:blue --colors match:fg:green '
 
-" Search by file path/names AND file contents
-nnoremap <silent> <Leader>ra :Rg<CR>
+" {q} is the query string passed from fzf to ripgrep.
+" If query is empty do nothing instead of fetching all lines.
+" `--fixed-strings` to avoid escaping regex chars like parentheses.
+" `%s` is a placeholder for `rg_base_command` and resolved by using `printf()`.
+let s:rg_full_command = '[[ {q} != "" ]] && '. '%s' . s:rg_colors . ' --line-number --color=always --smart-case --fixed-strings {q} || ' . s:rg_initial_command
+
+command! -bang -nargs=* Rg
+\   call fzf#vim#grep(
+\       'rg' . s:rg_colors . ' --line-number --color=always --smart-case -- '.shellescape(<q-args>), 1,
+\       fzf#vim#with_preview({'options': '--exact --delimiter : --nth 3..'}), <bang>0
+\   )
+
+" On-demand search using Rg if query is non-empty. Fzf is a middleman only.
+function! RgReloader(query, fullscreen, rg_base_command)
+    " Shift focus to the right/main window, especially when focus is in sidebar.
+    :wincmd l
+
+    let rg_reload_command = printf(s:rg_full_command, a:rg_base_command)
+
+    " --disabled: disable the fuzzy search, use fzf just a simple filter/pipe which is mainly search by Rg (makes the fzf's `--exact` option useless)
+    " Use `--phony` for version 0.24.0 or lower.
+    " https://github.com/junegunn/fzf/blob/master/CHANGELOG.md#0250
+    " --bind 'change:reload:rg ... {q}' will make fzf restart ripgrep process whenever the query string
+    " With --phony option, fzf will no longer perform search. The query string you type on fzf prompt is only used for restarting ripgrep process.
+    " `--delimiter`: parse per line.
+    " `--nth`: the scope of the search after parsing with delimiter.
+    " Looks like `--disabled` makes the `--delimiter` and `--nth` useless and will just relay the searching to `ripgrep`.
+    " let fzf_options = {'options': ['--prompt', 'λ ', '--disabled', '--phony', '--query', a:query, '--bind', 'change:reload:'.rg_reload_command, '--delimiter', ':', '--nth', '3..']}
+    let fzf_options = {
+        \ 'options':
+            \ [
+                \ '--prompt', 'λ ',
+                \ '--disabled',
+                \ '--phony',
+                \ '--query', a:query,
+                \ '--preview-window', 'right,50%,border-left',
+                \ '--bind', 'change:reload:' . rg_reload_command,
+                \ '--bind', '\:toggle-preview',
+            \ ]
+    \ }
+
+    " call fzf#vim#grep(s:rg_initial_command, 1, fzf#vim#with_preview(fzf_options), a:fullscreen)
+    call fzf#vim#grep(s:rg_initial_command, 1, fzf#vim#with_preview(fzf_options))
+endfunction
+
+" On-load search using Rg and Fzf, regardless if query is non-empty.
+function! RgLoader(query, fullscreen, rg_base_command)
+    " Shift focus to the right/main window, especially when focus is in sidebar.
+    :wincmd l
+
+    " Use empty string ("") as initial query string ({q}) to load all lines.
+    " Then, `rg` could search the contents and return the results with file paths.
+    " Then, `fzf` could search the file paths as well.
+    " Hence, this will load all lines at first, then use `fzf` to query the initial data.
+    " No data reloading will be done unlike in `RgReloader()`.
+    let _rg_load_command = a:rg_base_command . s:rg_colors . ' --line-number --color=always --smart-case --fixed-strings %s || true'
+    " Resolve the `%s` query string.
+    let rg_load_command = printf(_rg_load_command, shellescape(a:query))
+
+    let fzf_options = {
+        \ 'options':
+            \ [
+                \ '--prompt', 'λ ',
+                \ '--exact',
+                \ '--preview-window', 'right,50%,border-left',
+                \ '--bind', '\:toggle-preview',
+            \ ]
+    \ }
+    " call fzf#vim#grep(rg_load_command, 1, fzf#vim#with_preview(fzf_options), a:fullscreen)
+    call fzf#vim#grep(rg_load_command, 1, fzf#vim#with_preview(fzf_options))
+endfunction
+
+" mnemonics
+" Rg all (filetype)
+" Rg file (filetype)
+" Rg test(file) (filetype)
+
+" Search all file content
+let rg_all = 'rg'
+command! -nargs=* -bang RgAll call RgReloader(<q-args>, <bang>0, rg_all)
+noremap <Leader>raa :RgAll<CR>
+
+" Search all file content using the word under the cursor
+nnoremap <silent> <Leader>rawa :call RgLoader(expand('<cword>'), 0, rg_all)<CR>
+
+" Search all file content, includes the filename in matches
+command! -nargs=* -bang RgAll call RgLoader(<q-args>, <bang>0, rg_all)
+noremap <Leader>raf :RgAll<CR>
+
+" Search all JS/JSX/TS/TSX file content
+let rg_js_ts_all = 'rg --type webjsts'
+command! -nargs=* -bang RgJsTsAll call RgReloader(<q-args>, <bang>0, rg_js_ts_all)
+noremap <Leader>raj :RgJsTsAll<CR>
+
+" Search JS/JSX/TS/TSX file content, exclude test files
+let rg_js_ts = 'rg --type webjsts --glob "!**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*" '
+command! -nargs=* -bang RgJsTs call RgReloader(<q-args>, <bang>0, rg_js_ts)
+noremap <Leader>rfj :RgJsTs<CR>
+
+" Search JS/JSX/TS/TSX file content, only test files
+let rg_js_ts_test = 'rg --type webjsts --glob "**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"'
+command! -nargs=* -bang RgJsTsTest call RgReloader(<q-args>, <bang>0, rg_js_ts_test)
+noremap <Leader>rtj :RgJsTsTest<CR>
+
+" Search all JS/JSX/TS/TSX file content using the word under the cursor
+nnoremap <silent> <Leader>rawj :call RgLoader(expand('<cword>'), 0, rg_js_ts_all)<CR>
+" Search JS/JSX/TS/TSX file content using the word under the cursor, exclude test files
+nnoremap <silent> <Leader>rfwj :call RgLoader(expand('<cword>'), 0, rg_js_ts)<CR>
+" Search JS/JSX/TS/TSX test file content using the word under the cursor, only test files
+nnoremap <silent> <Leader>rtwj :call RgLoader(expand('<cword>'), 0, rg_js_ts_test)<CR>
+
+" Search all RB/ERB/SLIM/HTML file content
+let rg_rb_all = 'rg --type webrb'
+command! -nargs=* -bang RgRbAll call RgReloader(<q-args>, <bang>0, rg_rb_all)
+noremap <Leader>rar :RgRbAll<CR>
+
+" Search RB/ERB/SLIM/HTML file content, exclude test files
+let rg_rb = 'rg --type webrb --glob "!spec/**/*.*"'
+command! -nargs=* -bang RgRb call RgReloader(<q-args>, <bang>0, rg_rb)
+noremap <Leader>rfr :RgRb<CR>
+
+" Search RB/ERB/SLIM/HTML file content, only test files
+let rg_rb_test = 'rg --type webrb --glob "spec/**/*.*"'
+command! -nargs=* -bang RgRbTest call RgReloader(<q-args>, <bang>0, rg_rb_test)
+noremap <Leader>rtr :RgRbTest<CR>
+
+" Search all RB/ERB/SLIM/HTML file content using the word under the cursor
+nnoremap <silent> <Leader>rawr :call RgLoader(expand('<cword>'), 0, rg_rb_all)<CR>
+" Search RB/ERB/SLIM/HTML file content using the word under the cursor, exclude test files
+nnoremap <silent> <Leader>rfwr :call RgLoader(expand('<cword>'), 0, rg_rb)<CR>
+" Search RB/ERB/SLIM/HTML test file content using the word under the cursor, only test files
+nnoremap <silent> <Leader>rtwr :call RgLoader(expand('<cword>'), 0, rg_rb_test)<CR>
+
+" " Search by file path/names AND file contents
+" nnoremap <silent> <Leader>raa :Rg<CR>
 
 " Search lines in _all_ buffers with smart-case (this only does the current buffer???)
 " command! -bang -nargs=* BLines
@@ -156,7 +288,7 @@ nnoremap <silent> <Leader>ra :Rg<CR>
 " do not search filename, just file contents of all file Lines in root dir with smartcase
 command! -bang -nargs=* RgLines
   \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case  -- '.shellescape(<q-args>), 1,
+  \   'rg --column --line-number --no-heading --color=always --case-sensitive  -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview({ 'options': ['--delimiter', ':', '--nth', '4..'] }), <bang>0)
   " \   'rg --column --line-number --no-heading --color=always --colors 'path:fg:190,220,255' --colors 'line:fg:128,128,128' --smart-case  -- '.shellescape(<q-args>), 1,
   " \   fzf#vim#with_preview({ 'options': ['--delimiter', ':', '--nth', '4..', '--color', 'hl:123,hl+:222'] }), <bang>0)
@@ -179,11 +311,14 @@ command! -bang -nargs=* AgWord call fzf#vim#ag(<q-args>, '--word-regexp', <bang>
 " filter search by a passed in query (exact match)
 " TODO doesn't work passing in a <, for example
 function! RipgrepFzfExact(filepaths, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --with-filename -e ''%s'' ' . a:filepaths . ' || true'
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --case-sensitive --with-filename -e ''%s'' ' . a:filepaths . ' || true'
   let initial_command = printf(command_fmt, '')
   let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command]}
+  let spec = {'options': ['--disabled', '--bind', 'change:reload:'.reload_command]}
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  " let spec = {'options': ['--disabled', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  " let spec = fzf#vim#with_preview(spec, 'right', 'ctrl-/')
+  " call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
 endfunction
 
 " redefine :Rg to all arg passing
@@ -403,6 +538,8 @@ xnoremap ik `]o`[
 onoremap ik <Cmd>normal vik<cr>
 onoremap ak <Cmd>normal vikV<cr>
 " to comment out lines from last motion, `gcak`
+" make the b motion inclusive by default using
+onoremap b vb
 
 " Find and Replace in *all* files
 function! FindAndReplace( ... )
@@ -879,7 +1016,6 @@ require('nvim-tree').setup {
   },
   disable_netrw       = false,
   hijack_netrw        = false,
-  ignore_ft_on_setup  = {"startify"},
   hijack_cursor       = true,
   reload_on_bufenter  = true,
   diagnostics = {
@@ -1054,10 +1190,6 @@ let g:matchup_text_obj_enabled = 0
 " Plug 'drmingdrmer/vim-toggle-quickfix'
 nmap <Leader>qq <Plug>window:quickfix:loop
 
-" Plug 'gabrielpoca/replacer.nvim'
-" lua require("replacer").run()
-" lua require("replacer").run({ rename_files = false })
-" https://www.reddit.com/r/vim/comments/lwr56a/search_and_replace_camelcase_to_snake_case/
 
 " Plug 'kevinhwang91/nvim-bqf'
 " zf - fzf in quickfix
@@ -1068,6 +1200,14 @@ nmap <Leader>qq <Plug>window:quickfix:loop
 " c-x (split)
 
 lua << EOF
+
+-- Plug 'gabrielpoca/replacer.nvim'
+-- lua require("replacer").run()
+-- lua require("replacer").run({ rename_files = false })
+-- https://www.reddit.com/r/vim/comments/lwr56a/search_and_replace_camelcase_to_snake_case/
+vim.keymap.set('n','<Leader>sr' , ':%s/<C-r><C-w>//gc<Left><Left><Left>',{silent = false,desc="search and replace cword"})
+vim.keymap.set('v','<Leader>sr' , 'y:%s/<C-R>"//gc<Left><Left><Left>',{silent = false,desc="search and replace selection"})
+
 
 local rails_controller_patterns = {
   { target = "/spec/factories/%1.rb", context = "factories", transformer = "singularize" },

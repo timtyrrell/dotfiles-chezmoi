@@ -2,10 +2,13 @@
 --max-columns-preview
 
 --type-add
-web:*.{ts,tsx,js,jsx}
+webjsts:*.{ts,tsx,js,jsx}
 
 --type-add
-test:*{e2e,mocks,__tests__,_spec,__test__,test}.{ts,tsx,js,jsx}
+webrb:*.{rb,erb,slim,html}
+
+--type-add
+testjsts:*{e2e,mocks,__tests__,__test__,test}.{ts,tsx,js,jsx}
 
 --glob=!.git/*
 --glob=!node_modules/*

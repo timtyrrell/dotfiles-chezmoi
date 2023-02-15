@@ -1,3 +1,86 @@
+lua << EOF
+-- require("gitsigns").setup({
+--   signs = {
+--     add = { hl = "GitSignsAdd", text = "▍", numhl = "GitSignsAddNr", linehl = "GitSignsAddLn" },
+--     change = {
+--       hl = "GitSignsChange",
+--       text = "▍",
+--       numhl = "GitSignsChangeNr",
+--       linehl = "GitSignsChangeLn",
+--     },
+--     delete = {
+--       hl = "GitSignsDelete",
+--       text = "▸",
+--       numhl = "GitSignsDeleteNr",
+--       linehl = "GitSignsDeleteLn",
+--     },
+--     topdelete = {
+--       hl = "GitSignsDelete",
+--       text = "▾",
+--       numhl = "GitSignsDeleteNr",
+--       linehl = "GitSignsDeleteLn",
+--     },
+--     changedelete = {
+--       hl = "GitSignsChange",
+--       text = "▍",
+--       numhl = "GitSignsChangeNr",
+--       linehl = "GitSignsChangeLn",
+--     },
+--   },
+  -- on_attach = function(bufnr)
+  --   local gs = package.loaded.gitsigns
+
+  --   local function map(mode, l, r, opts)
+  --     opts = opts or {}
+  --     if type(opts) == "string" then
+  --       opts = { desc = opts }
+  --     end
+  --     opts.buffer = bufnr
+  --     vim.keymap.set(mode, l, r, opts)
+  --   end
+
+  --   -- Navigation
+  --   map("n", "]h", function()
+  --     if vim.wo.diff then
+  --       return "]h"
+  --     end
+  --     vim.schedule(function()
+  --       gs.next_hunk()
+  --     end)
+  --     return "<Ignore>"
+  --   end, { expr = true, desc = "Next Hunk" })
+
+  --   map("n", "[h", function()
+  --     if vim.wo.diff then
+  --       return "[h"
+  --     end
+  --     vim.schedule(function()
+  --       gs.prev_hunk()
+  --     end)
+  --     return "<Ignore>"
+  --   end, { expr = true, desc = "Prev Hunk" })
+
+  --   -- Actions
+  --   map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage Hunk")
+  --   map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset Hunk")
+  --   map("n", "<leader>ghS", gs.stage_buffer, "Stage Buffer")
+  --   map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo Stage Hunk")
+  --   map("n", "<leader>ghR", gs.reset_buffer, "Reset Buffer")
+  --   map("n", "<leader>ghp", gs.preview_hunk, "Preview Hunk")
+  --   map("n", "<leader>ghb", function()
+  --     gs.blame_line({ full = true })
+  --   end, "Blame Line")
+  --   map("n", "<leader>ghd", gs.diffthis, "Diff This")
+  --   map("n", "<leader>ghD", function()
+  --     gs.diffthis("~")
+  --   end, "Diff This ~")
+
+  --   -- Text object
+  --   map({ "o", "x" }, "ih", "<Cmd>Gitsigns select_hunk<CR>", "GitSigns Select Hunk")
+  -- end,
+-- })
+EOF
+
 " Plug 'tpope/vim-fugitive'
 
 " 1. Run :G mergetool.
@@ -157,16 +240,22 @@ nnoremap <leader>gs :tab Git<CR>
 " put changed file names from previous commit into the quickfix list
 command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' --name-only <args>"), '{"filename": v:val, "lnum": 1}'))
 
-" diff on file
+" diff on current file
 nnoremap <leader>dvf <Cmd>DiffviewFileHistory <cr>
-" diff on project commits
+" diff on all project commits
 nnoremap <leader>dvF <Cmd>DiffviewFileHistory<cr>
+" diff on ?
 nnoremap <leader>dvp <Cmd>DiffviewOpen HEAD~1<cr>
-nnoremap <leader>dvm <Cmd>DiffviewOpen origin/master...HEAD<cr>
+" diff current branch against local master
+nnoremap <leader>dvm <Cmd>DiffviewOpen master<cr>
+" diff current branch against remove master (I think)
+nnoremap <leader>dvM <Cmd>DiffviewOpen origin/master...HEAD<cr>
+" ?
 nnoremap <leader>dvh <Cmd>DiffviewFileHistory --range=origin/master..HEAD<cr>
+" ?
 vnoremap <leader>dvh <Cmd>'<,'>DiffviewFileHistory<CR>
+" diff current changes (also, merge/rebase flow)
 nnoremap <leader>dvo <cmd>DiffviewOpen<cr>
-" also use during a merge or rebase
 " The default mapping `g<C-x>` allows you to cycle through the available layouts.
 " "diff1_plain"
     " | "diff2_horizontal"

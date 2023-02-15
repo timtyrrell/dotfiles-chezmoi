@@ -89,17 +89,14 @@ nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
 " force decimal-based arithmetic on increment/decrement
 set nrformats=
 " increment and decrement
-nnoremap + <C-a>
-nnoremap - <C-x>
+" nnoremap + <C-a>
+" nnoremap - <C-x>
 "  visual mode, also
 " xnoremap + g<C-a>
 " xnoremap - g<C-x>
 
 " dot repetition over visual line selections.
 xnoremap . :norm.<CR>
-
-" executes the last recorded macro
-nnoremap Q @q
 
 " run macro over visual lines (using qq to record)
 xnoremap Q :'<,'>:normal @q<CR>
@@ -246,6 +243,7 @@ nnoremap <silent> <Leader>jj :set ft=json<CR>:%!jq .<CR>
 
 " save with Enter *except* in quickfix buffers
 " https://vi.stackexchange.com/questions/3127/how-to-map-enter-to-custom-command-except-in-quick-fix
+nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write<CR>"
 " nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write!<CR>"
 nnoremap <Enter> :w<Enter>
 nnoremap <leader><Enter> :w !sudo tee %<Enter>
@@ -374,13 +372,14 @@ Plug 'tpope/vim-dispatch'
 " debugging
 Plug 'mfussenegger/nvim-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
+" Plug 'folke/neodev.nvim'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'David-Kunz/jester'
 " Plug 'mxsdev/nvim-dap-vscode-js'
 
 " syntax
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'p00f/nvim-ts-rainbow'
+" Plug 'mrjones2014/nvim-ts-rainbow'
 Plug 'm-demare/hlargs.nvim'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -403,7 +402,6 @@ augroup tmuxgroups
   autocmd BufWritePost .tmux.conf execute ':!tmux source-file %'
 augroup END
 Plug 'tmux-plugins/vim-tmux'
-Plug 'gpanders/editorconfig.nvim'
 " https://github.com/nvim-treesitter/nvim-treesitter/issues/1019#issuecomment-812976740
 let g:polyglot_disabled = [
         \ 'bash', 'comment', 'css', 'graphql',
@@ -457,8 +455,8 @@ Plug 'gabrielpoca/replacer.nvim'
 Plug 'kevinhwang91/nvim-bqf'
 
 Plug 'christoomey/vim-tmux-navigator'
-" If the tmux window is zoomed, keep it zoomed when moving from Vim to another pane
-let g:tmux_navigator_preserve_zoom = 1
+" keeping all navigation within Vim until the tmux pane is explicitly unzoomed
+let g:tmux_navigator_disable_when_zoomed = 1
 
 Plug 'christoomey/vim-system-copy'
 
@@ -523,6 +521,8 @@ Plug 'mlaursen/vim-react-snippets', { 'branch': 'main' }
 " review linenumber before jump
 Plug 'nacro90/numb.nvim'
 
+" Plug 'barrett-ruth/import-cost.nvim', { 'do': 'sh install.sh yarn' }
+
 " git
 Plug 'tpope/vim-fugitive' |
            \ Plug 'tpope/vim-rhubarb' |
@@ -532,6 +532,7 @@ Plug 'whiteinge/diffconflicts'
 
 " Use a (usually) better diff algorithm.
 set diffopt+=indent-heuristic
+" nvim 9.x only
 set diffopt+=linematch:60
 
 " disable showing '------' for empty line in difftool
@@ -584,7 +585,7 @@ Plug 'windwp/nvim-spectre'
 Plug 'norcalli/nvim-terminal.lua'
 " https://github.com/akinsho/toggleterm.nvim
 
-Plug 'kyazdani42/nvim-web-devicons' " for file icons, nvim-tree and others
+Plug 'nvim-tree/nvim-web-devicons'
 
 Plug 'kyazdani42/nvim-tree.lua'
 nnoremap <silent> <leader>ee :NvimTreeFindFile<CR>
@@ -667,6 +668,7 @@ let g:rooter_patterns = ['!.bare', 'Gemfile', '.git', 'Makefile']
 let g:rooter_resolve_links = 1
 " to stop echo on change **KEEP ON**, echoes filename to cmdline
 let g:rooter_silent_chdir = 1
+" let g:rooter_buftypes = ['', 'nofile', 'nowrite', 'acwrite']
 
 " vim --startuptime /dev/stdout +qall && echo && time vim +q
 Plug 'dstein64/vim-startuptime'
@@ -692,6 +694,7 @@ Plug 'folke/which-key.nvim'
 
 " Plug 'ja-ford/delaytrain.nvim'
 " Plug 'takac/vim-hardtime'
+
 " typescript fork of 'ianding1/leetcode.vim'
 " Plug 'briemens/leetcode.vim'
 

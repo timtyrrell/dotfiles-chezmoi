@@ -15,11 +15,15 @@ nnoremap <silent> <c-p> :bprev<CR>
 " Next tab: gt
 " Prior tab: gT
 " Numbered tab: 7gt
-nnoremap <leader>tc  :tabclose<cr>
+"https://github.com/AndrewRadev/undoquit.vim#working-with-tabs
+nnoremap <leader>tc  :UndoableTabclose<cr>
+" nnoremap <leader>tc  :tabclose<cr>
 nnoremap <leader>tn  :tabnew<cr>
+" open buffer in new tab preserving cursor, preserving old buffer
+nnoremap <leader>ts  :tab sp<cr>
 nnoremap <leader>to  :tabonly<cr>
-nnoremap <leader>tmp :-tabmove<CR>
-nnoremap <leader>tmn :+tabmove<CR>
+nnoremap <leader>tmh :-tabmove<CR>
+nnoremap <leader>tml :+tabmove<CR>
 nnoremap <leader>1   1gt
 nnoremap <leader>2   2gt
 nnoremap <leader>3   3gt

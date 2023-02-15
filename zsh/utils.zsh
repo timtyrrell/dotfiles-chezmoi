@@ -50,6 +50,69 @@ gw_fuzzy_remote() {
   gw_add_remote $branch
 }
 
+# Core helper function.
+# Add -s for --case-sensitive search when calling the top level functions.
+# rgaj "LoginView" -s
+# For --colors, see https://www.mankier.com/1/rg#--colors.
+
+_rg() {
+    rg \
+        --smart-case \
+        --colors path:fg:175,135,255 \
+        --colors line:fg:red \
+        --colors match:fg:green \
+        --colors match:style:nobold $@
+}
+
+
+# Search JS/JSX/TS/TSX file content
+rgaj() {
+    _rg --type webjsts  $@
+}
+
+# Search JS/JSX/TS/TSX file content, exclude test files
+rgfj() {
+    _rg --type webjsts --glob "!**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"  $@
+}
+
+# Search JS/JSX/TS/TSX file content, only test files
+rgtj() {
+    _rg --type webjsts --glob "**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"  $@
+}
+
+# Search all RB/ERB/SLIM/HTML file content
+rgar() {
+    _rg --type webrb  $@
+}
+
+# Search RB/ERB/SLIM/HTML file content, exclude test files
+rgfr() {
+    _rg --type webrb ---glob "!spec/**/*.*" $@
+}
+
+# Search RB/ERB/SLIM/HTML file content, only test files
+rgtr() {
+    _rg --type webrb ---glob "spec/**/*.*" $@
+}
+
+# Find git conflicts
+rgc() {
+    _rg '>>>>>>>'
+}
+
+# Ctrl-z like `fg`
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
+
 notify() {
   if [ -z $1 ]; then
     terminal-notifier -title "CMD" -message "Completed!"  -sound purr -ignoreDnD
@@ -228,6 +291,7 @@ fco_preview() {
 git_reset_hard_remote() {
   local commit
   commit=$( git branch --show-current ) &&
+  git fetch origin $(echo "$commit")
   git reset --hard origin/$(echo "$commit")
 }
 
@@ -367,6 +431,10 @@ join-lines() {
   while read item; do
     echo -n "${(q)item} "
   done
+}
+
+function jwt_decode(){
+  jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$1"
 }
 
 pods() {

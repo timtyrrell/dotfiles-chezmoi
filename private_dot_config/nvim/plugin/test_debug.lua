@@ -1,3 +1,6 @@
+-- require("neodev").setup({
+--   library = { plugins = { "nvim-dap-ui" }, types = true },
+-- })
 -- Plug 'mfussenegger/nvim-dap'
 local dap = require('dap')
 -- dap.set_log_level('TRACE')
@@ -78,8 +81,8 @@ require("dapui").setup({
       close = { "q", "<Esc>" },
     },
   },
-  windows = { indent = 1 },
   render = {
+    indent = 1,
     max_type_length = nil,
   }
 })
@@ -132,7 +135,13 @@ vim.cmd [[
   nmap <silent> <leader>tf :TestFile<CR>
   nmap <silent> <leader>tl :TestLast<CR>
   nmap <silent> <leader>tv :TestVisit<CR>
-  nmap <silent> <leader>ts :TestSuite<CR>
+  " nmap <silent> <leader>ts :TestSuite<CR>
+
+  " let test#typescriptreact#jest#options = {
+  "   \ 'nearest': '--backtrace',
+  "   \ 'file':    '--format documentation',
+  "   \ 'suite':   '--tag ~slow',
+  " \}
 
   " dap-ui
   nnoremap <leader>dq  :lua require'dapui'.toggle()<CR>

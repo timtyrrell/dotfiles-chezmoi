@@ -1,4 +1,7 @@
+# debug perf: also run `zsh -l --sourcetrace`
+# https://www.reddit.com/r/zsh/comments/ycm6fa/comment/itn2i3l/?context=3
 # [ -z "$ZPROF" ] || zmodload zsh/zprof
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
   # exit 1
@@ -32,9 +35,8 @@ export LESS=FRX
 # telescope and less? https://github.com/nvim-telescope/telescope.nvim/issues/253#issuecomment-730071741
 # export LESS=iMRS
 
-bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol
-
 export XDG_CONFIG_HOME=$HOME/.config
+# export XDG_DATA_HOME=$HOME/.local/.share
 
 # make with the pretty colors
 autoload colors; colors
@@ -141,6 +143,7 @@ setopt auto_cd                 # if a command isn't valid, but is a directory, c
 # completions
 setopt always_to_end           # move cursor to the end of a completed word
 setopt glob_dots               # include dotfiles when globbing
+setopt no_case_glob            # ignore case https://www.reddit.com/r/zsh/comments/1088i0z/case_insensitive_file_completion/
 
 # expansion/globbing
 setopt extendedglob            # Treat the ‘#’, ‘~’ and ‘^’ characters as part of filename
@@ -325,17 +328,33 @@ export PYTHONPATH="."
 # bindkey '^T' fzf-completion #context (dir) aware completion
 # bindkey '^I' $fzf_default_completion
 
+# prevent paste readability issue https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/25
+zle_highlight=('paste:none')
+
 source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
 zcomet load romkatv/powerlevel10k
 zcomet load aloxaf/fzf-tab
 zcomet load zsh-vi-more/vi-motions
-# zcomet load kutsan/zsh-system-clipboard
-# zcomet load mattmc3/zman
+zcomet load zsh-vi-more/evil-registers
 zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zdharma-continuum/fast-syntax-highlighting
 zcomet load zsh-users/zsh-completions
+
+zstyle :plugin:fast-syntax-highlighting theme base16
+
+# send all yanks to system clipboard
+(){
+	local op
+	local -a handler
+	for op in yank put; do
+		# get the current behavior for '+'
+		zstyle -a :zle:evil-registers:'+' $op handler
+		# if there is a handler, assign it for the empty pattern
+		(($#handler)) && zstyle :zle:evil-registers:'' $op $handler
+	done
+}
 
 # Completion for kill-like commands
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
@@ -436,9 +455,9 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# export PYENV_ROOT="$(pyenv root)"
-# export PATH="$PYENV_ROOT/shims:$PATH"
-# eval "$(pyenv init -)"
+export PYENV_ROOT="$(pyenv root)"
+export PATH="$PYENV_ROOT/shims:$PATH"
+eval "$(pyenv init -)"
 
 source <(stern --completion=zsh)
 
@@ -453,28 +472,6 @@ fzf-history-widget-accept() {
 zle     -N     fzf-history-widget-accept
 bindkey '^X^R' fzf-history-widget-accept
 
-# vi-mode yank
-# function vi-yank-pbcopy {
-#   zle vi-yank
-#   echo "$CUTBUFFER" | pbcopy
-# }
-# zle -N vi-yank-pbcopy
-# bindkey -M vicmd 'y' vi-yank-pbcopy
-
-# function vi-put-after-pbcopy {
-#   CUTBUFFER=$(pbpaste)
-#   zle vi-put-after
-# }
-# zle -N vi-put-after-pbcopy
-# bindkey -M vicmd 'p' vi-put-after-pbcopy
-
-# function vi-put-before-pbcopy {
-#   CUTBUFFER=$(pbpaste)
-#   zle vi-put-before
-# }
-# zle -N vi-put-before-pbcopy
-# bindkey -M vicmd 'P' vi-put-before-pbcopy
-
 # Run compinit and compile its cache
 zcomet compinit
 
@@ -485,7 +482,7 @@ zcomet compinit
 # For compilers to find openjdk you may need to set:
 # export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# eval "$(frum init)"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # [ -z "$ZPROF" ] || zprof

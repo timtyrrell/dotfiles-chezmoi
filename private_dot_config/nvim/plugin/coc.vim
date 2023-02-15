@@ -1,6 +1,5 @@
 let g:coc_enable_locationlist = 0
           " \ 'coc-import-cost',
-          " \ 'coc-coverage',
 let g:coc_global_extensions = [
           \ 'coc-css',
           \ 'coc-cssmodules',
@@ -227,6 +226,7 @@ require("telescope").setup({
   },
 })
 require('telescope').load_extension('coc')
+-- require('coc-code-action-menu')
 EOF
 " fannheyward/telescope-coc.nvim
 " mru
