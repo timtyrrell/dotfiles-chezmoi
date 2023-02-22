@@ -134,7 +134,15 @@ require('numb').setup {
 }
 
 require('nvim-web-devicons').setup {}
-require('which-key').setup {}
+
+require('which-key').setup {
+  plugins = {
+    marks = false,
+  },
+  window = {
+    border = "double",
+  },
+}
 
 -- tamton-aquib/duck.nvim
 vim.keymap.set('n', '<leader>ddd', function() require("duck").hatch("🦆", 10) end, {}) -- A pretty fast duck
@@ -190,18 +198,6 @@ require('lualine').setup {
   extensions = {'fugitive', 'fzf', 'man', 'mundo', 'nvim-dap-ui', 'nvim-tree', 'quickfix'}
 }
 
-local registers = require("registers")
-registers.setup({
-  show_empty = false,
-  window = {
-    border = "double",
-    transparency = 90,
-  },
-  bind_keys = {
-    registers = registers.apply_register({ delay = 1 }),
-  },
-})
-
 require('terminal').setup {}
 
 require('package-info').setup({
@@ -232,34 +228,16 @@ end
 EOF
 
 
-" https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f
-function! MyHighlights() abort
+augroup MyColors
+  autocmd!
   if g:colors_name ==# 'tokyonight'
-    hi default link CocHighlightText TabLineSel
     hi IncSearch guifg=#292e42 guibg=#bb9af7
-    " hi CocUnderline gui=undercurl term=undercurl
-    " hi default link CocErrorHighlight LspDiagnosticsUnderlineError
-    " hi default link CocWarningHighlight LspDiagnosticsUnderlineWarning
-    " hi default link CocInfoHighlight LspDiagnosticsUnderlineInformation
-    " hi default link CocHintHighlight LspDiagnosticsUnderlineHint
-    " hi default link CocErrorVirtualText LspDiagnosticsVirtualTextError
-    " hi default link CocWarningVirtualText LspDiagnosticsVirtualTextWarning
-    " hi default link CocInfoVirtualText LspDiagnosticsVirtualTextInformation
-    " hi default link CocHintVirtualText LspDiagnosticsVirtualTextHint
-    hi default link CocCodeLens LspCodeLens
     hi NormalFloat guifg=#c0caf5 guibg=#292e42
-
-    " Coc autocomplete menu
-    hi default link CocPumSearch Statement
 
     " chentoast/marks.nvim'
     hi MarkVirtTextHL cterm=bold ctermfg=15 ctermbg=9 gui=bold guifg=#ffffff guibg=#f00077
   end
-endfunction
 
-augroup MyColors
-  autocmd!
-  autocmd ColorScheme * call MyHighlights()
 " https://github.com/trapd00r/vim-syntax-todo/blob/master/syntax/todo.vim
   autocmd Syntax * call matchadd(
               \ 'Search',

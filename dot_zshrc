@@ -344,16 +344,25 @@ zcomet load zsh-users/zsh-completions
 
 zstyle :plugin:fast-syntax-highlighting theme base16
 
-# send all yanks to system clipboard
+# zsh-vi-more/evil-registers, send all yanks to system clipboard
 (){
-	local op
-	local -a handler
-	for op in yank put; do
-		# get the current behavior for '+'
-		zstyle -a :zle:evil-registers:'+' $op handler
-		# if there is a handler, assign it for the empty pattern
-		(($#handler)) && zstyle :zle:evil-registers:'' $op $handler
-	done
+  local op
+  local -a handler
+  for op in yank put; do
+    # get the current behavior for '+'
+    zstyle -a :zle:evil-registers:'+' $op handler
+    # if there is a handler, assign it for the empty pattern
+    (($#handler)) && zstyle :zle:evil-registers:'' $op $handler
+  done
+}
+
+# zsh-vi-more/evil-registers, do not save delete or change to clipboard
+for w (
+  vi-delete vi-delete-char vi-kill-line vi-kill-eol
+  vi-change vi-change-eol vi-change-whole-line
+);{
+  # dot-prefixed widgets are builtins and cannot be overridden
+  zle -A .$w $w
 }
 
 # Completion for kill-like commands

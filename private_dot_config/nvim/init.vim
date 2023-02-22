@@ -616,8 +616,6 @@ Plug 'danilamihailov/beacon.nvim'
 
 Plug 'tamton-aquib/duck.nvim'
 
-Plug 'tversteeg/registers.nvim', { 'branch': 'main' }
-
 Plug 'chentoast/marks.nvim'
 
 " displays colors for words/hex

@@ -227,7 +227,7 @@ fgst() {
 # quick rebase with origin
 greb() {
   REMOTE=${1:-main}
-  git fetch origin && git rebase origin/${REMOTE}
+  git fetch origin ${REMOTE} && git rebase origin/${REMOTE}
 }
 
 # USAGE:

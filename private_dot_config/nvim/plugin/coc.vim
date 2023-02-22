@@ -110,7 +110,6 @@ nmap <silent> gu <Plug>(coc-references-used)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gm <Plug>(coc-implementation)
 
-
 nmap <space>cn <Plug>(coc-rename)
 
 " refactor buffer
@@ -317,4 +316,18 @@ augroup CocGroup
   " autocmd VimLeave * if get(g:, 'coc_process_pid', 0) | call system('kill -9 -'.g:coc_process_pid) | endif
 
   " autocmd FileType python let b:coc_root_patterns = ['app.py']
+  hi default link CocHighlightText TabLineSel
+  " hi CocUnderline gui=undercurl term=undercurl
+  " hi default link CocErrorHighlight LspDiagnosticsUnderlineError
+  " hi default link CocWarningHighlight LspDiagnosticsUnderlineWarning
+  " hi default link CocInfoHighlight LspDiagnosticsUnderlineInformation
+  " hi default link CocHintHighlight LspDiagnosticsUnderlineHint
+  " hi default link CocErrorVirtualText LspDiagnosticsVirtualTextError
+  " hi default link CocWarningVirtualText LspDiagnosticsVirtualTextWarning
+  " hi default link CocInfoVirtualText LspDiagnosticsVirtualTextInformation
+  " hi default link CocHintVirtualText LspDiagnosticsVirtualTextHint
+  hi default link CocCodeLens LspCodeLens
+
+  " Coc autocomplete menu
+  hi default link CocPumSearch Statement
 augroup end
