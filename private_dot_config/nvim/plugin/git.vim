@@ -362,9 +362,8 @@ require('octo').setup({
     },
 })
 
--- treesitter markdown parser with octo buffers
-local ft_to_parser = require "nvim-treesitter.parsers".filetype_to_parsername
-ft_to_parser.octo = "markdown"
+-- treesitter markdown parser with octo buffers, neovim 0.9
+vim.treesitter.language.register('markdown', 'octo')
 
 -- require('litee.lib').setup({
 --     tree = {

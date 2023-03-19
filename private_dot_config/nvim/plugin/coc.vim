@@ -21,7 +21,6 @@ let g:coc_global_extensions = [
           \ 'coc-sh',
           \ 'coc-snippets',
           \ 'coc-solargraph',
-          \ 'coc-spell-checker',
           \ 'coc-styled-components',
           \ 'coc-stylelintplus',
           \ 'coc-sumneko-lua',
@@ -120,7 +119,7 @@ xmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
 nmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
 
 nmap <space>cc <Plug>(coc-fix-current)
-nmap <space>cl <Plug>(coc-codelens-action)
+nmap <space>ce <Plug>(coc-codelens-action)
 nmap <space>ca <Plug>(coc-codeaction)
 nmap <space>cw <Plug>(coc-codeaction-cursor)
 nmap <space>cf <Plug>(coc-codeaction-source)
@@ -133,7 +132,7 @@ nmap <space>cki <Cmd>CHI<cr>
 " outgoing calls
 nmap <space>cko <Cmd>CHO<cr>
 nmap <space>co  <Cmd>CocOutline<cr>
-nmap <space>cw  <Cmd>CocSearch -w <C-R><C-W><cr>
+" nmap <space>cw  <Cmd>CocSearch -w <C-R><C-W><cr>
 nmap <space>cr  <Cmd>CocRestart<CR>
 
 " show outline for each tab automatically

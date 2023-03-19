@@ -51,9 +51,10 @@ alias ng='/ngrok.sh'
 
 # docker
 alias dc='docker-compose'
-alias dcu='docker-compose up'
-alias dcd='docker-compose down'
-alias dcps='docker-compose ps'
+alias dcu='dc up'
+alias dcud='dc up -d'
+alias dcd='dc down'
+alias dcps='dc ps'
 alias kt='kubetail'
 alias ks='stern -l'
 alias k='kubectl'
@@ -189,6 +190,8 @@ alias strat="start"
 alias ns="npm start"
 alias barf="rm -rf node_modules && npm i"
 alias rimraf="rm -rf node_modules"
+alias yay="yarn auth && yarn"
+alias yayb="yarn auth && yarn && bundle"
 
 # brew tap jason0x43/homebrew-neovim-nightly
 # brew cask install neovim-nightly

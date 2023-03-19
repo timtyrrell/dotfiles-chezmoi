@@ -283,8 +283,10 @@ call plug#begin('~/.config/nvim/plugged')
 
 " core code analysis and manipulation
            " \ Plug 'wellle/tmux-complete.vim' " coc completion from open tmux panes
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'} |
+Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-lockfile' } |
            \ Plug 'antoinemadec/coc-fzf'
+Plug 'tjdevries/coc-zsh'
+" Plug 'xiyaowong/coc-code-action-menu.nvim' | Plug 'weilbith/nvim-code-action-menu'
 " Plug 'wix/import-cost', { 'do': 'npm install', 'rtp': 'packages/coc-import-cost' }
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } |
@@ -379,7 +381,10 @@ Plug 'David-Kunz/jester'
 
 " syntax
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " Plug 'mrjones2014/nvim-ts-rainbow'
+" https://gitlab.com/HiPhish/nvim-ts-rainbow2
+
 Plug 'm-demare/hlargs.nvim'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -453,6 +458,10 @@ Plug 'drmingdrmer/vim-toggle-quickfix'
 Plug 'gabrielpoca/replacer.nvim'
 
 Plug 'kevinhwang91/nvim-bqf'
+
+Plug 'luukvbaal/statuscol.nvim'
+Plug 'kevinhwang91/promise-async'
+Plug 'kevinhwang91/nvim-ufo'
 
 Plug 'christoomey/vim-tmux-navigator'
 " keeping all navigation within Vim until the tmux pane is explicitly unzoomed
@@ -606,11 +615,6 @@ Plug 'tpope/vim-scriptease'
 " smooth scroll
 " Plug 'declancm/cinnamon.nvim'
 Plug 'karb94/neoscroll.nvim'
-
-Plug 'Konfekt/FastFold'
-" Plug 'Jorengarenar/vim-syntaxMarkerFold' ?
-" Plug 'anuvyklack/pretty-fold.nvim'
-" Plug 'kevinhwang91/nvim-ufo' requires = 'kevinhwang91/promise-async'}
 
 Plug 'danilamihailov/beacon.nvim'
 

@@ -85,9 +85,14 @@ colorscheme tokyonight
 lua << EOF
 
 -- require("colorful-winsep").setup({
---   no_exec_files = { "packer", "TelescopePrompt", "mason", "CompetiTest", "NvimTree" },
+--   highlight = {
+--     -- bg = "#16161E",
+--     fg = "#1F3442",
+--   },
+--   no_exec_files = { "TelescopePrompt", "mason", "NvimTree" },
+--   symbols = { "─", "│", "┌", "┐", "└", "┘" },
 -- })
--- require('import-cost').setup()
+-- require("import-cost").setup({})
 
 require("tidy").setup()
 
