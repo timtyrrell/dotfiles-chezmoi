@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+# bar settings
+yabai -m config top_padding 0
+
+# yabai -m config layout                       bsp
+yabai -m config bottom_padding               0
+yabai -m config left_padding                 0
+yabai -m config right_padding                0
+yabai -m config window_gap                   0
+
+# float system preferences
+# yabai -m rule --add app='^System Information$' manage=off
+# yabai -m rule --add app='^System Preferences$' manage=off
+# yabai -m rule --add title='Preferences$' manage=off
+
+# float settings windows
+# yabai -m rule --add title='Settings$' manage=off
+
+echo "yabai configuration loaded.."

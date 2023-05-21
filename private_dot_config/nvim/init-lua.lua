@@ -163,3 +163,16 @@ require('lspconfig')['tsserver'].setup{
     capabilities = capabilities,
     flags = lsp_flags,
 }
+
+
+-- https://www.reddit.com/r/neovim/comments/12o2pzq/comment/jggvt2n/?context=3
+-- wrap to see what blows up
+-- local function safeRequire(module)
+-- 	local success, req = pcall(require, module)
+-- 	if success then return req end
+-- 	vim.cmd.echoerr ("Error loading " .. module)
+-- end
+
+-- safeRequire("config.options-and-autocmds")
+-- safeRequire("config.theme-config")
+-- safeRequire("config.keybindings")

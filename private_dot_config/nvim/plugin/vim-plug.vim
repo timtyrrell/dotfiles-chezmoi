@@ -29,7 +29,6 @@ function! PlugGx()
                   \ ? matchstr(l:line, '^[-x+] \zs[^:]\+\ze:')
                   \ : getline(search('^- .*:$', 'bn'))[2:-2]
   else
-    " in .vimrc.bundles
     try
       let l:name = matchlist(l:line, '\v/([A-Za-z0-9\-_\.]+)')[1]
     catch

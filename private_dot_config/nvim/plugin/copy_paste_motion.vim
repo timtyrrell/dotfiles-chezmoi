@@ -222,3 +222,10 @@ nmap csnf <Plug>DsfNextChange
 " allow tab/s-tab to filter with incsearch in-progress
 " cnoremap <expr> <Tab>   getcmdtype() =~ "[?/]" ? "<c-g>" : "<Tab>"
 " cnoremap <expr> <S-Tab> getcmdtype() =~ "[?/]" ? "<c-t>" : "<S-Tab>"
+
+" yank file name
+nnoremap <leader>yf :let @"=expand("%:t")<CR>
+" yank file name and path
+nnoremap <leader>yp :let @"=expand("%:p")<CR>
+" yank file name and line number
+nnoremap <leader>yn :let @"=expand("%:p").":".getpos('.')[1]<CR>

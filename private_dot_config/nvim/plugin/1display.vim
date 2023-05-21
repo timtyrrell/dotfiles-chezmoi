@@ -92,7 +92,7 @@ lua << EOF
 --   no_exec_files = { "TelescopePrompt", "mason", "NvimTree" },
 --   symbols = { "─", "│", "┌", "┐", "└", "┘" },
 -- })
--- require("import-cost").setup({})
+require("import-cost").setup({})
 
 require("tidy").setup()
 
@@ -171,7 +171,9 @@ local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
 end
 
 require('lualine').setup {
-  theme = 'tokyonight',
+  options = {
+    theme = 'tokyonight',
+  },
   sections = {
     lualine_a = {},
     lualine_b = {

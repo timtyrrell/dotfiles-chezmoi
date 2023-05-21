@@ -1,18 +1,18 @@
 " customize
-let g:fzf_colors = {
-      \ 'fg': ['fg', 'Normal'],
-      \ 'bg': ['bg', 'Normal'],
-      \ 'hl': ['fg', 'Green'],
-      \ 'fg+': ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+': ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+': ['fg', 'Green'],
-      \ 'info': ['fg', 'Yellow'],
-      \ 'prompt': ['fg', 'Red'],
-      \ 'pointer': ['fg', 'Blue'],
-      \ 'marker': ['fg', 'Blue'],
-      \ 'spinner': ['fg', 'Yellow'],
-      \ 'header': ['fg', 'Blue']
-      \ }
+" let g:fzf_colors = {
+"       \ 'fg': ['fg', 'Normal'],
+"       \ 'bg': ['bg', 'Normal'],
+"       \ 'hl': ['fg', 'Green'],
+"       \ 'fg+': ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"       \ 'bg+': ['bg', 'CursorLine', 'CursorColumn'],
+"       \ 'hl+': ['fg', 'Green'],
+"       \ 'info': ['fg', 'Yellow'],
+"       \ 'prompt': ['fg', 'Red'],
+"       \ 'pointer': ['fg', 'Blue'],
+"       \ 'marker': ['fg', 'Blue'],
+"       \ 'spinner': ['fg', 'Yellow'],
+"       \ 'header': ['fg', 'Blue']
+"       \ }
 
 " fzf.vim
 " nnoremap <C-w>- :new<cr>
@@ -142,6 +142,8 @@ nnoremap <leader>rd :RGdir<Space>
 let s:rg_initial_command = 'true'
 
 let s:rg_colors = ' --colors line:fg:red --colors path:fg:blue --colors match:fg:green '
+
+" let s:rg_colors = ' --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7 --color=fg+:#FFFFFF,bg+:#1a1b26,hl+:#7dcfff --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a --color header:italic '
 
 " {q} is the query string passed from fzf to ripgrep.
 " If query is empty do nothing instead of fetching all lines.
@@ -542,6 +544,7 @@ onoremap ak <Cmd>normal vikV<cr>
 onoremap b vb
 
 " Find and Replace in *all* files
+" or use the terminal: git ls-files | xargs sed -i 's/oldword/neword/g'
 function! FindAndReplace( ... )
   if a:0 != 2
     echo "Need two arguments"

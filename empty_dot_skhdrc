@@ -1,0 +1,42 @@
+# change focus
+alt - h : yabai -m window --focus west
+alt - j : yabai -m window --focus south
+alt - k : yabai -m window --focus north
+alt - l : yabai -m window --focus east
+
+# swap managed window
+shift + alt - h : yabai -m window --swap west
+shift + alt - j : yabai -m window --swap south
+shift + alt - k : yabai -m window --swap north
+shift + alt - l : yabai -m window --swap east
+
+# move managed window
+shift + ctrl - h : yabai -m window --warp west
+shift + ctrl - j : yabai -m window --warp south
+shift + ctrl - k : yabai -m window --warp north
+shift + ctrl - l : yabai -m window --warp east
+
+# toggle window fullscreen zoom
+alt - f : yabai -m window --toggle zoom-fullscreen
+
+# fast focus desktop
+alt - 0 : yabai -m space --focus recent
+
+# balance size of windows
+shift + alt - 0 : yabai -m space --balance
+
+# send window to monitor and follow focus
+shift + alt - n : yabai -m window --display next; yabai -m display --focus next
+shift + alt - p : yabai -m window --display previous; yabai -m display --focus previous
+
+# control window size, modified to be intuitive
+alt + ctrl - h : yabai -m window --resize left:-20:0 || yabai -m window --resize right:-20:0
+alt + ctrl - l : yabai -m window --resize right:20:0 || yabai -m window --resize left:20:0
+alt + ctrl - j : yabai -m window --resize bottom:0:20 || yabai -m window --resize top:0:20
+alt + ctrl - k : yabai -m window --resize top:0:-20 || yabai -m window --resize bottom:0:-20
+
+.blacklist [
+  "terminal"
+  "kitty"
+  "google chrome"
+]

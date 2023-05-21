@@ -10,3 +10,4 @@ junit
 notebooks
 poetry.lock
 locales
+vendor

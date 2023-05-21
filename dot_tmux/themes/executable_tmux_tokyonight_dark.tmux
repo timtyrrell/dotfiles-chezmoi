@@ -34,8 +34,8 @@ setw -g window-status-current-format "#[fg=#16161e,bg=#3b4261,nobold,nounderscor
 
 set -g status-left "#[fg=#15161e,bg=#7aa2f7,bold] #S #[fg=#7aa2f7,bg=#16161e,nobold,nounderscore,noitalics]"
 
-# set -g status-right ''
-set -g status-right "#[fg=#16161e,bg=#16161e,nobold,nounderscore,noitalics]#[fg=#7aa2f7,bg=#16161e] #{prefix_highlight} #[fg=#3b4261,bg=#16161e,nobold,nounderscore,noitalics]#[fg=#7aa2f7,bg=#3b4261] %Y-%m-%d  %I:%M %p #[fg=#7aa2f7,bg=#3b4261,nobold,nounderscore,noitalics]#[fg=#15161e,bg=#7aa2f7,bold] #h "
+set -g status-right ''
+# set -g status-right "#[fg=#16161e,bg=#16161e,nobold,nounderscore,noitalics]#[fg=#7aa2f7,bg=#16161e] #{prefix_highlight} #[fg=#3b4261,bg=#16161e,nobold,nounderscore,noitalics]#[fg=#7aa2f7,bg=#3b4261] %Y-%m-%d  %I:%M %p #[fg=#7aa2f7,bg=#3b4261,nobold,nounderscore,noitalics]#[fg=#15161e,bg=#7aa2f7,bold] #h "
 
 # set -g status-right '#{?#{music_status},♫ #{music_status} #{artist}: #{track} |,""} #(gitmux "#{pane_current_path}") | #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'
 # set -g status-right '♫ #{music_status} #{artist}: #{track} | #(gitmux "#{pane_current_path}") | #{docker_status} | #{kcontext}#{kpod} #{pomodoro_status}'

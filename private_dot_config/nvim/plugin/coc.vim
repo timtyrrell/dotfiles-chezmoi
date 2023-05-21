@@ -1,5 +1,6 @@
 let g:coc_enable_locationlist = 0
           " \ 'coc-import-cost',
+          " \ 'coc-solargraph',
 let g:coc_global_extensions = [
           \ 'coc-css',
           \ 'coc-cssmodules',
@@ -8,6 +9,7 @@ let g:coc_global_extensions = [
           \ 'coc-emmet',
           \ 'coc-eslint',
           \ 'coc-git',
+          \ 'coc-go',
           \ 'coc-html',
           \ 'coc-jest',
           \ 'coc-json',
@@ -20,7 +22,6 @@ let g:coc_global_extensions = [
           \ 'coc-react-refactor',
           \ 'coc-sh',
           \ 'coc-snippets',
-          \ 'coc-solargraph',
           \ 'coc-styled-components',
           \ 'coc-stylelintplus',
           \ 'coc-sumneko-lua',
@@ -68,6 +69,10 @@ endfunction
 " also use C-j, C-k to move in completion list
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+
+" tell coc how to navigate to next snippet placeholder
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
 
 " Use <c-space> to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -139,17 +144,6 @@ nmap <space>cr  <Cmd>CocRestart<CR>
 " autocmd VimEnter,Tabnew *
 "   \ if empty(&buftype) | call CocActionAsync('showOutline', 1) | endif
 
-autocmd BufEnter * call CheckOutline()
-function! CheckOutline() abort
-  if &filetype ==# 'coctree' && winnr('$') == 1
-    if tabpagenr('$') != 1
-      close
-    else
-      bdelete
-    endif
-  endif
-endfunction
-
 " nmap <space> <Plug>(coc-format)
 " nmap <space> <Cmd>CocCommand eslint.executeAutofix<cr>
 " nmap <space> <Cmd>CocCommand tsserver.organizeImports<cr>
@@ -189,10 +183,6 @@ let g:coc_disable_transparent_cursor = 1
 
 " max items to show in popup list
 set pumheight=20
-
-" tell coc how to navigate to next snippet placeholder
-let g:coc_snippet_next = '<Tab>'
-let g:coc_snippet_prev = '<S-Tab>'
 
 " Do default action for next item.
 nnoremap <silent><nowait> <space>an <Cmd>CocNext<CR>

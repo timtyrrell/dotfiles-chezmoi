@@ -2,19 +2,11 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "wxss.validate": false,
   "stylelintplus.filetypes": [
     "scss",
     "less"
   ],
   "stylelintplus.autoFixOnSave": true,
-  "cSpell.enabled": false,
-  "cSpell.enabledLanguageIds": [
-    "markdown"
-  ],
-  "cSpell.ignoreRegExpList": [
-    "`(.*?)`"
-  ],
   "markdownlint.config": {
     "code_blocks": false,
     "enableCompoundWords": true,
@@ -51,11 +43,13 @@
     "typescript",
     "typescriptreact"
   ],
+  "coc.preferences.formatOnSave": true,
   "coc.preferences.formatOnSaveFiletypes": [
     // "json",
     // "jsonc",
     "javascript",
     "javascriptreact",
+    // "ruby",
     "typescript",
     "typescriptreact",
     "vimwiki",
@@ -221,10 +215,51 @@
   "jest.customFlags": [
     ""
   ],
-  "jest.binCommand": "node_modules/.bin/jest",
-  "importCost.debug": true,
+  "importCost.debug": false,
   "coc.preferences.enableMessageDialog": true,
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
-  "Lua.telemetry.enable": false
+  "Lua.telemetry.enable": false,
+  "languageserver": {
+    // "efm": {
+    //   "command": "efm-langserver",
+    //   "args": [],
+    //   // custom config path
+    //   // "args": ["-c", "/path/to/your/config.yaml"],
+    //   "filetypes": ["eruby"],
+    // },
+    "ruby-lsp": {
+      "command": "ruby-lsp",
+      "initializationOptions": {
+        "experimentalFeaturesEnabled": true,
+        "enabledFeatures": [
+          "codeActions",
+          // "diagnostics",
+          "documentHighlights",
+          "documentLink",
+          "documentSymbols",
+          "foldingRanges",
+          "formatting",
+          "hover",
+          "inlayHint",
+          "onTypeFormatting",
+          "selectionRanges",
+          "semanticHighlighting",
+          "completion"
+        ],
+        // "formatter": "auto"
+      },
+      "filetypes": ["ruby"]
+    },
+    "terraform": {
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    }
+  }
 }

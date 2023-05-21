@@ -118,4 +118,11 @@ require('hlslens').setup({
 -- <cr>: Go to current node in code buffer
 
 -- loaded after nvim-treesitter and any completion that already uses your tabkey.
-require('tabout').setup {}
+require('tabout').setup {
+  act_as_tab = true, -- shift content if tab out is not possible
+  act_as_shift_tab = false, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
+  default_tab = '<C-t>', -- shift default action (only at the beginning of a line, otherwise <TAB> is used)
+  default_shift_tab = '<C-d>', -- reverse shift default action,
+  enable_backwards = true, -- well ...
+  completion = false, -- if the tabkey is used in a completion pum
+}

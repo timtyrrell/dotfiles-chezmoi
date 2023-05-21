@@ -135,10 +135,18 @@ set ignorecase
 set infercase " enhances ignorecase
 set smartcase
 set inccommand=nosplit "highlight :s in realtime
-set diffopt+=vertical,algorithm:patience
+
 " allows block selections to operate across lines regardless of the underlying text
 set virtualedit=block
 set selection=old
+
+set diffopt+=vertical,algorithm:patience
+" Use a (usually) better diff algorithm
+set diffopt+=indent-heuristic
+" nvim 9.x only
+set diffopt+=linematch:800
+" disable showing '------' for empty line in difftool
+set fillchars+=diff:╱
 
 set complete-=t " disable searching tags
 
@@ -246,7 +254,7 @@ nnoremap <silent> <Leader>jj :set ft=json<CR>:%!jq .<CR>
 nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write<CR>"
 " nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write!<CR>"
 nnoremap <Enter> :w<Enter>
-nnoremap <leader><Enter> :w !sudo tee %<Enter>
+" nnoremap <leader><Enter> :w !sudo tee %<Enter>
 " Keep default CR behaviour for quickfix list
 augroup quickfix
   autocmd!
@@ -258,20 +266,18 @@ augroup END
 " autocmd FileType qf nnoremap <buffer> <cr> <cr>
 
 " train myself to use better commands
-" ZZ - Write current file, if modified, and quit. (:x = :wq = ZZ)
+" ZZ - Write current file, if modified, and close current window (:x)
 " ZQ - Quit without checking for changes (same as ':q!')
 map QQ :qa!<CR>
 map QA :qa<CR>
 cabbrev q! use ZQ
-cabbrev wq use :x or ZZ
-cabbrev wq! use :x!
-cabbrev wqa use :xa
-cabbrev wqa! use :xa!
+" cabbrev wq use :x or ZZ
+" cabbrev wq! use :x
 
 " speedup :StartTime - :h g:python3_host_prog
 let g:python3_host_prog = '/opt/homebrew/bin/python3'
 " let g:python3_host_prog = '/opt/homebrew/opt/python@3.10/libexec/bin/python'
-" let g:python3_host_prog = '/Users/ttyrrell/.pyenv/shims/python3'
+" let g:python3_host_prog = '~/.pyenv/shims/python3'
 " let g:loaded_python_provider = 1
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
@@ -288,6 +294,119 @@ Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-loc
 Plug 'tjdevries/coc-zsh'
 " Plug 'xiyaowong/coc-code-action-menu.nvim' | Plug 'weilbith/nvim-code-action-menu'
 " Plug 'wix/import-cost', { 'do': 'npm install', 'rtp': 'packages/coc-import-cost' }
+
+" Plug 'dmmulroy/tsc.nvim'
+
+" https://github.com/github/copilot.vim/blob/release/doc/copilot.txt#L93
+Plug 'github/copilot.vim'
+nnoremap <silent> <Leader>cp <cmd>Copilot<CR>
+nnoremap <silent> <Leader>ce <cmd>Copilot enable<CR>
+nnoremap <silent> <Leader>cx <cmd>Copilot disable<CR>
+
+inoremap                    <Up>   <Plug>(copilot-previous)
+inoremap                    <Down> <Plug>(copilot-next)
+inoremap                    <Left> <Plug>(copilot-dismiss)
+imap <silent><script><expr> <Right> copilot#Accept("\<CR>")
+let g:copilot_no_tab_map = v:true
+
+let g:copilot_filetypes = {
+            \ 'vimwiki': v:false,
+            \ }
+
+"copilot keybindings
+"ALT-]
+" inoremap ? <Plug>(copilot-next)
+"ALT-[
+" inoremap ? <Plug>(copilot-previous)
+"ALT-\
+" inoremap ? <Plug>(copilot-suggest)
+" Copilot.vim uses <Tab> to accept the current suggestion.  If you have an
+" existing <Tab> map, that will be used as the fallback when no suggestion is
+" displayed.
+                                                " *copilot#Accept()*
+" If you'd rather use a key that isn't <Tab>, define an <expr> map that calls
+" copilot#Accept().  Here's an example with CTRL-J:
+" >
+        " imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+        " let g:copilot_no_tab_map = v:true
+" <
+" The argument to copilot#Accept() is the fallback for when no suggestion is
+" displayed.  In this example, a regular carriage return is used.  If no
+" fallback is desired, use an argument of "" (an empty string).
+
+                                                " *copilot-i_CTRL-]*
+" <C-]>                   Dismiss the current suggestion.
+" <Plug>(copilot-dismiss)
+
+                                                " *copilot-i_ALT-]*
+" <M-]>                   Cycle to the next suggestion, if one is available.
+" <Plug>(copilot-next)
+
+                                                " *copilot-i_ALT-[*
+" <M-[>                   Cycle to the previous suggestion.
+" <Plug>(copilot-previous)
+
+                                                " *copilot-i_ALT-\*
+" <M-\>                   Explicitly request a suggestion, even if Copilot
+" <Plug>(copilot-suggest) is disabled.
+
+" SYNTAX HIGHLIGHTING                             *copilot-highlighting*
+" highlight CopilotSuggestion guifg=#555555 ctermfg=8
+
+"""""""""""""""""""""""""""""""""""" neovim-lsp
+
+" Plug 'williamboman/mason.nvim'
+" Plug 'williamboman/mason-lspconfig.nvim'
+" Plug 'WhoIsSethDaniel/mason-tool-installer.nvim'
+" Plug 'jayp0521/mason-nvim-dap.nvim'
+" Plug 'neovim/nvim-lspconfig'
+
+" Plug 'hrsh7th/nvim-cmp'
+" Plug 'hrsh7th/cmp-nvim-lua'
+" Plug 'hrsh7th/cmp-nvim-lsp'
+" Plug 'hrsh7th/cmp-buffer'
+" Plug 'hrsh7th/cmp-path'
+" Plug 'hrsh7th/cmp-cmdline'
+" Plug 'lukas-reineke/cmp-rg'
+" Plug 'David-Kunz/cmp-npm'
+" Plug 'SirVer/ultisnips'
+" Plug 'quangnguyen30192/cmp-nvim-ultisnips'
+" Plug 'zbirenbaum/neodim'
+" Plug 'RRethy/vim-illuminate'
+" https://git.sr.ht/~whynothugo/lsp_lines.nvim
+" https://github.com/VidocqH/lsp-lens.nvim
+
+" Plug 'jose-elias-alvarez/typescript.nvim'
+" Plug 'b0o/schemastore.nvim'
+"
+" Plug 'marilari88/twoslash-queries.nvim'
+
+" " Plug 'mfussenegger/nvim-lint'
+" Plug 'jose-elias-alvarez/null-ls.nvim'
+" Plug 'LostNeophyte/null-ls-embedded'
+" " Plug 'lukas-reineke/lsp-format.nvim'
+
+" Plug 'windwp/nvim-autopairs'
+
+" Plug 'onsails/lspkind-nvim'
+" Plug 'rmagatti/goto-preview'
+" " Plug 'hrsh7th/cmp-nvim-lsp-signature-help' ?
+" Plug 'ray-x/lsp_signature.nvim'
+" Plug 'ray-x/navigator.lua' " Plug 'glepnir/lspsaga.nvim'
+" Plug 'simrat39/symbols-outline.nvim'
+" Plug 'filipdutescu/renamer.nvim', { 'branch': 'master' }
+" weilbith/nvim-code-action-menu
+
+" Plug 'lewis6991/gitsigns.nvim'
+"
+" Plug 'neovim/nvim-lspconfig'
+" Plug 'SmiteshP/nvim-navic'
+" Plug 'MunifTanjim/nui.nvim'
+" Plug 'SmiteshP/nvim-navbuddy'
+"
+" https://github.com/DNLHC/glance.nvim
+
+"""""""""""""""""""""""""""""""""""" neovim-lsp
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } |
            \ Plug 'junegunn/fzf.vim'
@@ -530,7 +649,7 @@ Plug 'mlaursen/vim-react-snippets', { 'branch': 'main' }
 " review linenumber before jump
 Plug 'nacro90/numb.nvim'
 
-" Plug 'barrett-ruth/import-cost.nvim', { 'do': 'sh install.sh yarn' }
+Plug 'barrett-ruth/import-cost.nvim', { 'do': 'sh install.sh yarn' }
 
 " git
 Plug 'tpope/vim-fugitive' |
@@ -538,14 +657,6 @@ Plug 'tpope/vim-fugitive' |
            \ Plug 'junegunn/gv.vim'
 
 Plug 'whiteinge/diffconflicts'
-
-" Use a (usually) better diff algorithm.
-set diffopt+=indent-heuristic
-" nvim 9.x only
-set diffopt+=linematch:60
-
-" disable showing '------' for empty line in difftool
-set fillchars+=diff:╱
 
 Plug 'sindrets/diffview.nvim'
 
@@ -625,7 +736,7 @@ Plug 'chentoast/marks.nvim'
 " displays colors for words/hex
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
-" massive cmdline improvement
+" wilder.nvim
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
   let &rtp=&rtp

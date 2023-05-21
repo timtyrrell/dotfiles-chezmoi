@@ -50,10 +50,12 @@ gw_fuzzy_remote() {
   gw_add_remote $branch
 }
 
+kill-port() { lsof -tPni :$1 | xargs kill }
+
 # Core helper function.
 # Add -s for --case-sensitive search when calling the top level functions.
 # rgaj "LoginView" -s
-# For --colors, see https://www.mankier.com/1/rg#--colors.
+# For --colors, see https://www.mankier.com/1/rg#--colors
 
 _rg() {
     rg \

@@ -1,3 +1,5 @@
+[advice]
+	skippedCherryPicks = false
 [alias]
 	aa = add -A .
 	b  = branch
@@ -44,31 +46,6 @@
 	autoSetupRebase = always
 [color]
 	ui = true
-[color "branch"]
-	current = green
-	local = normal
-	remote = red
-	plain = normal
-[color "status"]
-	branch = green
-	header = normal dim
-	added = red
-	updated = blue
-	changed = red
-	untracked = yellow
-	nobranch = red
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-[color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
 [core]
 	editor = nvim
 	whitespace = warn
@@ -82,13 +59,19 @@
 	colorMoved = default
 	tool = vimdiff
 [delta]
-	commit-decoration-style = bold yellow box ul
-	file-style = bold yellow ul
-	hunk-header-decoration-style = yellow box
+	minus-style                   = syntax "#37222c"
+	minus-non-emph-style          = syntax "#37222c"
+	minus-emph-style              = syntax "#713137"
+	minus-empty-line-marker-style = syntax "#37222c"
+	line-numbers-minus-style      = "#b2555b"
+	plus-style                    = syntax "#20303b"
+	plus-non-emph-style           = syntax "#20303b"
+	plus-emph-style               = syntax "#2c5a66"
+	plus-empty-line-marker-style  = syntax "#20303b"
+	line-numbers-plus-style       = "#266d6a"
+	line-numbers-zero-style       = "#3b4261"
+	navigate = true # use n and N to move between diff sections
 	line-numbers = true
-	; minus-color = normal "#340001"
-	; plus-color = syntax "#012800"
-	whitespace-error-style = 22 reverse
 [fetch]
 	prune = true
 	; pruneTags = true

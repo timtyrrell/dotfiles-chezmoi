@@ -10,6 +10,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# https://www.reddit.com/r/KittyTerminal/comments/13ephdh/xtermkitty_ssh_woes_i_know_about_the_kitten_but/
+# kitty ssh fix
+# [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
+
 eval $(/opt/homebrew/bin/brew shellenv)
 export PATH="/opt/homebrew/bin:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
@@ -131,6 +135,16 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
+
+# reload zsh shell with ctrl N
+# exec-zsh() {
+#   zle -I
+#   exec zsh <$TTY
+# }
+
+# zle -N exec-zsh
+# bindkey '^N' exec-zsh
+
 # history
 HISTFILE=~/.zsh_history
 HISTSIZE=100000
@@ -242,8 +256,6 @@ export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
 # ctrl-x to execute, enter to put in cmd line
 export FZF_CTRL_R_OPTS="$FZF_HIDE_PREVIEW"
 
-export BAT_THEME="Enki-Tokyo-Night"
-
 export FZF_HEADER_DEFAULT="ALT-k/j page up/down, CTRL-u/d preview half-page up/down, \ to toggle"
 export FZF_HEADER_FILES="CTRL-s/ALT-d to select/unselect-all, CTRL-v open in nvim"
 export FZF_HEADER_PASTE="CTRL-y to copy into clipboard"
@@ -266,24 +278,31 @@ export FZF_DEFAULT_OPTS="
 --height=80%
 --multi
 --border
---color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
---color=fg+:#c0caf5,bg+:#292e42,hl+:#7dcfff
---color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
---color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
---color=gutter:#1a1b26
 --prompt='> ' --pointer='▶' --marker='✓'
 --header '$FZF_HEADER_DEFAULT'
 --bind 'ctrl-s:select-all'
 --bind 'alt-d:deselect-all'
 --preview-window 'right,50%,border-left,<50(up,50%,border-bottom)'
---bind '\:toggle-preview'
+--bind 'ctrl-\:toggle-preview'
+--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
 --bind 'ctrl-u:preview-half-page-up'
 --bind 'ctrl-d:preview-half-page-down'
 --bind 'alt-k:page-up'
 --bind 'alt-j:page-down'
 --bind 'ctrl-v:execute(nvim {} < /dev/tty > /dev/tty 2>&1)+accept'
 "
-# --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+# --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
+# --color=fg+:#c0caf5,bg+:#292e42,hl+:#7dcfff
+# --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
+# --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
+# --color=gutter:#1a1b26
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+--color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
+--color=fg+:#FFFFFF,bg+:#1a1b26,hl+:#7dcfff
+--color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
+--color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
+--color header:italic
+'
 
 # https://github.com/junegunn/fzf/commit/f84b3de24b63e2e26cbfa2a24e61a4173824fffd
 # tweak above nvim open?

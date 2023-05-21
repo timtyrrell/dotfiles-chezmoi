@@ -127,21 +127,26 @@ require("jester").setup({
   }
 })
 
+-- vim.api.nvim_set_keymap("n", "<leader>tt", "<cmd>TestNearest<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>tf", "<cmd>TestLatest<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>tl", "<cmd>TestLast<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>tv", "<cmd>TestVisit<cr>", {})
+-- vim.api.nvim_set_keymap("n", "<leader>ts", "<cmd>TestSuite<cr>", {})
 vim.cmd [[
   " vim-test
-  " let test#strategy = 'toggleterm'
+  let test#strategy = 'toggleterm'
   let test#strategy = 'vimux'
   nmap <silent> <leader>tt :TestNearest<CR>
   nmap <silent> <leader>tf :TestFile<CR>
   nmap <silent> <leader>tl :TestLast<CR>
   nmap <silent> <leader>tv :TestVisit<CR>
-  " nmap <silent> <leader>ts :TestSuite<CR>
+  nmap <silent> <leader>ts :TestSuite<CR>
 
-  " let test#typescriptreact#jest#options = {
-  "   \ 'nearest': '--backtrace',
-  "   \ 'file':    '--format documentation',
-  "   \ 'suite':   '--tag ~slow',
-  " \}
+  let test#typescriptreact#jest#options = {
+    \ 'nearest': '--backtrace',
+    \ 'file':    '--format documentation',
+    \ 'suite':   '--tag ~slow',
+  \}
 
   " dap-ui
   nnoremap <leader>dq  :lua require'dapui'.toggle()<CR>
