@@ -821,9 +821,12 @@ lua << EOF
 
 require('auto-session').setup {
   -- cwd_change_handling = {
-  --   restore_upcoming_session = false,
+  --   restore_upcoming_session = true,
   -- },
-  log_level = 'error',
+  session_lens = {
+    load_on_setup = false,
+  },
+  log_level = 'info',
   auto_session_enabled = true,
   auto_save_enabled = true,
   auto_restore_enabled = true,
