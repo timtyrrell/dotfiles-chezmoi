@@ -93,8 +93,7 @@ vnoremap <Leader>GB :GBrowse!<CR>
 nnoremap <Leader>GB :.GBrowse!<CR>
 
 " open project
-nnoremap <Leader>go <cmd>GBrowse master<cr>
-" nnoremap <Leader>go <cmd>GBrowse main<cr>
+nnoremap <Leader>go <cmd>GBrowse HEAD<cr>
 
 " Add <cfile> to index and save
 nnoremap <silent><Leader>gw <cmd>Gwrite<CR>
@@ -160,14 +159,13 @@ command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' 
 " Plug 'sindrets/diffview.nvim'
 " ***PR reviews***
 "
+" *** if HEAD fails, run `git remote set-head -a origin` in the repo ***
 " diff current branch(PR) against base branch
-nnoremap <leader>dvm <Cmd>DiffviewOpen origin/main...HEAD<cr>
-nnoremap <leader>dvM <Cmd>DiffviewOpen origin/master...HEAD<cr>
+nnoremap <leader>dvm <Cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<cr>
 " From the file panel you can press `L` to open the commit log for all the changes. This lets you check the full commit messages for all the commits involved
 
 " Comparing Changes From the Individual PR Commits against base branch
-nnoremap <leader>dvp <Cmd>DiffviewFileHistory --range=origin/main...HEAD --right-only --no-merges<cr>
-nnoremap <leader>dvP <Cmd>DiffviewFileHistory --range=origin/master...HEAD --right-only --no-merges<cr>
+nnoremap <leader>dvp <Cmd>DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges<cr>
 
 " diff current changes (also, merge/rebase flow)
 nnoremap <leader>dvo <cmd>DiffviewOpen<cr>
@@ -190,8 +188,7 @@ nnoremap <leader>dvF <Cmd>DiffviewFileHistory<cr>
 " diff on latest commit?
 nnoremap <leader>dvl <Cmd>DiffviewOpen HEAD~1<cr>
 " ?
-nnoremap <leader>dvh <Cmd>DiffviewFileHistory --range=origin/main..HEAD<cr>
-nnoremap <leader>dvH <Cmd>DiffviewFileHistory --range=origin/master..HEAD<cr>
+nnoremap <leader>dvh <Cmd>DiffviewFileHistory --range=origin/HEAD..HEAD<cr>
 " diff history on visual selection
 vnoremap <leader>dvh <Cmd>'<,'>DiffviewFileHistory<CR>
 

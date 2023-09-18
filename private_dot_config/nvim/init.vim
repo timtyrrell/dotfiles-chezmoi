@@ -254,7 +254,6 @@ nnoremap <silent> <Leader>jj :set ft=json<CR>:%!jq .<CR>
 nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write<CR>"
 " nnoremap <expr> <silent> <CR> &buftype ==# "quickfix" ? "\<CR>" : ":write!<CR>"
 nnoremap <Enter> :w<Enter>
-" nnoremap <leader><Enter> :w !sudo tee %<Enter>
 " Keep default CR behaviour for quickfix list
 augroup quickfix
   autocmd!
@@ -284,12 +283,14 @@ let g:loaded_ruby_provider = 0
 " let g:loaded_ruby_provider = 1 " use language server instead
 " let g:loaded_node_provider = 1
 
+let g:plug_threads = 5
 call plug#begin('~/.config/nvim/plugged')
 " if branch changes from master to main `git remote set-head origin -a` in `~/config/nvim/plugged/[plugin]`
 
 " core code analysis and manipulation
            " \ Plug 'wellle/tmux-complete.vim' " coc completion from open tmux panes
-Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'yarn install --frozen-lockfile' } |
+" Plug 'neoclide/coc.nvim', { 'commit': '0a2c8b84474593a55090b1c4b565ff395cbe3bfe', 'do': 'yarn install --frozen-lockfile' } |
+Plug 'neoclide/coc.nvim', { 'branch': 'master', 'do': 'npm ci' } |
            \ Plug 'antoinemadec/coc-fzf'
 Plug 'tjdevries/coc-zsh'
 " Plug 'xiyaowong/coc-code-action-menu.nvim' | Plug 'weilbith/nvim-code-action-menu'
@@ -313,44 +314,6 @@ let g:copilot_filetypes = {
             \ 'vimwiki': v:false,
             \ }
 
-"copilot keybindings
-"ALT-]
-" inoremap ? <Plug>(copilot-next)
-"ALT-[
-" inoremap ? <Plug>(copilot-previous)
-"ALT-\
-" inoremap ? <Plug>(copilot-suggest)
-" Copilot.vim uses <Tab> to accept the current suggestion.  If you have an
-" existing <Tab> map, that will be used as the fallback when no suggestion is
-" displayed.
-                                                " *copilot#Accept()*
-" If you'd rather use a key that isn't <Tab>, define an <expr> map that calls
-" copilot#Accept().  Here's an example with CTRL-J:
-" >
-        " imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
-        " let g:copilot_no_tab_map = v:true
-" <
-" The argument to copilot#Accept() is the fallback for when no suggestion is
-" displayed.  In this example, a regular carriage return is used.  If no
-" fallback is desired, use an argument of "" (an empty string).
-
-                                                " *copilot-i_CTRL-]*
-" <C-]>                   Dismiss the current suggestion.
-" <Plug>(copilot-dismiss)
-
-                                                " *copilot-i_ALT-]*
-" <M-]>                   Cycle to the next suggestion, if one is available.
-" <Plug>(copilot-next)
-
-                                                " *copilot-i_ALT-[*
-" <M-[>                   Cycle to the previous suggestion.
-" <Plug>(copilot-previous)
-
-                                                " *copilot-i_ALT-\*
-" <M-\>                   Explicitly request a suggestion, even if Copilot
-" <Plug>(copilot-suggest) is disabled.
-
-" SYNTAX HIGHLIGHTING                             *copilot-highlighting*
 " highlight CopilotSuggestion guifg=#555555 ctermfg=8
 
 """""""""""""""""""""""""""""""""""" neovim-lsp
@@ -408,13 +371,21 @@ let g:copilot_filetypes = {
 
 """""""""""""""""""""""""""""""""""" neovim-lsp
 
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } |
+Plug '/opt/homebrew/opt/fzf' |
            \ Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } |
+"            \ Plug 'junegunn/fzf.vim'
 
 " buffer management
 Plug 'AndrewRadev/undoquit.vim'
 
+Plug 'tzachar/highlight-undo.nvim'
+
 Plug 'kazhala/close-buffers.nvim'
+
+Plug 'lambdalisue/suda.vim'
+" Re-open a current file with sudo :SudaRead
+" Forcedly save a current file with sudo :SudaWrite
 
 " undo tree visualizer
 Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
@@ -499,12 +470,11 @@ Plug 'David-Kunz/jester'
 " Plug 'mxsdev/nvim-dap-vscode-js'
 
 " syntax
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 
 " Plug 'mrjones2014/nvim-ts-rainbow'
 " https://gitlab.com/HiPhish/nvim-ts-rainbow2
 
-Plug 'm-demare/hlargs.nvim'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
@@ -525,6 +495,7 @@ augroup tmuxgroups
   " automatically source tmux config when saved
   autocmd BufWritePost .tmux.conf execute ':!tmux source-file %'
 augroup END
+
 Plug 'tmux-plugins/vim-tmux'
 " https://github.com/nvim-treesitter/nvim-treesitter/issues/1019#issuecomment-812976740
 let g:polyglot_disabled = [
@@ -581,6 +552,7 @@ Plug 'kevinhwang91/nvim-bqf'
 Plug 'luukvbaal/statuscol.nvim'
 Plug 'kevinhwang91/promise-async'
 Plug 'kevinhwang91/nvim-ufo'
+Plug 'kevinhwang91/nvim-fundo'
 
 Plug 'christoomey/vim-tmux-navigator'
 " keeping all navigation within Vim until the tmux pane is explicitly unzoomed
@@ -685,6 +657,8 @@ Plug 'nvim-telescope/telescope-node-modules.nvim'
 Plug 'dhruvmanila/telescope-bookmarks.nvim'
 Plug 'ANGkeith/telescope-terraform-doc.nvim'
 Plug 'LinArcX/telescope-env.nvim'
+Plug 'debugloop/telescope-undo.nvim'
+Plug 'piersolenski/telescope-import.nvim'
 
 " or use? https://github.com/nvim-telescope/telescope.nvim/issues/2201#issuecomment-1284691502
 Plug 'princejoogie/dir-telescope.nvim'
@@ -767,8 +741,8 @@ Plug 'folke/zen-mode.nvim'
 Plug 'folke/trouble.nvim'
 
 Plug 'voldikss/vim-browser-search'
-nmap <silent> <Leader>bs <Plug>SearchNormal
-vmap <silent> <Leader>bs <Plug>SearchVisual
+nmap <silent> <Leader>sb <Plug>SearchNormal
+vmap <silent> <Leader>sb <Plug>SearchVisual
 let g:browser_search_default_engine = 'duckduckgo'
 
 Plug 'airblade/vim-rooter'
@@ -807,6 +781,7 @@ Plug 'folke/which-key.nvim'
 
 " Plug 'ja-ford/delaytrain.nvim'
 " Plug 'takac/vim-hardtime'
+" Plug 'm4xshen/hardtime.nvim'
 
 " typescript fork of 'ianding1/leetcode.vim'
 " Plug 'briemens/leetcode.vim'
@@ -826,7 +801,7 @@ require('auto-session').setup {
   session_lens = {
     load_on_setup = false,
   },
-  log_level = 'info',
+  log_level = 'error',
   auto_session_enabled = true,
   auto_save_enabled = true,
   auto_restore_enabled = true,

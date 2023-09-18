@@ -213,7 +213,7 @@
   ],
   "snippet.nextPlaceholderOnDelete": true,
   "jest.customFlags": [
-    ""
+    "no-watchman"
   ],
   "importCost.debug": false,
   "coc.preferences.enableMessageDialog": true,

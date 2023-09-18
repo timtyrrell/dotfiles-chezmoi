@@ -11,3 +11,5 @@ notebooks
 poetry.lock
 locales
 vendor
+cjs
+esm

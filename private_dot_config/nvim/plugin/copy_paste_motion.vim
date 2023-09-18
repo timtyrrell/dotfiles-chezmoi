@@ -100,11 +100,20 @@
 " nnoremap c "_c
 " nnoremap C "_C
 
+" nnoremap x "ax
+" nnoremap d "ad
+" nnoremap c "ac
+" nnoremap D "aD
+" nnoremap C "aC
+" vnoremap d "ad
+" vnoremap c "ac
+
 " copy paragraph
 " nnoremap cp vap:t'><CR>
 
+" probably pointless?
 " insert mode paste from the clipboard just like on mac
-inoremap <C-v> <C-r>*
+" inoremap <C-v> <C-r>*
 
 " Indent/dedent what you just pasted
 nnoremap <leader>< V`]<

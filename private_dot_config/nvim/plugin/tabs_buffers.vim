@@ -43,12 +43,36 @@ nnoremap <leader>0   :tablast<CR>
 " au TabLeave * let g:lasttab = tabpagenr()
 
 " Plug 'kazhala/close-buffers.nvim'
-map <leader>Bdo :BDelete other<CR>
-map <leader>Bdh :BDelete hidden<CR>
-map <leader>Bda :BDelete all<CR>
-map <leader>Bdt :BDelete this<CR>
-map <leader>Bdn :BDelete nameless<CR>
+map <leader>bdo :BDelete other<CR>
+map <leader>bdh :BDelete hidden<CR>
+map <leader>bda :BDelete all<CR>
+map <leader>bdt :BDelete this<CR>
+map <leader>bdn :BDelete nameless<CR>
 
 " Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 nmap <Leader>mt :MundoToggle<CR>
 let g:mundo_right=1
+
+lua << EOF
+
+require('fundo').setup()
+require('highlight-undo').setup({
+  -- duration = 300,
+  -- undo = {
+  --   hlgroup = 'HighlightUndo',
+  --   mode = 'n',
+  --   lhs = 'u',
+  --   map = 'undo',
+  --   opts = {}
+  -- },
+  -- redo = {
+  --   hlgroup = 'HighlightUndo',
+  --   mode = 'n',
+  --   lhs = '<C-r>',
+  --   map = 'redo',
+  --   opts = {}
+  -- },
+  -- highlight_for_count = true,
+})
+
+EOF

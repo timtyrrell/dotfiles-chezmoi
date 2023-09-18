@@ -188,7 +188,8 @@ setopt prompt_subst            # parameter expansion, command substitution and a
 
 # don't append failed command to ~/.zsh_history
 # this excludes commands that don't exist, assuming that the first word is the command name...
-zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+# this doesn't save commands starting with an ENV :(
+# zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 
 # Bindings
 # external editor support
@@ -242,20 +243,6 @@ export FZF_TMUX_OPTS="-p -w 90% -h 60%"
 export FZF_TMUX_POP_UP_OPTS="-p 90%,90%"
 
 # default fzf
-export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
-export FZF_DEFAULT_COMMAND='rg --files'
-# files
-export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules'"
-export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
-# directories
-export FZF_ALT_C_COMMAND="$FZF_CTRL_T_COMMAND --type d"
-export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
-# history
-# modify keybindings.zsh or add plugin: https://github.com/junegunn/fzf/issues/477#issuecomment-230338992
-# ctrl-x to execute, enter to put in cmd line
-export FZF_CTRL_R_OPTS="$FZF_HIDE_PREVIEW"
-
 export FZF_HEADER_DEFAULT="ALT-k/j page up/down, CTRL-u/d preview half-page up/down, \ to toggle"
 export FZF_HEADER_FILES="CTRL-s/ALT-d to select/unselect-all, CTRL-v open in nvim"
 export FZF_HEADER_PASTE="CTRL-y to copy into clipboard"
@@ -277,9 +264,10 @@ export FZF_DEFAULT_OPTS="
 --info=inline
 --height=80%
 --multi
---border
+--border=double
 --prompt='> ' --pointer='▶' --marker='✓'
 --header '$FZF_HEADER_DEFAULT'
+--scrollbar '▌▐'
 --bind 'ctrl-s:select-all'
 --bind 'alt-d:deselect-all'
 --preview-window 'right,50%,border-left,<50(up,50%,border-bottom)'
@@ -291,18 +279,35 @@ export FZF_DEFAULT_OPTS="
 --bind 'alt-j:page-down'
 --bind 'ctrl-v:execute(nvim {} < /dev/tty > /dev/tty 2>&1)+accept'
 "
-# --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
-# --color=fg+:#c0caf5,bg+:#292e42,hl+:#7dcfff
-# --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
-# --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
-# --color=gutter:#1a1b26
+
+# generated from tokyo dark colorscheme
+# export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+# --color=bg+:#292e42,bg:#1a1b26,spinner:#bb9af7,hl:#565f89,fg:#c0caf5,header:#565f89,info:#7dcfff,pointer:#bb9af7,marker:#7dcfff,fg+:#c0caf5,preview-bg:#292e42,prompt:#bb9af7,hl+:#bb9af7
+# '
+
 export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
---color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
---color=fg+:#FFFFFF,bg+:#1a1b26,hl+:#7dcfff
---color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
---color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
+--color fg:#c0caf5,bg:#1a1b26,hl:#FFFFFF
+--color fg+:#c0caf5,bg+:#292e42,hl+:#FFFFFF
+--color info:#bb9af7,prompt:#7dcfff,pointer:#bb9af7
+--color marker:#9ece6a,spinner:#9ece6a,header:#565f89
+--color border:#7aa2f7,gutter:#1a1b26
+--color preview-bg:#292e42,preview-border:#7aa2f7,preview-scrollbar:#7aa2f7
 --color header:italic
 '
+
+export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
+export FZF_DEFAULT_COMMAND='rg --files'
+# files
+export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules'"
+export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
+# directories
+export FZF_ALT_C_COMMAND="$FZF_CTRL_T_COMMAND --type d"
+export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
+# history
+# modify keybindings.zsh or add plugin: https://github.com/junegunn/fzf/issues/477#issuecomment-230338992
+# ctrl-x to execute, enter to put in cmd line
+export FZF_CTRL_R_OPTS="$FZF_HIDE_PREVIEW"
 
 # https://github.com/junegunn/fzf/commit/f84b3de24b63e2e26cbfa2a24e61a4173824fffd
 # tweak above nvim open?
@@ -317,6 +322,21 @@ _fzf_compgen_path() {
 # Use fd to generate the list for directory completion
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+    export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+  esac
 }
 
 # zle -N kube-toggle
@@ -360,6 +380,7 @@ zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zdharma-continuum/fast-syntax-highlighting
 zcomet load zsh-users/zsh-completions
+# Where would this fit in? https://github.com/zsh-users/zsh-autosuggestions
 
 zstyle :plugin:fast-syntax-highlighting theme base16
 
@@ -413,6 +434,25 @@ zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
+
+
+# https://github.com/Aloxaf/dotfiles/blob/180d97c8f13b001dbba49a69d964f4377d306748/zsh/.config/zsh/zshrc.zsh#L100-L113
+# == fzf-tab
+# zstyle ':fzf-tab:complete:_zlua:*' query-string input
+# zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
+# zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
+# zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
+# zstyle ":fzf-tab:*" fzf-flags --color=bg+:23
+# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+# zstyle ':fzf-tab:*' switch-group ',' '.'
+# zstyle ":completion:*:git-checkout:*" sort false
+# zstyle ':completion:*' file-sort modification
+# zstyle ':completion:*:exa' sort false
+# zstyle ':completion:files' sort false
+# https://github.com/Aloxaf/dotfiles/blob/180d97c8f13b001dbba49a69d964f4377d306748/zsh/.config/zsh/zshrc.zsh#L100-L113
+# == fzf-tab
 
 zstyle ':fzf-tab:*' show-group brief
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup

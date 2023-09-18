@@ -1,22 +1,25 @@
-" customize
-" let g:fzf_colors = {
-"       \ 'fg': ['fg', 'Normal'],
-"       \ 'bg': ['bg', 'Normal'],
-"       \ 'hl': ['fg', 'Green'],
-"       \ 'fg+': ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-"       \ 'bg+': ['bg', 'CursorLine', 'CursorColumn'],
-"       \ 'hl+': ['fg', 'Green'],
-"       \ 'info': ['fg', 'Yellow'],
-"       \ 'prompt': ['fg', 'Red'],
-"       \ 'pointer': ['fg', 'Blue'],
-"       \ 'marker': ['fg', 'Blue'],
-"       \ 'spinner': ['fg', 'Yellow'],
-"       \ 'header': ['fg', 'Blue']
-"       \ }
-
 " fzf.vim
+
+" run `echo fzf#wrap()` to see generate zsh colors for colorscheme
+" let g:fzf_colors =
+" \ { 'fg':         ['fg', 'Normal'],
+"   \ 'bg':         ['bg', 'Normal'],
+"   \ 'preview-bg': ['bg', 'NormalFloat'],
+"   \ 'hl':         ['fg', 'Comment'],
+"   \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+"   \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+"   \ 'hl+':        ['fg', 'Statement'],
+"   \ 'info':       ['fg', 'PreProc'],
+"   \ 'border':     ['fg', 'Ignore'],
+"   \ 'prompt':     ['fg', 'Conditional'],
+"   \ 'pointer':    ['fg', 'Exception'],
+"   \ 'marker':     ['fg', 'Keyword'],
+"   \ 'spinner':    ['fg', 'Label'],
+"   \ 'header':     ['fg', 'Comment'] }
+
 " nnoremap <C-w>- :new<cr>
 " nnoremap <C-w><bar> :vnew<cr>
+
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -69,7 +72,7 @@ nnoremap <silent> <Leader>fb :Buffers<CR>
 let g:fzf_buffers_jump = 1
 
 " select buffers to delete/close
-nnoremap <silent> <leader>bd :BD<CR>
+nnoremap <silent> <leader>bx :BD<CR>
 
 " Lines in the current buffer
 nnoremap <silent><leader>fB <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>
@@ -403,54 +406,6 @@ function! s:FzfFallback()
 endfunction
 tnoremap <c-space> <c-\><c-n>c:call <sid>FzfFallback()<cr>
 
-" FZF JUMPS/CHANGES
-function GoTo(jumpline)
-  let values = split(a:jumpline, ":")
-  echo "e ".values[0]
-  call cursor(str2nr(values[1]), str2nr(values[2]))
-  execute "normal! zvzz"
-endfunction
-
-function GetLine(bufnr, lnum)
-  let lines = getbufline(a:bufnr, a:lnum)
-  if len(lines)>0
-    return trim(lines[0])
-  else
-    return ''
-  endif
-endfunction
-
-function! Jumps()
-  " Get jumps with filename added
-  let jumps = map(reverse(copy(getjumplist()[0])),
-    \ { key, val -> extend(val, {'name': expand('#'.(val.bufnr)) }) })
-
-  let jumptext = map(copy(jumps), { index, val ->
-      \ (val.name).':'.(val.lnum).':'.(val.col+1).': '.GetLine(val.bufnr, val.lnum) })
-
-  call fzf#run(fzf#vim#with_preview(fzf#wrap({
-        \ 'source': jumptext,
-        \ 'column': 1,
-        \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
-        \ 'sink': function('GoTo')})))
-endfunction
-command! Jumps call Jumps()
-
-function! Changes()
-  let changes  = reverse(copy(getchangelist()[0]))
-
-  let offset = &lines / 2 - 3
-  let changetext = map(copy(changes), { index, val ->
-      \ expand('%').':'.(val.lnum).':'.(val.col+1).': '.GetLine(bufnr('%'), val.lnum) })
-
-  call fzf#run(fzf#vim#with_preview(fzf#wrap({
-        \ 'source': changetext,
-        \ 'column': 1,
-        \ 'options': ['--delimiter', ':', '--bind', 'alt-a:select-all,alt-d:deselect-all', '--preview-window', '+{2}-/2'],
-        \ 'sink': function('GoTo')})))
-endfunction
-command! Changes call Changes()
-
 nnoremap <silent> <leader>fj :Jumps<CR>
 nnoremap <silent> <leader>fJ :Changes<CR>
 " FZF JUMPS/CHANGES
@@ -522,10 +477,12 @@ nnoremap <leader>rl viw"9y:s/<c-r>9//g<left><left>
 
 " Search for the word under
 " stay at current match
-" Change the search matches
+" Replace current word (and . for next one)
 " . to repeat on next match
 nnoremap cn *``cgn
 nnoremap cN *``cgN
+
+"*``cgn", "Replace current word (and . for next one)
 
 " searches for the word under my cursor and performs cgn
 " nmap cg* *Ncgn
@@ -551,12 +508,14 @@ function! FindAndReplace( ... )
     return
   endif
   execute printf('args `rg --files-with-matches ''%s'' .`', a:1)
-  execute printf('argdo %%substitute/%s/%s/g | update', a:1, a:2)
+  execute printf('noautocmd argdo %%substitute/%s/%s/g | update', a:1, a:2)
 endfunction
 command! -nargs=+ FindAndReplaceAll call FindAndReplace(<f-args>)
 
 nnoremap <leader>te <cmd>Telescope<cr>
+nnoremap <leader>tu <cmd>Telescope undo<cr>
 nnoremap <leader>fn <cmd>Telescope node_modules list<cr>
+nnoremap <leader>ti <cmd>Telescope import<cr>
 
 " Unhighlight search results
 map <Leader><space> :nohl<cr>
@@ -580,9 +539,9 @@ augroup END
 function! s:wilder_init() abort
   call wilder#setup({'modes': [':', '/', '?']})
 
-  cmap <expr> <Tab> wilder#in_context() ? wilder#next() : "\<Tab>"
+  cmap <expr> <Tab>   wilder#in_context() ? wilder#next()     : "\<Tab>"
   cmap <expr> <S-Tab> wilder#in_context() ? wilder#previous() : "\<S-Tab>"
-  cmap <expr> <c-j>   wilder#in_context() ? wilder#next() :     "\<c-j>"
+  cmap <expr> <c-j>   wilder#in_context() ? wilder#next()     : "\<c-j>"
   cmap <expr> <c-k>   wilder#in_context() ? wilder#previous() : "\<c-k>"
 
   " '-I' to ignore respect .gitignore, '-H' show hidden files
@@ -858,7 +817,21 @@ require('telescope').setup {
     },
     -- file_browser = {layout_strategy = "horizontal", sorting_strategy = "ascending"},
     heading = {treesitter = true},
-    ["ui-select"] = {require("telescope.themes").get_dropdown({})}
+    ["ui-select"] = {require("telescope.themes").get_dropdown({})},
+    undo = {
+      side_by_side = false,
+      layout_strategy = "vertical",
+      layout_config = {
+        preview_height = 0.8,
+      },
+       mappings = {
+        i = {
+          ["<cr>"] = require("telescope-undo.actions").yank_additions,
+          ["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+          ["<C-cr>"] = require("telescope-undo.actions").restore,
+        },
+      },
+    },
   }
 }
 -- local M = {}
@@ -934,6 +907,16 @@ require("telescope").load_extension("notify")
 require("telescope").load_extension("ui-select")
 
 require('telescope').load_extension('terraform_doc')
+require("telescope").load_extension("undo")
+
+require("telescope").setup({
+  extensions = {
+    import = {
+      -- Add imports to the top of the file keeping the cursor in place
+      insert_at_top = true,
+    },
+  },
+})
 
 
 -- require('telescope').load_extension('neoclip')
@@ -1039,9 +1022,6 @@ require('nvim-tree').setup {
   view = {
     side = 'left',
     width = 45,
-    mappings = {
-      list = {}
-    },
     float = {
       enable = false,
       open_win_config = {
@@ -1219,11 +1199,10 @@ local rails_controller_patterns = {
 }
 
 require("other-nvim").setup({
-  rememberBuffers = false,
+  -- showMissingFiles = true,
   mappings = {
     "rails",
   },
-  mappings = {
   --   {
   --     pattern = "/src/(.*)/.*.js$",
   --     target = "/src/%1/\\(*.css\\|*.scss\\)",
@@ -1296,7 +1275,7 @@ require("other-nvim").setup({
   --     target = "/spec/lib/%1_test.rb",
   --     context = "spec"
   --   },
-  }
+  -- }
 })
 
 EOF

@@ -40,6 +40,7 @@
 --     "diagnostic-languageserver",
 --     "dockerfile-language-server",
 --     "emmet-ls",
+--     "emmet-language-server", // use instead?
 --     "eslint-lsp",
 --     "graphql-language-service-cli",
 --     "html-lsp",

@@ -59,13 +59,16 @@ kill-port() { lsof -tPni :$1 | xargs kill }
 
 _rg() {
     rg \
-        --smart-case \
         --colors path:fg:175,135,255 \
         --colors line:fg:red \
         --colors match:fg:green \
         --colors match:style:nobold $@
 }
 
+# don't ignore node_modules
+# rga() {
+#     _rg  -g '*' $@
+# }
 
 # Search JS/JSX/TS/TSX file content
 rgaj() {
@@ -230,6 +233,8 @@ fgst() {
 greb() {
   REMOTE=${1:-main}
   git fetch origin ${REMOTE} && git rebase origin/${REMOTE}
+  # git remote set-head -a origin
+  # git fetch origin HEAD && git rebase origin/HEAD
 }
 
 # USAGE:
@@ -244,7 +249,7 @@ function git-fixup () {
 # fbr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
 fbr() {
   local branches branch
-  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branches=$(git for-each-ref --exclude-hidden --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
   branch=$(echo "$branches" |
            fzf-tmux -p 90%,90% -preview-window=:hidden) &&
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
@@ -467,7 +472,7 @@ rbi() {
 ###################################
 # https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
 fzf-tmux-popup() {
-  fzf-tmux -p 90%,90% --border --bind ctrl-/:toggle-preview "$@"
+  fzf-tmux -p 90%,90% "$@"
 }
 
 # git status

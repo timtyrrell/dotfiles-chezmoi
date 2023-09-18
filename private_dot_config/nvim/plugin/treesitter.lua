@@ -1,7 +1,7 @@
 require('nvim-treesitter.configs').setup {
   auto_install = true,
-  ensure_installed = { "bash", "comment", "css", "embedded_template", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
-  ignore_install = { "phpdoc" },
+  ensure_installed = { "bash", "css", "embedded_template", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
+  ignore_install = { "phpdoc", "comment" },
   -- disable slow treesitter highlight for large files
   disable = function(lang, buf)
     local max_filesize = 100 * 1024 -- 100 KB
@@ -94,28 +94,9 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-require('hlargs').setup({
-  extras = {
-    named_parameters = true,
-  },
-})
-
 require('hlslens').setup({
   nearest_only = true
 })
-
--- Plug 'nvim-treesitter/playground', { 'on': ['TSHighlightCapturesUnderCursor', 'TSNodeUnderCursor']}
--- :TSHighlightCapturesUnderCursor
--- :TSNodeUnderCursor
--- R: Refreshes the playground view when focused or reloads the query when the query editor is focused.
--- o: Toggles the query editor when the playground is focused.
--- a: Toggles visibility of anonymous nodes.
--- i: Toggles visibility of highlight groups.
--- I: Toggles visibility of the language the node belongs to.
--- t: Toggles visibility of injected languages.
--- f: Focuses the language tree under the cursor in the playground. The query editor will now be using the focused language.
--- F: Unfocuses the currently focused language.
--- <cr>: Go to current node in code buffer
 
 -- loaded after nvim-treesitter and any completion that already uses your tabkey.
 require('tabout').setup {

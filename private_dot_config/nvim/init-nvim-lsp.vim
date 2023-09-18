@@ -24,6 +24,7 @@ Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 " Plug 'dmitmel/cmp-cmdline-history'
 " Plug 'kristijanhusak/vim-dadbod-completion
 " Plug 'rcarriga/cmp-dap'
+" https://github.com/niuiic/dap-utils.nvim
 
 Plug 'onsails/lspkind-nvim'
 Plug 'glepnir/lspsaga.nvim' " or https://github.com/ray-x/navigator.lua?
@@ -43,6 +44,8 @@ Plug 'lukas-reineke/lsp-format.nvim'
 
 " https://github.com/jose-elias-alvarez/null-ls.nvim
 " Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+"
+" https://github.com/Bekaboo/dropbar.nvim
 
 " utils
 Plug 'windwp/nvim-autopairs'
@@ -59,6 +62,8 @@ Plug 'pwntester/octo.nvim'
 Plug 'nvim-telescope/telescope-node-modules.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'Kasama/nvim-custom-diagnostic-highlight'
+" https://github.com/aznhe21/actions-preview.nvim
+" https://github.com/Wansmer/symbol-usage.nvim
 
 Plug 'kyazdani42/nvim-tree.lua'
 

@@ -8,6 +8,7 @@ alias tree='exa -T --level=5'
 alias cl='clear'
 
 alias cat='bat'
+alias baty='bat -l yaml'
 
 # copy the last zsh command to clipboard
 alias clc='echo !! | pbcopy'
@@ -112,6 +113,7 @@ alias gdc='git diff --cached'
 alias glod='git log --oneline --decorate'
 alias glola='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
 alias gpush='git push'
+alias gpu='git push'
 alias gpf='git pushf'
 alias gp='git pull'
 alias gput='git fetch --tags -f && git pull'
@@ -153,6 +155,7 @@ alias grhr="git_reset_hard_remote"
 alias grhl="git_reset_hard_local"
 alias stash="git stash -u"
 alias wip="git add . && gc -m 'wip [ci skip]' --no-verify"
+# wtc = !sh -c 'git add -A && git commit $@ -m \""`curl -s https://whatthecommit.com/index.txt`"\"' -
 alias undo="git reset HEAD~1 --mixed"
 alias unwip="undo"
 # alias unwip="git reset --soft 'HEAD^' && git restore --staged ."
@@ -181,6 +184,8 @@ alias tmux_plugins_install="~/.tmux/plugins/tpm/bin/install_plugins"
 alias tmux_plugins_update="~/.tmux/plugins/tpm/bin/update_plugins all"
 alias tmux_plugins_clean="~/.tmux/plugins/tpm/bin/clean_plugins"
 
+alias tig="TERM=xterm-256color tig"
+
 # frum
 alias rbl="frum local"
 alias rbg="frum global"
@@ -205,6 +210,7 @@ alias update-neovim-nightly="brew reinstall neovim"
 alias brew-tmux-head="brew reinstall tmux"
 alias brew-install="brew bundle install --global"
 alias brew-outdated="brew update && echo 'OUTDATED:' && brew outdated"
+alias brew-kill-lock="kill $(lsof -t +d $(brew --prefix)/var/homebrew/locks)"
 alias brewup="brew update; brew upgrade; brew cleanup"
 alias ghu="gh extension upgrade --all"
 alias zsh-update="zcomet self-update && zcomet update"

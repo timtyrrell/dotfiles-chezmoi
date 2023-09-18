@@ -66,7 +66,33 @@ endfunction
 "       \ coc#refresh()
 " inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-" also use C-j, C-k to move in completion list
+" https://github.com/neoclide/coc.nvim/wiki/F.A.Q#tab-not-working-well-with-copilotvim
+" let g:copilot_no_tab_map = v:true
+" inoremap <silent><expr> <TAB>
+"       \ exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") :
+"       \ CheckBackspace() ? "\<Tab>" :
+"       \ coc#refresh()
+      " \ "\<Plug>(Tabout)"
+
+" inoremap <silent><expr> <TAB>
+"       \ exists('b:_copilot.suggestions') ? copilot#Accept("\<CR>") :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ CheckBackSpace() ? "\<TAB>" :
+"       \ coc#refresh()
+      " \ "\<Plug>(Tabout)"
+      "
+" inoremap <expr> <C-j>
+"       \ coc#pum#visible() ? coc#pum#next(1) :
+"       \ "\<Tab>"
+
+" from coc.nvim wiki
+" inoremap <silent><expr> <TAB>
+      " \ pumvisible() ? coc#_select_confirm() :
+      " \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      " \ CheckBackSpace() ? "\<TAB>" :
+      " \ coc#refresh()
+
+" use C-j, C-k to move in completion list
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
 inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
 
@@ -123,11 +149,10 @@ nmap <silent> <space>re <Plug>(coc-codeaction-refactor)
 xmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
 nmap <silent> <space>rs <Plug>(coc-codeaction-refactor-selected)
 
-nmap <space>cc <Plug>(coc-fix-current)
+nmap <space>cf <Plug>(coc-fix-current)
 nmap <space>ce <Plug>(coc-codelens-action)
-nmap <space>ca <Plug>(coc-codeaction)
-nmap <space>cw <Plug>(coc-codeaction-cursor)
-nmap <space>cf <Plug>(coc-codeaction-source)
+nmap <space>cc <Plug>(coc-codeaction-cursor)
+nmap <space>cS <Plug>(coc-codeaction-source)
 nmap <space>cl <Plug>(coc-codeaction-line)
 vmap <space>cs <Plug>(coc-codeaction-selected)
 nmap <space>cs <Plug>(coc-codeaction-selected)

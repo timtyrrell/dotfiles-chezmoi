@@ -55,6 +55,10 @@ function! SortWiki()
   call fzf#run(fzf#wrap(l:fzf_opts))
 endfunction
 
+" if you want to turn off support for other extension(for example, disabling accidently creating new wiki and link for normal markdown files)
+" set the following option in your `.vimrc` before packadd vimwiki:
+" let g:vimwiki_ext2syntax = {}
+
 let g:vimwiki_list = [{
   \ 'path': '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/',
   \ 'syntax': 'markdown',

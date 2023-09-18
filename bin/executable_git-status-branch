@@ -224,7 +224,7 @@ GetRefs() # (refs_dir)
   local fmt='%(refname:short) %(upstream:short)'
   local sort=$( (( $SHOW_DATES )) && echo '--sort=creatordate')
 
-  git for-each-ref --format="$fmt" $sort $refs_dir 2> /dev/null
+  git for-each-ref --exclude-hidden --format="$fmt" $sort $refs_dir 2> /dev/null
 }
 
 GetLocalRefs()
