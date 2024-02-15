@@ -107,7 +107,7 @@ augroup fugitive_ext
 augroup END
 
 " open Git Status in new tab
-nnoremap <leader>gs :tab Git<CR>
+nnoremap <silent> <leader>gs :tab Git<cr>:G<cr>/^M\s<cr>:let @/=""<cr>
 " P (on the file you want to run patch on)
 " <C-N> or <C-P> to jump to the next/previous file
 " - on a file, stages (or unstages) the entire file.
@@ -161,6 +161,7 @@ command -nargs=? -bar Gshow call setqflist(map(systemlist("git show --pretty='' 
 "
 " *** if HEAD fails, run `git remote set-head -a origin` in the repo ***
 " diff current branch(PR) against base branch
+" (OURS, left), area to resolve (middle), the version from the branch which is being merged (THEIRS, right)
 nnoremap <leader>dvm <Cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<cr>
 " From the file panel you can press `L` to open the commit log for all the changes. This lets you check the full commit messages for all the commits involved
 
@@ -203,9 +204,6 @@ let g:git_messenger_always_into_popup = 1
 let g:git_messenger_include_diff = 'current'
 let g:git_messenger_extra_blame_args ='-w' " Ignore whitespace
 let g:git_messenger_floating_win_opts = { 'border': 'single' }
-
-" Plug 'andrewradev/linediff.vim'
-" :Linediff
 
 " Plug 'rhysd/committia.vim'
 let g:committia_open_only_vim_starting = 1

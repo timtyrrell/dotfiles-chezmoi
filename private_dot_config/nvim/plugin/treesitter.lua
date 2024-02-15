@@ -3,13 +3,13 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { "bash", "css", "embedded_template", "graphql", "html", "http", "javascript", "jsdoc", "json", "jsonc", "lua", "regex", "ruby", "tsx", "typescript" },
   ignore_install = { "phpdoc", "comment" },
   -- disable slow treesitter highlight for large files
-  disable = function(lang, buf)
-    local max_filesize = 100 * 1024 -- 100 KB
-    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-    if ok and stats and stats.size > max_filesize then
-      return true
-    end
-  end,
+  -- disable = function(lang, buf)
+  --   local max_filesize = 100 * 1024 -- 100 KB
+  --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+  --   if ok and stats and stats.size > max_filesize then
+  --     return true
+  --   end
+  -- end,
   endwise = {
     enable = true,
   },
@@ -30,9 +30,6 @@ require('nvim-treesitter.configs').setup {
   -- },
   -- https://github.com/andymass/vim-matchup
   matchup = {
-    enable = true,
-  },
-  context_commentstring = {
     enable = true,
   },
   textobjects = {
@@ -93,6 +90,8 @@ require('nvim-treesitter.configs').setup {
     enable = true,
   },
 }
+
+require('nvim-treesitter.configs').setup {}
 
 require('hlslens').setup({
   nearest_only = true

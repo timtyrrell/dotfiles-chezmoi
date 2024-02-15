@@ -62,7 +62,7 @@ endfunction
 let g:vimwiki_list = [{
   \ 'path': '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/',
   \ 'syntax': 'markdown',
-  \ 'ext': '.md',
+  \ 'ext': 'md',
   \ 'auto_toc': 1,
   \ }]
 " gln to toggle forward

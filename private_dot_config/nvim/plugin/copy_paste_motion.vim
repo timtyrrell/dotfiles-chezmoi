@@ -180,23 +180,17 @@ for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '-', 
   execute 'onoremap a' . char . ' :normal va' . char . '<CR>'
 endfor
 
+" Don't include leading whitespace
+onoremap a' 2i'
+onoremap a" 2i"
+xnoremap a' 2i'
+xnoremap a" 2i"
+
 " change word movement?
 " let someobject = response.user.posts[2].description.length
 " ^   ^            ^        ^    ^     ^  ^           ^
 " nnoremap w /\W\zs\w<CR>
 " nnoremap W ?\W\zs\w<CR>
-
-" change/delete surrounding function call
-" Plug 'AndrewRadev/dsf.vim'
-let g:dsf_no_mappings = 1
-nmap dsf <Plug>DsfDelete
-nmap csf <Plug>DsfChange
-nmap dsnf <Plug>DsfNextDelete
-nmap csnf <Plug>DsfNextChange
-" omap af <Plug>DsfTextObjectA
-" xmap af <Plug>DsfTextObjectA
-" omap if <Plug>DsfTextObjectI
-" xmap if <Plug>DsfTextObjectI
 
 " Plug 'christoomey/vim-system-copy'
 " cp for copying and cv for pasting

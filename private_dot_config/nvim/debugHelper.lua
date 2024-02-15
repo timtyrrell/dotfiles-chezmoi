@@ -210,3 +210,8 @@ return {
 --        },
 --    }
 --end
+
+-- next.js debugging setup
+-- https://www.reddit.com/r/neovim/comments/198ft3f/nextjs_is_impossible_to_debug_on_neovim/
+-- https://github.com/serranomorante/.dotfiles/commit/69c7ed982e3748af15f1a69e909739b89562ddf4
+-- https://github.com/gonstoll/dotfiles/blob/6cd3a66d1764932186dbbc5a19b13d1f3906c479/nvim/lua/plugins/dap.lua#L195-L215

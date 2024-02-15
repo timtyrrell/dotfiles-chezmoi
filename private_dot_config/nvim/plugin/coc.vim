@@ -1,6 +1,7 @@
 let g:coc_enable_locationlist = 0
           " \ 'coc-import-cost',
           " \ 'coc-solargraph',
+          " \ 'coc-lightbulb',
 let g:coc_global_extensions = [
           \ 'coc-css',
           \ 'coc-cssmodules',
@@ -13,7 +14,6 @@ let g:coc_global_extensions = [
           \ 'coc-html',
           \ 'coc-jest',
           \ 'coc-json',
-          \ 'coc-lightbulb',
           \ 'coc-lists',
           \ 'coc-markdownlint',
           \ 'coc-marketplace',

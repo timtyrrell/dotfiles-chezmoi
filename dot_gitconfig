@@ -10,11 +10,15 @@
 	cp = cherry-pick
 	put = push origin HEAD
 	fixup = commit --fixup
+	fza = "!git ls-files -m -o --exclude-standard | fzf -m --print0 | xargs -0 git add"
 	squash = commit --squash
 	ri = rebase --interactive
 	br = branch
 	open = browse
 	pruneremote = remote prune origin
+	gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+	root = rev-parse --show-toplevel
+	brancherry = "!f() { git checkout -b $(git rev-parse --abbrev-ref HEAD)-$(git rev-parse --short \"$1\") $1; }; f"
 	lg = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --graph
 	ll = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --first-parent --no-merges
 	add-untracked = !"git status --porcelain | awk '/\\?\\?/{ print $2 }' | xargs git add"
@@ -57,6 +61,7 @@
 	algorithm = patience
 	compactionHeuristic = true
 	colorMoved = default
+	colorMovedWS = "allow-indentation-change"
 	tool = vimdiff
 [delta]
 	minus-style                   = syntax "#37222c"

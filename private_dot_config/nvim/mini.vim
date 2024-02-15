@@ -5,24 +5,31 @@ set hidden
 
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'rmagatti/auto-session'
+Plug 'shortcuts/no-neck-pain.nvim'
 
 call plug#end()
 
 lua << EOF
 
-require('auto-session').setup {
-  -- cwd_change_handling = {
-  --   restore_upcoming_session = false,
-  -- },
-  log_level = 'info',
-  auto_session_enabled = true,
-  auto_save_enabled = true,
-  auto_restore_enabled = true,
-  auto_session_use_git_branch = true,
-  auto_session_suppress_dirs = {'~/', '~/code', '~/code/timtyrrell', '~/code/brandfolder'},
-  -- auto_session_allow_dirs = {'~/code/*', '~/.local/share/chezmoi'},
-  -- pre_save_cmds = {"lua require'nvim-tree'.setup()", "tabdo NvimTreeClose", "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
-}
+require("no-neck-pain").setup({
+    width = 100,
+    buffers = {
+        -- right = {
+        --     enabled = false,
+        -- },
+        colors = {
+            background = "tokyonight-moon",
+        }
+    },
+    mappings = {
+        enabled = true,
+        toggle = "<Leader>nn",
+        toggleLeftSide = "<Leader>nql",
+        toggleRightSide = "<Leader>nqr",
+        widthUp = { mapping = "<Leader>n=", value = 20 },
+        widthDown = { mapping = "<Leader>n-", value = 20 },
+        scratchPad = "<Leader>ns",
+    },
+})
 
 EOF

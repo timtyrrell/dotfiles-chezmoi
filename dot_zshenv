@@ -1,1 +1,3 @@
+# zsh startup file order: https://zsh.sourceforge.io/Doc/Release/Files.html
+# https://www.reddit.com/r/zsh/comments/19e8u20/comment/kjc3oll/?context=3
 . "$HOME/.cargo/env"

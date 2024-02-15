@@ -316,6 +316,24 @@ let g:copilot_filetypes = {
 
 " highlight CopilotSuggestion guifg=#555555 ctermfg=8
 
+" wilder.nvim & CopilotChat.nvim
+function! UpdateRemotePlugins(...)
+  " Needed to refresh runtime files
+  let &rtp=&rtp
+  UpdateRemotePlugins
+endfunction
+
+" good config example: https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat.lua
+Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'do': function('UpdateRemotePlugins') }
+" { "<leader>ccc", ":CopilotChat ",                desc = "CopilotChat - Prompt" },
+" { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+" { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+" { "<leader>ccv", :CopilotChatVisual", mode = "x", desc = "CopilotChat - Open in vertical split", },
+" { "<leader>ccx", :CopilotChatInPlace<cr>", mode = "x", desc = "CopilotChat - Run in-place code", },
+" { "<leader>ccr", "<cmd>CopilotChatReview<cr>", desc = "CopilotChat - Review code" },
+" { "<leader>ccR", "<cmd>CopilotChatRefactor<cr>", desc = "CopilotChat - Refactor code" },
+
+
 """""""""""""""""""""""""""""""""""" neovim-lsp
 
 " Plug 'williamboman/mason.nvim'
@@ -371,10 +389,9 @@ let g:copilot_filetypes = {
 
 """""""""""""""""""""""""""""""""""" neovim-lsp
 
+" homebrew fzf path
 Plug '/opt/homebrew/opt/fzf' |
            \ Plug 'junegunn/fzf.vim'
-" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } |
-"            \ Plug 'junegunn/fzf.vim'
 
 " buffer management
 Plug 'AndrewRadev/undoquit.vim'
@@ -399,20 +416,18 @@ Plug 'rmagatti/auto-session'
 
 " https://github.com/andrewferrier/debugprint.nvim/tree/main#alternative-feature-comparison
 Plug 'meain/vim-printer'
-let g:vim_printer_print_below_keybinding = '<leader>co'
-let g:vim_printer_print_above_keybinding = '<leader>cO'
+let g:vim_printer_print_below_keybinding = '<leader>cl'
+let g:vim_printer_print_above_keybinding = '<leader>cL'
 
 let g:vim_printer_items = {
       \ 'javascript': "console.log('{$}:', {$});",
       \ 'typescriptreact': "console.log('{$}:', {$});",
       \ 'typescript': "console.log('{$}:', {$});",
       \ 'javascriptreact': "console.log('{$}:', {$});",
-      \ 'ruby': 'puts "{$}", {$}'
+      \ 'ruby': 'puts "{$}", {$}',
+      \ 'eruby': '<%= puts "{$}", {$} %>',
+      \ 'slim': 'puts "{$}", {$}',
       \ }
-
-" let g:vim_printer_items = {
-"       \ 'ruby': 'puts "{$}", {$}'
-"       \ }
 
 " alternative: https://github.com/akinsho/toggleterm.nvim, :ToggleTermSendCurrentLine, etc
 " or https://github.com/numToStr/FTerm.nvim, or https://github.com/voldikss/vim-floaterm
@@ -453,6 +468,7 @@ nmap <Leader>vf :call VimuxRunCommand("clear; node " . bufname("%"))<CR>
 
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
+" pbogut/vim-dadbod-ssh
 let g:db_ui_show_database_icon = 1
 let g:db_ui_use_nerd_fonts = 1
 let g:db_ui_force_echo_notifications = 1
@@ -487,7 +503,7 @@ xnoremap <silent> m :lua require('tsht').nodes()<CR>
 
 Plug 'ThePrimeagen/refactoring.nvim'
 
-Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'lukas-reineke/indent-blankline.nvim', { 'tag': 'v2.20.8' }
 
 augroup tmuxgroups
   autocmd!
@@ -568,6 +584,11 @@ Plug 'tpope/vim-eunuch'
 " try https://github.com/kana/vim-altr/blob/master/doc/altr.txt ?
 Plug 'tpope/vim-projectionist'
 Plug 'rgroli/other.nvim'
+noremap <leader>of <cmd>Other<CR>
+noremap <leader>oc <cmd>OtherClear<CR>
+noremap <leader>ot <cmd>OtherTabNew<CR>
+noremap <leader>ox <cmd>OtherSplitCR>
+noremap <leader>ov <cmd>OtherVSplit<CR>
 
 "gf support
 Plug 'tpope/vim-apathy'
@@ -605,9 +626,6 @@ Plug 'tpope/vim-unimpaired'
 " [<Space> and ]<Space> add newlines before and after the cursor line
 " [e and ]e exchange the current line with the one above or below it.
 
-" change/delete surrounding function call
-Plug 'AndrewRadev/dsf.vim'
-
 " try https://github.com/wellle/targets.vim ?
 " https://github.com/kana/vim-textobj-user/wiki
 Plug 'kana/vim-textobj-user'
@@ -624,16 +642,15 @@ Plug 'nacro90/numb.nvim'
 Plug 'barrett-ruth/import-cost.nvim', { 'do': 'sh install.sh yarn' }
 
 " git
+let g:fugitive_gitlab_domains = ['https://git.lab.smartsheet.com']
 Plug 'tpope/vim-fugitive' |
            \ Plug 'tpope/vim-rhubarb' |
-           \ Plug 'junegunn/gv.vim'
+           \ Plug 'junegunn/gv.vim'   |
+           \ Plug 'shumphrey/fugitive-gitlab.vim'
 
 Plug 'whiteinge/diffconflicts'
 
 Plug 'sindrets/diffview.nvim'
-
-" diff visual selections
-Plug 'andrewradev/linediff.vim'
 
 Plug 'rhysd/git-messenger.vim'
 
@@ -652,16 +669,10 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope-dap.nvim'
-Plug 'nvim-telescope/telescope-github.nvim'
 Plug 'nvim-telescope/telescope-node-modules.nvim'
-Plug 'dhruvmanila/telescope-bookmarks.nvim'
-Plug 'ANGkeith/telescope-terraform-doc.nvim'
 Plug 'LinArcX/telescope-env.nvim'
 Plug 'debugloop/telescope-undo.nvim'
 Plug 'piersolenski/telescope-import.nvim'
-
-" or use? https://github.com/nvim-telescope/telescope.nvim/issues/2201#issuecomment-1284691502
-Plug 'princejoogie/dir-telescope.nvim'
 
 Plug 'pwntester/octo.nvim'
 " Plug 'ldelossa/litee.nvim'
@@ -680,6 +691,8 @@ Plug 'norcalli/nvim-terminal.lua'
 " https://github.com/akinsho/toggleterm.nvim
 
 Plug 'nvim-tree/nvim-web-devicons'
+
+Plug 'echasnovski/mini.files'
 
 Plug 'kyazdani42/nvim-tree.lua'
 nnoremap <silent> <leader>ee :NvimTreeFindFile<CR>
@@ -703,8 +716,6 @@ Plug 'karb94/neoscroll.nvim'
 
 Plug 'danilamihailov/beacon.nvim'
 
-Plug 'tamton-aquib/duck.nvim'
-
 Plug 'chentoast/marks.nvim'
 
 " displays colors for words/hex
@@ -723,7 +734,7 @@ Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
 Plug 'nvim-lualine/lualine.nvim'
 
-" Plug 'nvim-zh/colorful-winsep.nvim'
+Plug 'nvim-zh/colorful-winsep.nvim'
 
 Plug 'folke/tokyonight.nvim'
 " Plug 'EdenEast/nightfox.nvim'
@@ -731,18 +742,11 @@ Plug 'folke/tokyonight.nvim'
 " Plug 'catppuccin/nvim'
 " Plug 'bluz71/vim-nightfly-guicolors'
 
-" center all windows, including splits
-Plug 'jmckiern/vim-venter'
-
-" center current buffer only
-Plug 'folke/zen-mode.nvim'
-" Plug 'folke/twilight.nvim'
-
-Plug 'folke/trouble.nvim'
+Plug 'shortcuts/no-neck-pain.nvim'
 
 Plug 'voldikss/vim-browser-search'
-nmap <silent> <Leader>sb <Plug>SearchNormal
-vmap <silent> <Leader>sb <Plug>SearchVisual
+nmap <silent> <Leader>bs <Plug>SearchNormal
+vmap <silent> <Leader>bs <Plug>SearchVisual
 let g:browser_search_default_engine = 'duckduckgo'
 
 Plug 'airblade/vim-rooter'
@@ -766,10 +770,16 @@ Plug 'dstein64/vim-startuptime'
 Plug 'vimwiki/vimwiki', { 'branch': 'dev', 'for': 'markdown', 'on': 'VimwikiMakeDiaryNote' }
 Plug 'mattn/calendar-vim'
 Plug 'alok/notational-fzf-vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 
 " markdown preview in nvim popup
 Plug 'ellisonleao/glow.nvim', {'for': 'markdown'}
+" Plug 'ellisonleao/glow.nvim'
+
+" imbed images with drag and drop
+" Plug 'HakonHarnes/img-clip.nvim'
+" rendering in kitty/tmux
+" Plug '3rd/image.nvim'
 
 " Plug 'adelarsq/image_preview.nvim'
 " Plug 'ekickx/clipboard-image.nvim'
@@ -850,12 +860,13 @@ augroup randomstuff
   " autocmd BufRead,BufNewFile */schema/*.js set syntax=graphql
   " autocmd BufRead,BufNewFile */graphql/queries/*.js set syntax=graphql
 
+  " might want to sync with `.bat/config`
   autocmd BufNewFile,BufRead .eslintrc,.prettierrc,.lintstagedrc set filetype=jsonc
   autocmd BufNewFile,BufRead *.build,.env*,config.env set filetype=sh
   autocmd BufNewFile,BufRead *.template set filetype=nginx
 
   "chezmoi filetype fixes
-  autocmd BufNewFile,BufRead dot_gitconfig,dot_gitconfig.local set filetype=gitconfig
+  autocmd BufNewFile,BufRead *gitconfig* set filetype=gitconfig
   autocmd BufNewFile,BufRead dot_zshrc set filetype=zsh
   autocmd BufNewFile,BufRead dot_tmux.conf set filetype=tmux
 

@@ -160,6 +160,7 @@ command! -bang -nargs=* Rg
 \       fzf#vim#with_preview({'options': '--exact --delimiter : --nth 3..'}), <bang>0
 \   )
 
+" https://www.reddit.com/r/vim/comments/10mh48r/comment/j64i2b4/?context=3
 " On-demand search using Rg if query is non-empty. Fzf is a middleman only.
 function! RgReloader(query, fullscreen, rg_base_command)
     " Shift focus to the right/main window, especially when focus is in sidebar.
@@ -363,7 +364,7 @@ endfunction
 command! BD call fzf#run(fzf#wrap({
   \ 'source': s:list_buffers(),
   \ 'sink*': { lines -> s:delete_buffers(lines) },
-  \ 'options': '--no-preview --multi --reverse --bind ctrl-a:select-all+accept'
+  \ 'options': '--no-preview --multi --reverse --bind ctrl-s:select-all+accept'
   \ }))
 command! -bang Args call fzf#run(fzf#wrap('args',
     \ {'source': map([argidx()]+(argidx()==0?[]:range(argc())[0:argidx()-1])+range(argc())[argidx()+1:], 'argv(v:val)')}, <bang>0))
@@ -812,14 +813,11 @@ require('telescope').setup {
         javascriptreact = { 'javascript', 'react' },
       },
     },
-    bookmarks = {
-      selected_browser = 'chrome',
-    },
     -- file_browser = {layout_strategy = "horizontal", sorting_strategy = "ascending"},
     heading = {treesitter = true},
     ["ui-select"] = {require("telescope.themes").get_dropdown({})},
     undo = {
-      side_by_side = false,
+      side_by_side = true,
       layout_strategy = "vertical",
       layout_config = {
         preview_height = 0.8,
@@ -869,21 +867,6 @@ require('telescope').load_extension('node_modules')
 -- | `<C-x>` (split)   | `:chdir` to the dir  |
 -- | `<C-v>` (vsplit)  | `:lchdir` to the dir |
 -- | `<C-t>` (tabedit) | `:tchdir` to the dir |
-require('telescope').load_extension('gh')
--- Telescope gh pull_request assignee=timtyrrell state=open
--- |---------|-------------------------------|
--- | `<cr>`  | checkout pull request         |
--- | `<c-t>` | open web                      |
--- | `<c-e>` | toggle to view detail or diff |
--- | `<c-r>` | merge request                 |
--- | `<c-a>` | approve pull request          |
--- Telescope gh run
--- |---------|----------------------------------------------|
--- | `<cr>`  | open workflow summary/run logs in new window |
--- | `<c-t>` | open web                                     |
--- | `<c-r>` | request run rerun                            |
--- Telescope gh gist
--- Telescope gh issues
 -- require('telescope').load_extension('coc')
 require("telescope").load_extension("git_worktree")
 
@@ -901,12 +884,9 @@ worktree.on_tree_change(function(op, metadata)
 end)
 
 require('telescope').load_extension('fzf')
-require('telescope').load_extension('bookmarks')
 require('telescope').load_extension('env')
 require("telescope").load_extension("notify")
 require("telescope").load_extension("ui-select")
-
-require('telescope').load_extension('terraform_doc')
 require("telescope").load_extension("undo")
 
 require("telescope").setup({
@@ -947,6 +927,60 @@ vim.cmd([[
     hi link BqfPreviewRange Search
 ]])
 
+local fn = vim.fn
+
+function _G.qftf(info)
+    local items
+    local ret = {}
+    -- The name of item in list is based on the directory of quickfix window.
+    -- Change the directory for quickfix window make the name of item shorter.
+    -- It's a good opportunity to change current directory in quickfixtextfunc :)
+    --
+    -- local alterBufnr = fn.bufname('#') -- alternative buffer is the buffer before enter qf window
+    -- local root = getRootByAlterBufnr(alterBufnr)
+    -- vim.cmd(('noa lcd %s'):format(fn.fnameescape(root)))
+    --
+    if info.quickfix == 1 then
+        items = fn.getqflist({id = info.id, items = 0}).items
+    else
+        items = fn.getloclist(info.winid, {id = info.id, items = 0}).items
+    end
+    local limit = 61
+    local fnameFmt1, fnameFmt2 = '%-' .. limit .. 's', '…%.' .. (limit - 1) .. 's'
+    local validFmt = '%s │%5d:%-3d│%s %s'
+    for i = info.start_idx, info.end_idx do
+        local e = items[i]
+        local fname = ''
+        local str
+        if e.valid == 1 then
+            if e.bufnr > 0 then
+                fname = fn.bufname(e.bufnr)
+                if fname == '' then
+                    fname = '[No Name]'
+                else
+                    fname = fname:gsub('^' .. vim.env.HOME, '~')
+                end
+                -- char in fname may occur more than 1 width, ignore this issue in order to keep performance
+                if #fname <= limit then
+                    fname = fnameFmt1:format(fname)
+                else
+                    fname = fnameFmt2:format(fname:sub(1 - limit))
+                end
+            end
+            local lnum = e.lnum > 99999 and -1 or e.lnum
+            local col = e.col > 999 and -1 or e.col
+            local qtype = e.type == '' and '' or ' ' .. e.type:sub(1, 1):upper()
+            str = validFmt:format(fname, lnum, col, qtype, e.text)
+        else
+            str = e.text
+        end
+        table.insert(ret, str)
+    end
+    return ret
+end
+
+vim.o.qftf = '{info -> v:lua._G.qftf(info)}'
+
 require('bqf').setup({
     auto_enable = true,
     auto_resize_height = true,
@@ -974,7 +1008,7 @@ require('bqf').setup({
         open = '<cr>',
         openc = 'O', -- open item, close quickfix
         drop = 'o', -- open item, close quickfix
-        split = '<C-s>',
+        split = '<C-x>',
         vsplit = '<C-v>',
         tabdrop = '',
         tab = 't',
@@ -990,11 +1024,42 @@ require('bqf').setup({
     },
     filter = {
         fzf = {
-            action_for = {['ctrl-s'] = 'split', ['ctrl-t'] = 'tab drop'},
-            extra_opts = {'--bind', 'ctrl-o:toggle-all', '--prompt', '> '}
+            action_for = {['ctrl-x'] = 'split', ['ctrl-t'] = 'tab drop'},
+            extra_opts = {'--bind', 'ctrl-s:toggle-all', '--prompt', '> '}
         }
     }
 })
+
+require('mini.files').setup({
+  mappings = {
+    close       = 'q',
+    go_in       = 'l',
+    go_in_plus  = 'L',
+    go_out      = 'h',
+    go_out_plus = 'H',
+    reset       = '<BS>',
+    reveal_cwd  = '@',
+    show_help   = 'g?',
+    synchronize = '=',
+    trim_left   = '<',
+    trim_right  = '>',
+  },
+
+  options = {
+    use_as_default_explorer = false,
+  },
+
+  windows = {
+    preview = false,
+    width_focus = 50,
+    width_nofocus = 15,
+    width_preview = 25,
+  },
+})
+
+vim.keymap.set("n", "-", "<CMD>lua MiniFiles.open()<CR>", { desc = "Open cwd" })
+vim.keymap.set("n", "<Leader>-", "<CMD>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>", { desc = "Open directory of current file" })
+
 
 require('nvim-tree').setup {
   git = {
@@ -1037,6 +1102,42 @@ require('nvim-tree').setup {
   renderer = {
     highlight_git = true,
     highlight_opened_files = "icon",
+    icons = {
+      web_devicons = {
+        file = {
+          enable = true,
+          color = true,
+        },
+        folder = {
+          enable = false,
+          color = true,
+        },
+      },
+      git_placement = "before",
+      modified_placement = "after",
+      diagnostics_placement = "signcolumn",
+      bookmarks_placement = "signcolumn",
+      padding = " ",
+      symlink_arrow = " ➛ ",
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+        modified = true,
+        diagnostics = true,
+        bookmarks = true,
+      },
+      glyphs = {
+        -- https://www.nerdfonts.com/cheat-sheet
+        folder = {
+          -- arrow_closed = ">",
+          arrow_closed = "",
+          -- arrow_closed = "",
+          arrow_open = "",
+        },
+      },
+    },
   },
   actions = {
     change_dir = {
@@ -1127,12 +1228,28 @@ require('flit').setup {
   multiline = false,
 }
 
+-- nvim bug workaround, hide the original cursor position after a leap
+vim.api.nvim_create_autocmd(
+  "User",
+  { callback = function()
+      vim.cmd.hi("Cursor", "blend=100")
+      vim.opt.guicursor:append { "a:Cursor/lCursor" }
+    end,
+    pattern = "LeapEnter"
+  }
+)
+vim.api.nvim_create_autocmd(
+  "User",
+  { callback = function()
+      vim.cmd.hi("Cursor", "blend=0")
+      vim.opt.guicursor:remove { "a:Cursor/lCursor" }
+    end,
+    pattern = "LeapLeave"
+  }
+)
+
 require('refactoring').setup({})
 require("telescope").load_extension("refactoring")
-require("dir-telescope").setup({
-  hidden = true,
-  respect_gitignore = true,
-})
 
 -- remap to open the Telescope refactoring menu in visual mode
 vim.api.nvim_set_keymap(

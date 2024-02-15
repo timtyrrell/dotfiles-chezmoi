@@ -27,3 +27,7 @@
 
 # to preview themes:
 # bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"
+
+
+# `bat --list-languages`
+--map-syntax='*gitconfig*:Git Config'

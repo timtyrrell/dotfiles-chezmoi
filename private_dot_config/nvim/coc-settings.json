@@ -55,8 +55,10 @@
     "vimwiki",
     "sass",
     "scss",
-    "yaml"
+    "terraform"
+    // "yaml"
   ],
+  "yaml.customTags": [ "!reference sequence" ],
   "list.floatPreview": true,
   "semanticTokens.enable": true,
   "hover.target": "float",
@@ -228,25 +230,51 @@
     //   // "args": ["-c", "/path/to/your/config.yaml"],
     //   "filetypes": ["eruby"],
     // },
-    "ruby-lsp": {
-      "command": "ruby-lsp",
+    // "ruby-lsp": {
+    //   "command": "ruby-lsp",
+    //   "initializationOptions": {
+    //     "experimentalFeaturesEnabled": true,
+    //     "enabledFeatures": [
+    //       "codeActions",
+    //       // "diagnostics",
+    //       "documentHighlights",
+    //       "documentLink",
+    //       "documentSymbols",
+    //       "foldingRanges",
+    //       "formatting",
+    //       "hover",
+    //       "inlayHint",
+    //       "onTypeFormatting",
+    //       "selectionRanges",
+    //       "semanticHighlighting",
+    //       "completion"
+    //     ],
+    //     // "formatter": "auto"
+    //   },
+    //   "filetypes": ["ruby"]
+    // },
+    "fuzzyRubyServer": {
+      "command": "fuzzy",
       "initializationOptions": {
-        "experimentalFeaturesEnabled": true,
-        "enabledFeatures": [
-          "codeActions",
-          // "diagnostics",
-          "documentHighlights",
-          "documentLink",
-          "documentSymbols",
-          "foldingRanges",
-          "formatting",
-          "hover",
-          "inlayHint",
-          "onTypeFormatting",
-          "selectionRanges",
-          "semanticHighlighting",
-          "completion"
-        ],
+        "allocationType": "ram",
+        "indexGems": true,
+        "reportDiagnostics": true
+        // "experimentalFeaturesEnabled": true,
+        // "enabledFeatures": [
+        //   "codeActions",
+        //   // "diagnostics",
+        //   "documentHighlights",
+        //   "documentLink",
+        //   "documentSymbols",
+        //   "foldingRanges",
+        //   "formatting",
+        //   "hover",
+        //   "inlayHint",
+        //   "onTypeFormatting",
+        //   "selectionRanges",
+        //   "semanticHighlighting",
+        //   "completion"
+        // ],
         // "formatter": "auto"
       },
       "filetypes": ["ruby"]

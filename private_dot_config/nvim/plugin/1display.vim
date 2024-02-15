@@ -20,6 +20,21 @@ let g:indent_blankline_show_current_context = v:true
 let g:indent_blankline_show_current_context_start = v:true
 let g:indent_blankline_context_patterns = ['declaration', 'expression', 'pattern', 'primary_expression', 'statement', 'switch_body' ,'def', 'class', 'return', '^func', 'method', '^if', 'while', 'jsx_element', 'for', 'object', 'table', 'block', 'arguments', 'else_clause', '^jsx', 'try', 'catch_clause', 'import_statement', 'operation_type', 'with', 'except', 'arguments', 'argument_list', 'dictionary', 'element', 'tuple']
 
+lua << EOF
+
+-- require("ibl").setup({
+--   indent = { char = "|" },
+--   exclude = { filetypes = { "checkhealth", "NvimTree", "vim-plug", "man", "help", "lspinfo", "GV", "git", "packer" } },
+--   buftypes = { "terminal", "nofile", "quickfix", "prompt" },
+--   hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+--   -- scope = { exclude = { "" } },
+-- })
+
+-- local hooks = require "ibl.hooks"
+-- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+
+EOF
+
 " Plug 'danilamihailov/beacon.nvim'
 let g:beacon_ignore_filetypes = ['git', 'startify', 'pr']
 let g:beacon_show_jumps = 0
@@ -42,31 +57,23 @@ let g:Hexokinase_highlighters = ['backgroundfull']
 " let g:Hexokinase_highlighters = ['virtual']
 let g:Hexokinase_ftEnabled = ['css', 'html', 'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'less', 'vim', 'conf', 'tmux', 'gitconfig', 'xml', 'lua', 'stylus', 'sh', 'zsh', 'scss']
 
-" Plug 'jmckiern/vim-venter'
-let g:venter_width = &columns/6
-nnoremap <leader>ve :VenterToggle<CR>
-
-" Plug 'folke/zen-mode.nvim'
-nnoremap <leader>zm :ZenMode<CR>
-
-" Plug 'folke/trouble.nvim'
-" nmap <silent> gL <cmd>call coc#rpc#request('fillDiagnostics', [bufnr('%')])<CR><cmd>Trouble loclist<CR>
-
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-let g:mkdp_browser = 'Chrome'
-let g:mkdp_auto_start = 0
-let g:mkdp_filetypes = ['markdown']
+" Plug 'iamcco/markdown-preview.nvim'
+let g:mkdp_filetypes = ['markdown', 'mermaid']
 nmap <leader>mp <Plug>MarkdownPreview
 nmap <leader>ms <Plug>MarkdownPreviewStop
 
 " Plug 'ellisonleao/glow.nvim', {'for': 'markdown'}
-nmap <leader>mv :Glow<CR>
-let g:glow_binary_path = '/opt/homebrew/bin/glow'
-let g:glow_border = 'rounded'
-let g:glow_width = 120
-" q to quit, :Glow for current filepath
-
+nmap <leader>mg :Glow<CR>
 lua << EOF
+require('glow').setup({
+  glow_path = "/opt/homebrew/bin/glow",
+  border = "rounded",
+  width = 220,
+  height = 400,
+  width_ratio = 0.8,
+  height_ratio = 0.8,
+})
+
 require("tokyonight").setup({
   hide_inactive_statusline = false,
   lualine_bold = true,
@@ -84,14 +91,14 @@ colorscheme tokyonight
 
 lua << EOF
 
--- require("colorful-winsep").setup({
---   highlight = {
---     -- bg = "#16161E",
---     fg = "#1F3442",
---   },
---   no_exec_files = { "TelescopePrompt", "mason", "NvimTree" },
---   symbols = { "─", "│", "┌", "┐", "└", "┘" },
--- })
+require("colorful-winsep").setup({
+  highlight = {
+    -- bg = "#16161E",
+    -- fg = "#1F3442",
+  },
+  no_exec_files = { "TelescopePrompt", "mason", "NvimTree" },
+  symbols = { "─", "│", "┌", "┐", "└", "┘" },
+})
 require("import-cost").setup({})
 
 require("tidy").setup()
@@ -99,6 +106,7 @@ require("tidy").setup()
 require('marks').setup {
   default_mappings = false,
   highlight_unlabeled = true,
+  excluded_buftypes = {'nofile'},
   mappings = {
     set = "m",
     set_next = "m,",
@@ -119,18 +127,34 @@ require('marks').setup {
 -- :MarksListAll - Fill the location list with all marks in all open buffers
 -- :MarksQFListAll
 
-require('zen-mode').setup {
-  twilight = { enabled = false },
-  window = {
-    backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
-    width = .8, -- width of the Zen window
-    height = 1, -- height of the Zen window
-  },
-}
-
-require("trouble").setup { mode = "loclist" }
-
 require('neoscroll').setup {}
+
+require("no-neck-pain").setup({
+    width = 100,
+    buffers = {
+        -- right = {
+        --     enabled = false,
+        -- },
+        colors = {
+            background = "tokyonight-moon",
+        }
+    },
+    mappings = {
+        enabled = true,
+        toggle = "<Leader>nn",
+        toggleLeftSide = "<Leader>nql",
+        toggleRightSide = "<Leader>nqr",
+        widthUp = { mapping = "<Leader>n=", value = 20 },
+        widthDown = { mapping = "<Leader>n-", value = 20 },
+        scratchPad = "<Leader>ns",
+    },
+})
+
+-- local function purge_sessions()
+--   local auto_session = require 'auto-session'
+--   local to_purge = {} for _, session in ipairs(auto_session.get_session_files()) do assert(session.display_name, "Session has no 'display_name' field") -- in case of API change if session.display_name:find('^/.*') and vim.fn.isdirectory(session.display_name) == 0 then table.insert(to_purge, session.display_name) end end for _, name in ipairs(to_purge) do vim.notify("Purging session " .. name, vim.log.info) auto_session.DeleteSessionByName(name) end if #to_purge == 0 then vim.notify("Nothing to purge", vim.log.info) end end
+-- end
+-- vim.api.nvim_create_user_command('PurgeSessions', purge_sessions, { desc = "Purge orphaned sessions" })
 
 require('numb').setup {
    show_numbers = true,
@@ -148,11 +172,6 @@ require('which-key').setup {
     border = "double",
   },
 }
-
--- tamton-aquib/duck.nvim
-vim.keymap.set('n', '<leader>ddd', function() require("duck").hatch("🦆", 10) end, {}) -- A pretty fast duck
-vim.keymap.set('n', '<leader>ddc', function() require("duck").hatch("🐈", 0.75) end, {}) -- Quite a mellow cat
-vim.keymap.set('n', '<leader>ddk', function() require("duck").cook() end, {})
 
 --- @param trunc_width number trunctates component when screen width is less then trunc_width
 --- @param trunc_len number truncates component to trunc_len number of chars
@@ -212,21 +231,21 @@ require('package-info').setup({
   package_manager = 'yarn'
 })
 -- Show package versions
-vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show({ force = true })<CR>", { silent = false, noremap = true })
--- Hide package versions
-vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
--- Update package on line
-vim.api.nvim_set_keymap("n", "<leader>nu", ":lua require('package-info').update()<CR>", { silent = true, noremap = true })
--- Delete package on line
-vim.api.nvim_set_keymap("n", "<leader>nd", ":lua require('package-info').delete()<CR>", { silent = true, noremap = true })
--- Install a new package
-vim.api.nvim_set_keymap("n", "<leader>ni", ":lua require('package-info').install()<CR>", { silent = true, noremap = true })
--- Reinstall dependencies
-vim.api.nvim_set_keymap("n", "<leader>nr", ":lua require('package-info').reinstall()<CR>", { silent = true, noremap = true })
--- Install a different package version
-vim.api.nvim_set_keymap("n", "<leader>np", ":lua require('package-info').change_version()<CR>", { silent = true, noremap = true })
--- Toggle dependency versions
-vim.keymap.set({ "n" }, "<LEADER>nt", require("package-info").toggle, { silent = true, noremap = true })
+-- vim.api.nvim_set_keymap("n", "<leader>ns", ":lua require('package-info').show({ force = true })<CR>", { silent = false, noremap = true })
+-- -- Hide package versions
+-- vim.api.nvim_set_keymap("n", "<leader>nc", ":lua require('package-info').hide()<CR>", { silent = true, noremap = true })
+-- -- Update package on line
+-- vim.api.nvim_set_keymap("n", "<leader>nu", ":lua require('package-info').update()<CR>", { silent = true, noremap = true })
+-- -- Delete package on line
+-- vim.api.nvim_set_keymap("n", "<leader>nd", ":lua require('package-info').delete()<CR>", { silent = true, noremap = true })
+-- -- Install a new package
+-- vim.api.nvim_set_keymap("n", "<leader>ni", ":lua require('package-info').install()<CR>", { silent = true, noremap = true })
+-- -- Reinstall dependencies
+-- vim.api.nvim_set_keymap("n", "<leader>nr", ":lua require('package-info').reinstall()<CR>", { silent = true, noremap = true })
+-- -- Install a different package version
+-- vim.api.nvim_set_keymap("n", "<leader>np", ":lua require('package-info').change_version()<CR>", { silent = true, noremap = true })
+-- -- Toggle dependency versions
+-- vim.keymap.set({ "n" }, "<LEADER>nt", require("package-info").toggle, { silent = true, noremap = true })
 
 local function close_nvim_tree()
   require('nvim-tree.view').close()

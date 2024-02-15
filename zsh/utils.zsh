@@ -130,6 +130,8 @@ notify() {
   fi
 }
 
+# pkill -15 nvim
+# pgrep nvim
 fkill() {
     local pid
     if [ "$UID" != "0" ]; then
@@ -182,6 +184,22 @@ tmt() {
     tmux attach -t "$session_name"
   else
     tmux switch-client -t "$session_name"
+  fi
+}
+
+# frg SOMETHING
+function frg {
+  result=$(rg --ignore-case --color=always --line-number --no-heading "$@" |
+    fzf --ansi \
+        --color 'hl:-1:underline,hl+:-1:underline:reverse' \
+        --delimiter ':' \
+        --preview "bat --color=always {1} --highlight-line {2}" \
+        --preview-window 'up,60%,border-bottom,+{2}+3/3,~3')
+  file=${result%%:*}
+  linenumber=$(echo "${result}" | cut -d: -f2)
+
+  if [[ -n "$file" ]]; then
+    $EDITOR +"${linenumber}" "$file"
   fi
 }
 

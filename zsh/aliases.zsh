@@ -1,10 +1,10 @@
-alias ls="exa --all --icons --no-permissions --git --header --no-user --classify --group-directories-first"
+alias ls="eza --all --icons --no-permissions --git --header --no-user --classify --group-directories-first"
 alias ll="ls -lh"
 alias lt='ls --tree'
 alias lart='ll --sort=mod'
 alias md='mkdir -p'
 alias rd='rmdir'
-alias tree='exa -T --level=5'
+alias tree='eza -T --level=5'
 alias cl='clear'
 
 alias cat='bat'
@@ -22,7 +22,7 @@ alias vim='nvim'
 alias n='nvim'
 alias nn='nvim .'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
-alias no='nvim -u NORC' # no config
+alias no='nvim -u NONE' # no config
 alias np='nvim --noplugin' # no plugins
 alias nv='nvim -u ~/.config/nvim/init-nvim-lsp.vim'
 alias ndebug='nvim -V9myVim.log'
@@ -105,6 +105,7 @@ alias gb="git branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:re
 alias gc='git commit -v'
 alias gca='git commit -a -v'
 alias gce='git commit -m "This is a blank commit" --allow-empty'
+alias gcb='git commit --allow-empty'
 alias gcf='git commit --fixup'
 alias gcl='git clean -f -d'
 alias gd='git diff'
@@ -198,8 +199,10 @@ alias strat="start"
 alias ns="npm start"
 alias barf="rm -rf node_modules && npm i"
 alias rimraf="rm -rf node_modules"
+alias ya="yarn auth"
 alias yay="yarn auth && yarn"
 alias yayb="yarn auth && yarn && bundle"
+alias nan="npm run auth && npm i"
 
 # brew tap jason0x43/homebrew-neovim-nightly
 # brew cask install neovim-nightly
@@ -209,10 +212,12 @@ alias install-neovim-nightly="brew install --HEAD neovim"
 alias update-neovim-nightly="brew reinstall neovim"
 alias brew-tmux-head="brew reinstall tmux"
 alias brew-install="brew bundle install --global"
-alias brew-outdated="brew update && echo 'OUTDATED:' && brew outdated"
-alias brew-kill-lock="kill $(lsof -t +d $(brew --prefix)/var/homebrew/locks)"
-alias brewup="brew update; brew upgrade; brew cleanup"
-alias ghu="gh extension upgrade --all"
-alias zsh-update="zcomet self-update && zcomet update"
+alias brew-outdated="brew update -v && echo 'OUTDATED:' && brew outdated"
+# alias brew-kill-lock="kill $(lsof -t +d $(brew --prefix)/var/homebrew/locks)"
+alias brew-kill-lock="kill $(lsof -t +d /opt/homebrew/var/homebrew/locks)"
+alias brewup="brew update -v; brew upgrade; brew cleanup"
+alias ghup="gh extension upgrade --all"
+alias zshup="zcomet self-update && zcomet update"
+alias cargoup="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
 
 alias reload='source ~/.zshrc; echo -e "\n\u2699  \e[33mZSH config reloaded\e[0m \u2699"'

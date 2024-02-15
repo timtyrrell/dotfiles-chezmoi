@@ -115,7 +115,8 @@ require("jester").setup({
   dap = { -- debug adapter configuration
     type = 'node2',
     request = 'launch',
-    cwd = vim.fn.getcwd(),
+    -- remove this line per https://github.com/David-Kunz/jester/issues/17#issuecomment-1921878659
+    -- cwd = vim.fn.getcwd(),
     runtimeArgs = {'--inspect-brk', '$path_to_jest', '--no-coverage', '-t', '$result', '--', '$file'},
     args = { '--no-cache' },
     sourceMaps = 'inline',
@@ -135,7 +136,13 @@ require("jester").setup({
 vim.cmd [[
   " vim-test
   let test#strategy = 'toggleterm'
-  let test#strategy = 'vimux'
+  " let test#strategy = 'vimux'
+  " let test#strategy = 'neovim'
+
+  " let test#strategy = 'neovim_sticky'
+  " let g:test#neovim_sticky#kill_previous = 1  " Try to abort previous run
+  " let g:test#preserve_screen = 0  " Clear screen from previous run
+
   nmap <silent> <leader>tt :TestNearest<CR>
   nmap <silent> <leader>tf :TestFile<CR>
   nmap <silent> <leader>tl :TestLast<CR>

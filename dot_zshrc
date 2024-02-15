@@ -1,6 +1,7 @@
 # debug perf: also run `zsh -l --sourcetrace`
 # https://www.reddit.com/r/zsh/comments/ycm6fa/comment/itn2i3l/?context=3
 # [ -z "$ZPROF" ] || zmodload zsh/zprof
+# zmodload zsh/zprof
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -250,6 +251,7 @@ export FZF_YANK_COMMAND="--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+a
 
 # preview cycle window rotate: https://github.com/junegunn/fzf/commit/43f0d0c
 export FZF_HIDE_PREVIEW="--preview-window=:hidden"
+# to add image preview https://github.com/junegunn/fzf/blob/0.44.0/bin/fzf-preview.sh
 export FZF_SHOW_PREVIEW="
 --preview '([[ -f {} ]] && (bat --style=full --color=always {} || cat {})) || ([[ -d {} ]] && (tree -C {} | less)) || echo {} 2> /dev/null | head -200'
 --preview-window 'right,50%,border-left,<50(up,50%,border-bottom)'
@@ -299,7 +301,7 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
 export FZF_DEFAULT_COMMAND='rg --files'
 # files
-export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules'"
+export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules' --exclude '.rvm' --exclude '.frum' --exclude '.pyenv' --exclude '.npm'"
 export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
 # directories
 export FZF_ALT_C_COMMAND="$FZF_CTRL_T_COMMAND --type d"
@@ -372,10 +374,18 @@ zle_highlight=('paste:none')
 
 source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
+# load prompt
 zcomet load romkatv/powerlevel10k
+
+# to benchmark, run: ~/zsh-bench/zsh-bench
+zcomet trigger zsh-prompt-benchmark romkatv/zsh-prompt-benchmark
+
+#load plugins
 zcomet load aloxaf/fzf-tab
 zcomet load zsh-vi-more/vi-motions
 zcomet load zsh-vi-more/evil-registers
+zcomet load romkatv/zsh-no-ps2
+# zcomet load MichaelAquilina/zsh-you-should-use
 zcomet load greymd/docker-zsh-completion
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load zdharma-continuum/fast-syntax-highlighting
@@ -442,7 +452,7 @@ zstyle ':completion:*:descriptions' format '[%d]'
 # zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
 # zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
 # zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 # zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
 # zstyle ":fzf-tab:*" fzf-flags --color=bg+:23
 # zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
@@ -475,7 +485,7 @@ zstyle ':fzf-tab:*' accept-line ctrl-x
 
 local preview_command='
 if [[ -d $realpath ]]; then
-  exa -a --icons --tree --level=1 --color=always $realpath
+  eza -a --icons --tree --level=1 --color=always $realpath
 elif [[ -f $realpath ]]; then
   bat --pager=never --color=always --line-range :80 $realpath
 else
@@ -553,4 +563,10 @@ zcomet compinit
 # eval "$(frum init)"
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# export VOLTA_HOME="$HOME/.volta"
+# export PATH="$VOLTA_HOME/bin:$PATH"
+
+eval "$(zoxide init zsh)"
+
 # [ -z "$ZPROF" ] || zprof
+# zprof
