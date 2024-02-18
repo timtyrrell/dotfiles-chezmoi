@@ -9,6 +9,7 @@
 	cob = "!f() { git checkout $(git show-ref --verify --quiet refs/heads/\"$1\" || echo '-b') \"$1\"; }; f"
 	cp = cherry-pick
 	put = push origin HEAD
+	absorb = absorb --and-rebase
 	fixup = commit --fixup
 	fza = "!git ls-files -m -o --exclude-standard | fzf -m --print0 | xargs -0 git add"
 	squash = commit --squash
@@ -32,7 +33,7 @@
 	pnb = push -u origin HEAD
 	lart = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
 	sha = rev-parse HEAD
-	releases = for-each-ref --sort=authordate --format=\"%(color:white)%(color:bold)%(refname:lstrip=-2)%09%(color:blue)%(authordate:relative)%09%(color:red)%(authorname)\" refs/remotes/origin/release
+	; releases = for-each-ref --sort=authordate --format=\"%(color:white)%(color:bold)%(refname:lstrip=-2)%09%(color:blue)%(authordate:relative)%09%(color:red)%(authorname)\" refs/remotes/origin/release
 	quickdiff = diff ':!package-lock.json'
 	diffs = diff --staged
 	last = log -1 HEAD --stat
@@ -48,6 +49,7 @@
 [branch]
 	autoSetupMerge = always
 	autoSetupRebase = always
+	sort = -committerdate
 [color]
 	ui = true
 [core]
@@ -58,11 +60,14 @@
 	ignorecase = true
 	fsmonitor = true
 [diff]
-	algorithm = patience
+	algorithm = histogram
 	compactionHeuristic = true
 	colorMoved = default
 	colorMovedWS = "allow-indentation-change"
-	tool = vimdiff
+	context = 10
+	tool = nvimdiff
+[difftool]
+  prompt = false
 [delta]
 	minus-style                   = syntax "#37222c"
 	minus-non-emph-style          = syntax "#37222c"
@@ -76,6 +81,7 @@
 	line-numbers-plus-style       = "#266d6a"
 	line-numbers-zero-style       = "#3b4261"
 	navigate = true # use n and N to move between diff sections
+	light = false # set to true w/ a terminal light background
 	line-numbers = true
 [fetch]
 	prune = true
@@ -89,6 +95,8 @@
 [interactive]
 	singlekey = true
 	diffFilter = delta --color-only
+[log]
+	date = iso
 [merge]
 	conflictstyle = zdiff3
 	summary = true
@@ -103,11 +111,11 @@
 	rebase = true
 [push]
 	followTags = true
-	default = simple
-	autoSetupRemote = true
+	default = current
 [rebase]
 	autosquash = true
 	autostash = true
+	updateRefs = true
 [rerere]
 	enabled = true
 	autoupdate = true
@@ -133,6 +141,12 @@
 [blame]
 	markUnblamableLines = true
 	markIgnoredLines = true
+[worktree]
+	guessRemote = true
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"
+[tag]
+	sort = taggerdate
 [mergetool]
 	keepBackup = false
 [mergetool "fugitive"]
@@ -142,5 +156,3 @@
 	trustExitCode = true
 [mergetool "vimdiff1"]
 	hideResolved = true
-[worktree]
-	guessRemote = true

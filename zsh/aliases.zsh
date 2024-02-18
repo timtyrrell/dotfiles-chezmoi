@@ -96,10 +96,12 @@ alias dselect='tmux display-popup -E "docker image ls --format '{{.Repository}}'
 alias chrome-debug='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222&'
 
 # git aliases
+# also check https://github.com/tj/git-extras/blob/main/Commands.md
 alias g='git'
 alias ga='git add'
 alias gap='git add -p'
 alias gnap='git add -N --ignore-removal . && gap && gref'
+alias gabsorb='git absorb --and-rebase' # https://github.com/tummychow/git-absorb
 # alias gnap='git add $(git ls-files -N -add -o --exclude-standard) || git add -N --ignore-removal . && gap && gref'
 alias gb="git branch --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(contents:subject) %(color:green)(%(committerdate:relative)) [%(authorname)]' --sort=-committerdate"
 alias gc='git commit -v'
