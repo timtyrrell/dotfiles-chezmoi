@@ -23,9 +23,10 @@ alias n='nvim'
 alias nn='nvim .'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
 alias no='nvim -u NONE' # no config
+alias nowr="nvim -u NONE -c 'set nowrap'" # no config, no wrap
 alias np='nvim --noplugin' # no plugins
 alias nv='nvim -u ~/.config/nvim/init-nvim-lsp.vim'
-alias ndebug='nvim -V9myVim.log'
+alias ndebug='nvim -V9myVim.log' # debug authcommands and move
 alias nvim-startuptime='rm /tmp/vim.log; nvim --startuptime /tmp/vim.log -c "quit" && cat /tmp/vim.log'
 
 # edit zsh history
@@ -194,6 +195,9 @@ alias rbl="frum local"
 alias rbg="frum global"
 alias rbu="frum uninstall"
 alias rbv="frum versions"
+
+alias tf="terraform"
+alias tg="terragrunt"
 
 # random alias
 alias nvm="fnm"

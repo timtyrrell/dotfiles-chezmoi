@@ -253,6 +253,9 @@ nnoremap <leader>orb <cmd>Octo review submit<cr>
 lua << EOF
 
 require('octo').setup({
+  suppress_missing_scope = {
+    projects_v2 = true,
+  },
   submit_win = {
       approve_review = "<C-p>",            -- approve review
       comment_review = "<C-m>",            -- comment review

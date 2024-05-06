@@ -407,6 +407,7 @@ Plug 'lambdalisue/suda.vim'
 " undo tree visualizer
 Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 
+Plug 'vhyrro/luarocks.nvim', {'do': ':source ./build.lua'}
 Plug 'rest-nvim/rest.nvim'
 map <leader>rr <Plug>RestNvim
 map <leader>rp <Plug>RestNvimPreview
@@ -481,6 +482,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'mfussenegger/nvim-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
 " Plug 'folke/neodev.nvim'
+Plug 'nvim-neotest/nvim-nio'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'David-Kunz/jester'
 " Plug 'mxsdev/nvim-dap-vscode-js'
@@ -804,6 +806,10 @@ set shada=!,'0,f0,<50,s10,h
 
 lua << EOF
 
+require("luarocks-nvim").setup {
+  rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }
+}
+
 require('auto-session').setup {
   -- cwd_change_handling = {
   --   restore_upcoming_session = true,
@@ -821,25 +827,7 @@ require('auto-session').setup {
   pre_save_cmds = {close_nvim_tree, "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
 }
 
-require('rest-nvim').setup({
-  -- Open request results in a horizontal split
-  result_split_horizontal = false,
-  -- Skip SSL verification, useful for unknown certificates
-  skip_ssl_verification = false,
-  -- Highlight request on run
-  highlight = {
-    enabled = true,
-    timeout = 150,
-  },
-  result = {
-    -- toggle showing URL, HTTP info, headers at top the of result window
-    show_url = true,
-    show_http_info = true,
-    show_headers = true,
-  },
-  -- Jump to request line on run
-  jump_to_request = false,
-})
+require('rest-nvim').setup()
 
 EOF
 

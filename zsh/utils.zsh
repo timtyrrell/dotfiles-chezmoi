@@ -394,34 +394,6 @@ ch() {
   fzf-tmux -p 90%,90% --ansi --multi --preview-window=:hidden | sed 's#.*\(https*://\)#\1#' | xargs open -a "Chromium"
 }
 
-# Default `fold` to screen width and break at spaces
-function fold {
-  if [ $# -eq 0 ]; then
-    /usr/bin/fold -w $COLUMNS -s
-  else
-    /usr/bin/fold $*
-  fi
-}
-
-# Use `fzf` against system dictionary
-function spell {
-  cat /usr/share/dict/words | fzf-tmux -p 90%,90% --preview 'wn {} -over | fold' --preview-window=up:60%
-}
-
-# Lookup definition of word using `wn $1 -over`.
-# If $1 is not provided, we'll use the `spell` command to pick a word.
-#
-# Requires:
-#   brew install wordnet
-#   brew install fzf
-function dic {
-  if [ $# -eq 0 ]; then
-    wn `spell` -over | fold
-  else
-    wn $1 -over | fold
-  fi
-}
-
 # Select a docker container to start and attach
 function da() {
   local cid
@@ -449,13 +421,6 @@ function drm() {
 # Select a docker image or images to remove
 function drmi() {
   docker images | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi
-}
-
-join-lines() {
-  local item
-  while read item; do
-    echo -n "${(q)item} "
-  done
 }
 
 function jwt_decode(){
@@ -546,14 +511,6 @@ _gs() {
   cut -d: -f1
 }
 
-# bind-git-helper() {
-#   local c
-#   for c in $@; do
-#     eval "fzf-g$c-widget() { local result=\$(_g$c | join-lines); zle reset-prompt; LBUFFER+=\$result }"
-#     eval "zle -N fzf-g$c-widget"
-#     eval "bindkey '^g^$c' fzf-g$c-widget"
-#   done
-# }
-# bind-git-helper f b t r h s
-# unset -f bind-git-helper
-###################################
+function .. ... .... ..... ...... ....... {
+  repeat $(( ${#0} - 1 )) { cd .. }
+}

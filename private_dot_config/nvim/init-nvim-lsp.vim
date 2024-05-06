@@ -39,6 +39,8 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'filipdutescu/renamer.nvim', { 'branch': 'master' }
 Plug 'lukas-reineke/lsp-format.nvim'
 
+Plug 'dmmulroy/ts-error-translator.nvim'
+
 " if i don't want to configure the LSP but test it
 " Plug 'VonHeikemen/lsp-zero.nvim'
 

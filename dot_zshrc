@@ -2,6 +2,13 @@
 # https://www.reddit.com/r/zsh/comments/ycm6fa/comment/itn2i3l/?context=3
 # [ -z "$ZPROF" ] || zmodload zsh/zprof
 # zmodload zsh/zprof
+#
+# https://www.reddit.com/r/zsh/comments/1bqtb7m/comment/kx4pqxw/?context=3
+# This should make it clear which files takes a long time to source. After that you can start disabling stuff in that file to find the culprit:
+# exec -l zsh --sourcetrace
+#
+# This might immediately tell you which command takes a long time:
+# ( exec -l zsh --sourcetrace 2>&1 ) | ts -i '%.s'
 
 # Clone zcomet if necessary
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
@@ -271,7 +278,9 @@ export FZF_SHOW_PREVIEW="
 --bind 'ctrl-d:preview-half-page-down'
 "
 
+# TODO: remove --preview from FZF_DEFAULT_OPTS and use FZF_SHOW_PREVIEW
 export FZF_DEFAULT_OPTS="
+--walker=file,dir,hidden,follow --walker-skip=.git,node_modules,target
 --history=$HOME/.fzf_history
 --layout=reverse
 --info=inline
@@ -560,8 +569,8 @@ bindkey '^X^R' fzf-history-widget-accept
 # For compilers to find openjdk you may need to set:
 # export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# export VOLTA_HOME="$HOME/.volta"
+# export PATH="$VOLTA_HOME/bin:$PATH"
 
 eval "$(zoxide init zsh)"
 
@@ -573,3 +582,11 @@ export PATH="$PATH:$HOME/.rvm/bin"
 zcomet compinit
 # [ -z "$ZPROF" ] || zprof
 # zprof
+
+# pnpm
+export PNPM_HOME="/Users/ttyrrell/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

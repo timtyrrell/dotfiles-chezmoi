@@ -206,6 +206,7 @@
   "tsserver.log": "normal",
   "tsserver.trace.server": "off",
   "tsserver.disableAutomaticTypeAcquisition": false,
+  "tsserver.preferGoToSourceDefinition": false,
   "stylelintplus.trace.server": "off",
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.silentAutoupdate": false,
