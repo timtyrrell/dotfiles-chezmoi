@@ -20,14 +20,15 @@ alias ranger='TERM=xterm-256color ranger'
 alias vi='nvim'
 alias vim='nvim'
 alias n='nvim'
-alias nn='nvim .'
+alias nn='nvim "+let g:auto_session_enabled = v:false"'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
 alias no='nvim -u NONE' # no config
 alias nowr="nvim -u NONE -c 'set nowrap'" # no config, no wrap
 alias np='nvim --noplugin' # no plugins
 alias nv='nvim -u ~/.config/nvim/init-nvim-lsp.vim'
 alias ndebug='nvim -V9myVim.log' # debug authcommands and move
-alias nvim-startuptime='rm /tmp/vim.log; nvim --startuptime /tmp/vim.log -c "quit" && cat /tmp/vim.log'
+alias nvim-startuptime='rm /tmp/vim.log; nvim "+let g:auto_session_enabled = v:false" --startuptime /tmp/vim.log -c "quit" && cat /tmp/vim.log'
+alias :e="nvim"
 
 # edit zsh history
 alias zedit='fc -W; nvim "$HISTFILE"; fc -R'
@@ -53,7 +54,7 @@ alias sk='./bin/sidekiq.sh'
 alias ng='/ngrok.sh'
 
 # docker
-alias dc='docker-compose'
+alias dc='docker compose'
 # alias dcu='dc up'
 alias dcu='dc up -d'
 alias dcd='dc down'
@@ -224,6 +225,6 @@ alias brew-kill-lock="kill $(lsof -t +d /opt/homebrew/var/homebrew/locks)"
 alias brewup="brew update -v; brew upgrade; brew cleanup"
 alias ghup="gh extension upgrade --all"
 alias zshup="zcomet self-update && zcomet update"
-alias cargoup="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
+# alias cargoup="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
 
 alias reload='source ~/.zshrc; echo -e "\n\u2699  \e[33mZSH config reloaded\e[0m \u2699"'

@@ -34,12 +34,15 @@ set wildignorecase
 set wildignore+=tags
 set wildignore+=package-lock.json
 set wildignore+=**/*.xml
+set wildignore+=**/*.po
 " off for telescope-node_modules usage
 " set wildignore+=**/node_modules/*
 set wildignore+=**/.git/*
 
 " give low priority to files matching the defined patterns.
 set suffixes+=.lock,.scss,.sass,.min.js,.less,.json
+" helpful?
+" set suffixesadd=.ts,.tsx,.js,.jsx,.rb,.erb
 
 " controls the behavior when switching between buffers. Mostly for |quickfix| commands
 set switchbuf=useopen,usetab
@@ -134,7 +137,8 @@ set jumpoptions=stack
 set ignorecase
 set infercase " enhances ignorecase
 set smartcase
-set inccommand=nosplit "highlight :s in realtime
+" set inccommand=nosplit "highlight :s in realtime
+set inccommand=split "highlight :s in realtime and show offscreen
 
 " allows block selections to operate across lines regardless of the underlying text
 set virtualedit=block
@@ -217,6 +221,9 @@ nnoremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " change directory to folder of current file
 nnoremap <leader>cf :cd %:p:h<cr>
+
+" backspace to ciw
+nnoremap <bs> ciw
 
 " open file under cursor anywhere on line
 " https://www.reddit.com/r/vim/comments/mcxha4/remapping_gf_to_open_a_file_from_anywhere_on_the/
@@ -324,7 +331,7 @@ function! UpdateRemotePlugins(...)
 endfunction
 
 " good config example: https://github.com/jellydn/lazy-nvim-ide/blob/main/lua/plugins/extras/copilot-chat.lua
-Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'do': function('UpdateRemotePlugins') }
+" Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'do': function('UpdateRemotePlugins') }
 " { "<leader>ccc", ":CopilotChat ",                desc = "CopilotChat - Prompt" },
 " { "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
 " { "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
@@ -407,6 +414,9 @@ Plug 'lambdalisue/suda.vim'
 " undo tree visualizer
 Plug 'simnalamburt/vim-mundo', { 'on': 'MundoToggle' }
 
+" replace with?
+" https://github.com/oysandvik94/curl.nvim
+" https://github.com/mistweaverco/kulala.nvim
 Plug 'vhyrro/luarocks.nvim', {'do': ':source ./build.lua'}
 Plug 'rest-nvim/rest.nvim'
 map <leader>rr <Plug>RestNvim
@@ -545,9 +555,18 @@ vmap gx <Plug>(openbrowser-smart-search)
 " Draw ASCII diagrams in Neovim.
 " Plug 'jbyuki/venn.nvim'
 
+" Maximize pane
+" https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-misc.md
+
 Plug 'tpope/vim-abolish'
 
+" replace with https://github.com/mhinz/vim-grepper
+" https://github.com/mhinz/vim-grepper/wiki/example-configurations-and-mappings
+" https://seniormars.com/posts/neovim-workflow/#search-and-replace
 Plug 'mileszs/ack.vim'
+
+" immediate feedback on :norm
+" https://github.com/smjonas/live-command.nvim
 
 " enhanced matchit
 let g:loaded_matchit = 1
@@ -654,8 +673,6 @@ Plug 'whiteinge/diffconflicts'
 
 Plug 'sindrets/diffview.nvim'
 
-Plug 'rhysd/git-messenger.vim'
-
 " more pleasant editing of commit message
 Plug 'rhysd/committia.vim'
 
@@ -738,7 +755,7 @@ Plug 'nvim-lualine/lualine.nvim'
 
 Plug 'nvim-zh/colorful-winsep.nvim'
 
-Plug 'folke/tokyonight.nvim'
+Plug 'folke/tokyonight.nvim', { 'commit': '30d7be361a7fbf187a881f17e574e9213d5108ea' }
 " Plug 'EdenEast/nightfox.nvim'
 " Plug 'andersevenrud/nordic.nvim'
 " Plug 'catppuccin/nvim'

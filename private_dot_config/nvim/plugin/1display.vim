@@ -33,6 +33,18 @@ lua << EOF
 -- local hooks = require "ibl.hooks"
 -- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
 
+-- require('beacon').setup({
+--   enabled = true, --- (boolean | fun():boolean) check if enabled
+--   speed = 2, --- integer speed at wich animation goes
+--   width = 40, --- integer width of the beacon window
+--   winblend = 70, --- integer starting transparency of beacon window :h winblend
+--   fps = 60, --- integer how smooth the animation going to be
+--   min_jump = 10, --- integer what is considered a jump. Number of lines
+--   cursor_events = { 'CursorMoved' }, -- table<string> what events trigger check for cursor moves
+--   window_events = { 'WinEnter', 'FocusGained' }, -- table<string> what events trigger cursor highlight
+--   highlight = { bg = 'white', ctermbg = 15 }, -- vim.api.keyset.highlight table passed to vim.api.nvim_set_hl
+-- })
+
 EOF
 
 " Plug 'danilamihailov/beacon.nvim'
@@ -74,6 +86,54 @@ require('glow').setup({
   height_ratio = 0.8,
 })
 
+-- https://github.com/vimwiki/vimwiki/issues/1367#issuecomment-1762420036
+-- Put this command in your ftplugin/vimwiki.lua (or autocommand):
+-- vim.treesitter.language.register('markdown', 'vimwiki')
+-- require("headlines").setup({
+--      vimwiki = {
+--         query = vim.treesitter.parse_query(
+--           "markdown",
+--             [[
+--                 (atx_heading [
+--                     (atx_h1_marker)
+--                     (atx_h2_marker)
+--                     (atx_h3_marker)
+--                     (atx_h4_marker)
+--                     (atx_h5_marker)
+--                     (atx_h6_marker)
+--                 ] @headline)
+
+--                 (thematic_break) @dash
+
+--                 (fenced_code_block) @codeblock
+
+--                 (block_quote_marker) @quote
+--                 (block_quote (paragraph (inline (block_continuation) @quote)))
+--                 (block_quote (paragraph (block_continuation) @quote))
+--                 (block_quote (block_continuation) @quote)
+--             ]]
+--         ),
+--         headline_highlights = { "Headline" },
+--         bullet_highlights = {
+--             "@text.title.1.marker.markdown",
+--             "@text.title.2.marker.markdown",
+--             "@text.title.3.marker.markdown",
+--             "@text.title.4.marker.markdown",
+--             "@text.title.5.marker.markdown",
+--             "@text.title.6.marker.markdown",
+--         },
+--         bullets = { "◉", "○", "✸", "✿" },
+--         codeblock_highlight = "CodeBlock",
+--         dash_highlight = "Dash",
+--         dash_string = "-",
+--         quote_highlight = "Quote",
+--         quote_string = "┃",
+--         fat_headlines = true,
+--         fat_headline_upper_string = "▃",
+--         fat_headline_lower_string = "🬂",
+--     },
+-- })
+
 require("tokyonight").setup({
   hide_inactive_statusline = false,
   lualine_bold = true,
@@ -84,6 +144,25 @@ require("tokyonight").setup({
   },
   sidebars = { "qf", "help", "NvimTree", "terminal", "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches", "dap-repl", "DiffviewFiles", "dbui" },
   dim_inactive = true,
+  on_highlights = function(hl, c)
+    -- hl.LeapMatch = { bg = c.magenta2, fg = c.fg, style = "bold" }
+    -- hl.LeapLabelPrimary = { fg = c.magenta2, style = "bold" }
+    -- hl.LeapLabelSecondary = { fg = c.green1, style = "bold" }
+    -- hl.LeapBackdrop = { fg = c.dark3 }
+    hl.LeapBackdrop = {
+      fg = "#545c7e"
+    }
+    hl.LeapLabel = {
+      bold = true,
+      -- fg = "#ff007c"
+      fg = "#73daca"
+    }
+    hl.LeapMatch = {
+      bg = "#ff007c",
+      bold = true,
+      fg = "#c0caf5"
+    }
+  end
 })
 
 EOF
@@ -96,7 +175,11 @@ require("colorful-winsep").setup({
     -- bg = "#16161E",
     -- fg = "#1F3442",
   },
-  no_exec_files = { "TelescopePrompt", "mason", "NvimTree" },
+  no_exec_files = { "packer", "TelescopePrompt", "mason", "CompetiTest" },
+  events = { "VimResume", "WinEnter", "BufEnter", "WinResized", "WinClosed", "VimResized", "SessionLoadPost", "WinLeave" },
+  -- events = { "WinEnter", "WinResized", "SessionLoadPost" },
+  -- event = { "WinNew" },
+  -- event = { "WinLeave" },
   symbols = { "─", "│", "┌", "┐", "└", "┘" },
 })
 require("import-cost").setup({})
@@ -166,10 +249,10 @@ require('nvim-web-devicons').setup {}
 
 require('which-key').setup {
   plugins = {
-    marks = false,
+      marks = false,
   },
-  window = {
-    border = "double",
+  win = {
+      border = "double",
   },
 }
 

@@ -20,6 +20,9 @@
 " nnoremap <C-w>- :new<cr>
 " nnoremap <C-w><bar> :vnew<cr>
 
+let g:fzf_vim = {}
+let g:fzf_vim.grep_multi_line = 2
+
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
@@ -527,10 +530,10 @@ nnoremap * m`:keepjumps normal! *``<cr><Cmd>lua require('hlslens').start()<CR>
 
 noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'nzz')<CR>
             \<Cmd>lua require('hlslens').start()<CR>
-            \<Cmd>Beacon<CR>
+            " \<Cmd>Beacon<CR>
 noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'Nzz')<CR>
             \<Cmd>lua require('hlslens').start()<CR>
-            \<Cmd>Beacon<CR>
+            " \<Cmd>Beacon<CR>
 
 augroup lazy_load_wilder
   autocmd!
@@ -704,6 +707,23 @@ require('spectre').setup()
 
 local actions = require "telescope.actions"
 local action_layout = require "telescope.actions.layout"
+
+-- focus telescope preview window
+-- https://github.com/nvim-telescope/telescope.nvim/issues/2778#issuecomment-2202572413
+local focus_preview = function(prompt_bufnr)
+    local action_state = require("telescope.actions.state")
+    local picker = action_state.get_current_picker(prompt_bufnr)
+    local prompt_win = picker.prompt_win
+    local previewer = picker.previewer
+    local winid = previewer.state.winid
+    local bufnr = previewer.state.bufnr
+    vim.keymap.set("n", "<Tab>", function()
+        vim.cmd(string.format("noautocmd lua vim.api.nvim_set_current_win(%s)", prompt_win))
+    end, { buffer = bufnr })
+    vim.cmd(string.format("noautocmd lua vim.api.nvim_set_current_win(%s)", winid))
+    -- api.nvim_set_current_win(winid)
+end
+
 -- Global remapping
 ------------------------------
 require('telescope').setup {

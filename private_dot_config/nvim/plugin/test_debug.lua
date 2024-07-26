@@ -135,9 +135,11 @@ require("jester").setup({
 -- vim.api.nvim_set_keymap("n", "<leader>ts", "<cmd>TestSuite<cr>", {})
 vim.cmd [[
   " vim-test
-  let test#strategy = 'toggleterm'
-  " let test#strategy = 'vimux'
+  let test#ruby#rspec#executable = 'bundle exec rspec'
+  let test#strategy = 'vimux'
+  " let test#strategy = 'toggleterm'
   " let test#strategy = 'neovim'
+  " let test#strategy = 'spawn'
 
   " let test#strategy = 'neovim_sticky'
   " let g:test#neovim_sticky#kill_previous = 1  " Try to abort previous run

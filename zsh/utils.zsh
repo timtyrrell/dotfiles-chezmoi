@@ -92,12 +92,12 @@ rgar() {
 
 # Search RB/ERB/SLIM/HTML file content, exclude test files
 rgfr() {
-    _rg --type webrb ---glob "!spec/**/*.*" $@
+    _rg --type webrb --glob "!spec/**/*.*" $@
 }
 
 # Search RB/ERB/SLIM/HTML file content, only test files
 rgtr() {
-    _rg --type webrb ---glob "spec/**/*.*" $@
+    _rg --type webrb --glob "spec/**/*.*" $@
 }
 
 # Find git conflicts

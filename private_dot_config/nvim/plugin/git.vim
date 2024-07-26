@@ -193,18 +193,6 @@ nnoremap <leader>dvh <Cmd>DiffviewFileHistory --range=origin/HEAD..HEAD<cr>
 " diff history on visual selection
 vnoremap <leader>dvh <Cmd>'<,'>DiffviewFileHistory<CR>
 
-" Plug 'rhysd/git-messenger.vim'
-let g:git_messenger_date_format = "%Y %b %d %X"
-" <Leader>gm
-" q 	Close the popup window
-" o/O 	older commit/newer commit
-" d/D 	Toggle diff hunks only related to current file in the commit/All Diffs
-
-let g:git_messenger_always_into_popup = 1
-let g:git_messenger_include_diff = 'current'
-let g:git_messenger_extra_blame_args ='-w' " Ignore whitespace
-let g:git_messenger_floating_win_opts = { 'border': 'single' }
-
 " Plug 'rhysd/committia.vim'
 let g:committia_open_only_vim_starting = 1
 let g:committia_hooks = {}
