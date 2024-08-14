@@ -223,6 +223,7 @@
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
   "Lua.telemetry.enable": false,
+  "Lua.hint.arrayIndex": "Disable",
   "languageserver": {
     // "efm": {
     //   "command": "efm-langserver",

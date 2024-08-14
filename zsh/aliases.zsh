@@ -19,6 +19,7 @@ alias ranger='TERM=xterm-256color ranger'
 #vim
 alias vi='nvim'
 alias vim='nvim'
+alias nvim='nvim -u ~/.config/nvim/init-single.lua'
 alias n='nvim'
 alias nn='nvim "+let g:auto_session_enabled = v:false"'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
@@ -48,7 +49,7 @@ alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' |
 # rails
 alias be="bundle exec"
 alias rs='bundle exec rails s'
-alias rc='bundle exec rails c'
+alias rc='bundle exec rails c --nomultiline'
 alias wds='./bin/webpack-dev-server'
 alias sk='./bin/sidekiq.sh'
 alias ng='/ngrok.sh'
