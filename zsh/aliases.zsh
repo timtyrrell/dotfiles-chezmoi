@@ -21,7 +21,7 @@ alias vi='nvim'
 alias vim='nvim'
 alias nvim='nvim'
 alias n='nvim'
-alias nn='nvim "+let g:auto_session_enabled = v:false"'
+alias nn='nvim --cmd "let g:auto_session_enabled = v:false"'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
 alias no='nvim -u NONE' # no config
 alias nowr="nvim -u NONE -c 'set nowrap'" # no config, no wrap
@@ -49,7 +49,8 @@ alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' |
 # rails
 alias be="bundle exec"
 alias rs='bundle exec rails s'
-alias rc='bundle exec rails c --nomultiline'
+# alias rc='bundle exec rails c --nomultiline'
+alias rc='bundle exec rails c'
 alias wds='./bin/webpack-dev-server'
 alias sk='./bin/sidekiq.sh'
 alias ng='/ngrok.sh'

@@ -88,8 +88,6 @@
 	; pruneTags = true
 [help]
 	autoCorrect = prompt
-[include]
-	path = ~/.gitconfig.local
 [init]
 	defaultBranch = main
 [interactive]
@@ -119,10 +117,10 @@
 [rerere]
 	enabled = true
 	autoupdate = true
-[user]
-	useconfigonly = true
-	name = Tim Tyrrell
-	email = tim@tyrrell.io
+[include]
+	path = ~/.gitconfig.local
+[includeIf "gitdir:~/code/COMPANY/"]
+	path = ~/.gitconfig.work
 [web]
 	browser = chromium
 [commit]
