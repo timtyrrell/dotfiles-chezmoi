@@ -34,7 +34,7 @@ fi
 # kitty ssh fix
 # [[ "$TERM" == "xterm-kitty" ]] && alias ssh="TERM=xterm-256color ssh"
 
-export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@14/bin:$PATH"
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
 
 # fpath=(
@@ -213,9 +213,7 @@ setopt prompt_subst            # parameter expansion, command substitution and a
 # Bindings
 # external editor support
 autoload edit-command-line; zle -N edit-command-line
-bindkey '^o' edit-command-line
-# bindkey '^e' edit-command-line
-# bindkey '^x^e' edit-command-line
+bindkey '^e' edit-command-line
 
 # Partial word history completion
 bindkey '\ep' up-line-or-search
@@ -381,6 +379,9 @@ export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH
 export PATH=$PATH:$GOROOT/bin
 export PYTHONPATH="."
+
+# pipx
+export PATH="$HOME/.local/bin:$PATH"
 
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

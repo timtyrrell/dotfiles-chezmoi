@@ -108,8 +108,9 @@
 [pull]
 	rebase = true
 [push]
-	followTags = true
+  autoSetupRemote = true
 	default = current
+	followTags = true
 [rebase]
 	autosquash = true
 	autostash = true

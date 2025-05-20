@@ -179,7 +179,12 @@ require('lazy').setup({
         'ggandor/flit.nvim',
         config = function()
           require('flit').setup {
+            keys = { f = 'f', F = 'F', t = 't', T = 'T' },
+            labeled_modes = "v",
+            -- Repeat with the trigger key itself.
+            clever_repeat = true,
             multiline = false,
+            opts = {}
           }
         end,
     },

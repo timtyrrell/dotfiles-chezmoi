@@ -12,7 +12,6 @@ vim.opt.rtp:prepend(lazypath)
 -- Add plugins
 require('lazy').setup({
     checker = {
-      -- automatically check for plugin updates
       enabled = false,
       concurrency = nil, ---@type number? set to 1 to check for updates very slowly
       notify = true, -- get a notification when new updates are found
@@ -23,18 +22,18 @@ require('lazy').setup({
         'folke/tokyonight.nvim',
         lazy = false, -- make sure we load this during startup if it is your main colorscheme
         priority = 1000, -- make sure to load this before all the other start plugins
-        commit = '30d7be361a7fbf187a881f17e574e9213d5108ea',
+        -- commit = '30d7be361a7fbf187a881f17e574e9213d5108ea',
         config = function()
           -- load the colorscheme here
             require("tokyonight").setup({
-              hide_inactive_statusline = false,
+              -- hide_inactive_statusline = false,
               lualine_bold = true,
               style = "night",
               styles = {
                 comments = { italic = true },
                 keywords = { italic = true },
               },
-              sidebars = { "qf", "help", "NvimTree", "terminal", "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches", "dap-repl", "DiffviewFiles", "dbui" },
+              -- sidebars = { "qf", "help", "NvimTree", "terminal", "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches", "dap-repl", "DiffviewFiles", "dbui" },
               dim_inactive = true,
               on_highlights = function(hl, c)
                 -- hl.LeapMatch = { bg = c.magenta2, fg = c.fg, style = "bold" }
@@ -62,6 +61,8 @@ require('lazy').setup({
     {
      'neoclide/coc.nvim',
         branch = 'master',
+        -- branch = 'release',
+        -- commit = '883ae3dc32eedc732afa7f6b783c71ae953f4ed8',
         build = 'npm ci'
     },
     'antoinemadec/coc-fzf',
@@ -95,27 +96,52 @@ require('lazy').setup({
             end,
         },
     {
-      'rmagatti/auto-session',
-        lazy = false,
-        config = function()
-          require('auto-session').setup {
-            -- cwd_change_handling = {
-            --   restore_upcoming_session = true,
-            -- },
-            session_lens = {
-              load_on_setup = false,
-            },
-            log_level = 'error',
-            auto_session_enabled = true,
-            auto_save_enabled = true,
-            auto_restore_enabled = true,
-            auto_session_use_git_branch = true,
-            auto_session_suppress_dirs = {'~/', '~/code', '~/code/timtyrrell', '~/code/brandfolder'},
-            -- auto_session_allow_dirs = {'~/code/*', '~/.local/share/chezmoi'},
-            pre_save_cmds = {close_nvim_tree, "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
-          }
+    'rmagatti/auto-session',
+      lazy = false,
+      config = function()
+        require('auto-session').setup {
+        -- cwd_change_handling = {
+        --   restore_upcoming_session = true,
+        -- },
+        auto_restore = true,
+        auto_save = true,
+        enabled = false,
+        git_use_branch_name = true,
+        log_level = "error",
+        pre_save_cmds = {
+          -- close_nvim_tree,
+          [2] = "BDelete! nameless",
+          [3] = "BDelete! hidden",
+          [4] = "BDelete glob=yode*",
+          [5] = "cclose"
+        },
+        session_lens = {
+          load_on_setup = false
+        },
+        suppressed_dirs = { "~/", "~/code", "~/code/timtyrrell", "~/code/brandfolder" }
+        }
       end
     },
+
+        -- config = function()
+        --   require('auto-session').setup {
+        --     -- cwd_change_handling = {
+        --     --   restore_upcoming_session = true,
+        --     -- },
+        --     session_lens = {
+        --       load_on_setup = false,
+        --     },
+        --     log_level = 'error',
+        --     auto_session_enabled = true,
+        --     auto_save_enabled = true,
+        --     auto_restore_enabled = true,
+        --     auto_session_use_git_branch = true,
+        --     auto_session_suppress_dirs = {'~/', '~/code', '~/code/timtyrrell', '~/code/brandfolder'},
+        --     -- auto_session_allow_dirs = {'~/code/*', '~/.local/share/chezmoi'},
+        --     pre_save_cmds = {close_nvim_tree, "BDelete! nameless", "BDelete! hidden", "BDelete glob=yode*", "cclose"}
+        --   }
+      -- end
+    -- },
   -- https://github.com/rest-nvim/rest.nvim
     'meain/vim-printer',
     'preservim/vimux',
@@ -281,6 +307,7 @@ require('lazy').setup({
     'echasnovski/mini.files',
     'kyazdani42/nvim-tree.lua',
     'ThePrimeagen/git-worktree.nvim',
+    -- https://github.com/polarmutex/git-worktree.nvim use fork?
     'MunifTanjim/nui.nvim',
     'vuki656/package-info.nvim',
     'tpope/vim-scriptease',
@@ -421,6 +448,7 @@ require('lazy').setup({
         build = 'cd app && npx --yes yarn install'
     },
     {
+      -- replace with https://github.com/MeanderingProgrammer/render-markdown.nvim
         'ellisonleao/glow.nvim',
         ft =  'markdown'
     },
@@ -2285,9 +2313,9 @@ require('package-info').setup({
   package_manager = 'yarn'
 })
 
-local function close_nvim_tree()
-  require('nvim-tree.view').close()
-end
+-- local function close_nvim_tree()
+--   require('nvim-tree.view').close()
+-- end
 
   -- use black hole register when deleting empty line
   local function smart_dd()
