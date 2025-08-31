@@ -61,8 +61,7 @@ require('lazy').setup({
     {
      'neoclide/coc.nvim',
         branch = 'master',
-        -- branch = 'release',
-        -- commit = '883ae3dc32eedc732afa7f6b783c71ae953f4ed8',
+        -- commit = '67b94293b8303d8b62f1ff0b43681630906c4377',
         build = 'npm ci'
     },
     'antoinemadec/coc-fzf',
@@ -96,31 +95,35 @@ require('lazy').setup({
             end,
         },
     {
-    'rmagatti/auto-session',
+      'rmagatti/auto-session',
       lazy = false,
-      config = function()
-        require('auto-session').setup {
-        -- cwd_change_handling = {
-        --   restore_upcoming_session = true,
-        -- },
-        auto_restore = true,
-        auto_save = true,
-        enabled = false,
-        git_use_branch_name = true,
-        log_level = "error",
-        pre_save_cmds = {
-          -- close_nvim_tree,
-          [2] = "BDelete! nameless",
-          [3] = "BDelete! hidden",
-          [4] = "BDelete glob=yode*",
-          [5] = "cclose"
-        },
-        session_lens = {
-          load_on_setup = false
-        },
-        suppressed_dirs = { "~/", "~/code", "~/code/timtyrrell", "~/code/brandfolder" }
-        }
-      end
+
+      opts = {
+        suppressed_dirs = { "~/", "~/Downloads", "~/code", "~/code/timtyrrell", "~/code/brandfolder" },
+        git_use_branch_name = true,  -- can also have the old name of use_git_branch
+        git_auto_restore_on_branch_change = true, -- new config name to turn on branch tracking
+        log_level = 'error',
+      }
+
+      -- config = function()
+      --   require('auto-session').setup {
+      --     -- cwd_change_handling = {
+      --     --   restore_upcoming_session = true,
+      --     -- },
+      --     -- auto_restore = true,
+      --     -- auto_save = true,
+      --     -- enabled = false,
+      --     log_level = "error",
+      --     pre_save_cmds = {
+      --       -- close_nvim_tree,
+      --       [2] = "BDelete! nameless",
+      --       [3] = "BDelete! hidden",
+      --       [4] = "BDelete glob=yode*",
+      --       [5] = "cclose"
+      --     },
+      --     suppressed_dirs = { "~/", "~/code", "~/code/timtyrrell", "~/code/brandfolder" }
+      --   }
+      -- end
     },
 
         -- config = function()
@@ -145,8 +148,23 @@ require('lazy').setup({
   -- https://github.com/rest-nvim/rest.nvim
     'meain/vim-printer',
     'preservim/vimux',
-    'tpope/vim-dadbod',
-    'kristijanhusak/vim-dadbod-ui',
+    {
+      'kristijanhusak/vim-dadbod-ui',
+      dependencies = {
+        { 'tpope/vim-dadbod', lazy = true },
+        { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
+      },
+      cmd = {
+        'DBUI',
+        'DBUIToggle',
+        'DBUIAddConnection',
+        'DBUIFindBuffer',
+      },
+      init = function()
+        -- Your DBUI configuration
+        vim.g.db_ui_use_nerd_fonts = 1
+      end,
+    },
     'vim-test/vim-test',
     'tpope/vim-dispatch',
     'mfussenegger/nvim-dap',
@@ -156,6 +174,9 @@ require('lazy').setup({
     'David-Kunz/jester',
     {
         'nvim-treesitter/nvim-treesitter',
+        branch = 'master',
+        lazy = false,
+        build = ":TSUpdate",
         dependencies = {
         {
             'abecodes/tabout.nvim',
@@ -184,7 +205,7 @@ require('lazy').setup({
     },
     'tmux-plugins/vim-tmux',
     {
-    'sheerun/vim-polyglot',
+      'sheerun/vim-polyglot',
          init = function()
            vim.cmd(
              [[
@@ -203,8 +224,8 @@ require('lazy').setup({
           )
         end,
     },
-    -- 'tpope/vim-sleuth',
-    { 'echasnovski/mini.splitjoin', version = '*' },
+    'tpope/vim-sleuth',
+    { 'nvim-mini/mini.splitjoin', version = '*' },
     'mcauley-penney/tidy.nvim',
     'tyru/open-browser.vim',
     'tpope/vim-abolish',
@@ -289,7 +310,7 @@ require('lazy').setup({
             'nvim-telescope/telescope-node-modules.nvim',
             'LinArcX/telescope-env.nvim',
             'debugloop/telescope-undo.nvim',
-            'piersolenski/telescope-import.nvim',
+            'piersolenski/import.nvim',
             {
                 'nvim-telescope/telescope-fzf-native.nvim',
                 build = 'make'
@@ -304,7 +325,7 @@ require('lazy').setup({
         'nvim-tree/nvim-web-devicons',
         lazy = true
     },
-    'echasnovski/mini.files',
+    'nvim-mini/mini.files',
     'kyazdani42/nvim-tree.lua',
     'ThePrimeagen/git-worktree.nvim',
     -- https://github.com/polarmutex/git-worktree.nvim use fork?
@@ -328,6 +349,12 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     -- 'nvim-zh/colorful-winsep.nvim',
     -- 'shortcuts/no-neck-pain.nvim'
+    {
+      "oysandvik94/curl.nvim",
+      cmd = { "CurlOpen" },
+      dependencies = { "nvim-lua/plenary.nvim", },
+      config = true,
+    },
     'voldikss/vim-browser-search',
     -- 'airblade/vim-rooter'
     -- 'dstein64/vim-startuptime'
@@ -1064,7 +1091,9 @@ augroup MyColors
 augroup END
 
 let g:coc_enable_locationlist = 0
+          " \ 'coc-stylelintplus',
 let g:coc_global_extensions = [
+          \ 'coc-basedpyright',
           \ 'coc-css',
           \ 'coc-cssmodules',
           \ 'coc-db',
@@ -1074,6 +1103,7 @@ let g:coc_global_extensions = [
           \ 'coc-git',
           \ 'coc-go',
           \ 'coc-html',
+          \ 'coc-java',
           \ 'coc-jest',
           \ 'coc-json',
           \ 'coc-lists',
@@ -1082,10 +1112,10 @@ let g:coc_global_extensions = [
           \ 'coc-pairs',
           \ 'coc-prettier',
           \ 'coc-react-refactor',
+          \ '@yaegassy/coc-ruff',
           \ 'coc-sh',
           \ 'coc-snippets',
           \ 'coc-styled-components',
-          \ 'coc-stylelintplus',
           \ 'coc-sumneko-lua',
           \ 'coc-svg',
           \ 'coc-swagger',
@@ -2316,6 +2346,10 @@ require('package-info').setup({
 -- local function close_nvim_tree()
 --   require('nvim-tree.view').close()
 -- end
+
+-- only search within visual selection
+vim.keymap.set('x', '/', '<C-\\><C-n>`</\\%V', { desc = 'Search forward within visual selection' })
+vim.keymap.set('x', '?', '<C-\\><C-n>`>?\\%V', { desc = 'Search backward within visual selection' })
 
   -- use black hole register when deleting empty line
   local function smart_dd()

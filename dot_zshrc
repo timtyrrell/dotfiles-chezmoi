@@ -379,6 +379,7 @@ export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOPATH
 export PATH=$PATH:$GOROOT/bin
 export PYTHONPATH="."
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # pipx
 export PATH="$HOME/.local/bin:$PATH"
@@ -550,6 +551,7 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # export PATH="$PYENV_ROOT/shims:$PATH"
 # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 # eval "$(pyenv init -)"
+eval "$(uv generate-shell-completion zsh)"
 
 # source <(stern --completion=zsh)
 

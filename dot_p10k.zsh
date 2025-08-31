@@ -70,10 +70,10 @@ function prompt_my_volta() {
     pyenv                   # python environment (https://github.com/pyenv/pyenv)
     goenv                   # go environment (https://github.com/syndbg/goenv)
     nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
-    nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
+    # nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
     nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
-    # my_volta                # node.js version from volta (https://volta.sh/) https://github.com/romkatv/powerlevel10k/issues/1388#issuecomment-859352008
-    node_version            # node.js version
+    my_volta                # node.js version from volta (https://volta.sh/) https://github.com/romkatv/powerlevel10k/issues/1388#issuecomment-859352008
+    # node_version            # node.js version
     # go_version            # go version (https://golang.org)
     # rust_version          # rustc version (https://www.rust-lang.org)
     # dotnet_version        # .NET version (https://dotnet.microsoft.com)

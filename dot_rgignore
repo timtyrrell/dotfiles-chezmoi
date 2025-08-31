@@ -13,3 +13,6 @@ locales
 vendor
 cjs
 esm
+target
+.yarn
+.idea

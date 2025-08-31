@@ -30,6 +30,9 @@
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "eslint.autoFixOnSave": true,
   "eslint.validate": [
     "javascript",
@@ -291,5 +294,6 @@
       "initializationOptions": {},
       "settings": {}
     }
-  }
+  },
+  "snippets.ultisnips.pythonPrompt": true
 }

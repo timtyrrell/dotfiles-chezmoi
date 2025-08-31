@@ -295,6 +295,12 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     -- 'nvim-zh/colorful-winsep.nvim',
     -- 'shortcuts/no-neck-pain.nvim'
+    {
+      "oysandvik94/curl.nvim",
+      cmd = { "CurlOpen" },
+      dependencies = { "nvim-lua/plenary.nvim", },
+      config = true,
+    },
     'voldikss/vim-browser-search',
     -- 'airblade/vim-rooter'
     -- 'dstein64/vim-startuptime'
