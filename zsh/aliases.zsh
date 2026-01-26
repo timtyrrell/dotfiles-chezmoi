@@ -19,7 +19,6 @@ alias ranger='TERM=xterm-256color ranger'
 #vim
 alias vi='nvim'
 alias vim='nvim'
-alias nvim='nvim'
 alias n='nvim'
 alias nn='nvim --cmd "let g:auto_session_enabled = v:false"'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
@@ -55,6 +54,7 @@ alias wds='./bin/webpack-dev-server'
 alias sk='./bin/sidekiq.sh'
 alias ng='/ngrok.sh'
 
+alias docker='podman'
 # docker
 alias dc='docker compose'
 # alias dcu='dc up'
@@ -88,6 +88,9 @@ alias skitty=kitty +kitten ssh
 
 # python
 alias pactivate='source $(poetry env info --path)/bin/activate'
+alias uactivate='source .venv/bin/activate'
+alias uvr='uv run'
+alias uvrp='uv run python'
 
 # https://qmacro.org/autodidactics/2021/08/06/tmux-output-formatting/
 # 1. Open a popup
@@ -225,6 +228,7 @@ alias brew-outdated="kill $(lsof -t +d $(brew --prefix)/var/homebrew/locks) >/de
 alias brewup="brew upgrade; brew cleanup"
 alias ghup="gh extension upgrade --all"
 alias zshup="zcomet self-update && zcomet update"
+alias ibrew='arch -x86_64 /usr/local/bin/brew'
 # alias cargoup="cargo install $(cargo install --list | egrep '^[a-z0-9_-]+ v[0-9.]+:$' | cut -f1 -d' ')"
 
 alias reload='source ~/.zshrc; echo -e "\n\u2699  \e[33mZSH config reloaded\e[0m \u2699"'

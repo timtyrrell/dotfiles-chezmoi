@@ -71,17 +71,17 @@ _rg() {
 # }
 
 # Search JS/JSX/TS/TSX file content
-rgaj() {
+rgat() {
     _rg --type webjsts  $@
 }
 
 # Search JS/JSX/TS/TSX file content, exclude test files
-rgfj() {
+rgft() {
     _rg --type webjsts --glob "!**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"  $@
 }
 
 # Search JS/JSX/TS/TSX file content, only test files
-rgtj() {
+rgtt() {
     _rg --type webjsts --glob "**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"  $@
 }
 
@@ -98,6 +98,21 @@ rgfr() {
 # Search RB/ERB/SLIM/HTML file content, only test files
 rgtr() {
     _rg --type webrb --glob "spec/**/*.*" $@
+}
+
+# Search java file content
+rgaj() {
+    _rg --type java --type kotlin $@
+}
+
+# Search java file content, exclude test files
+rgfj() {
+    _rg --type java --type kotlin --glob "!**/{test}/**/*.*"  $@
+}
+
+# Search java file content, only test files
+rgtj() {
+    _rg --type java --type kotlin --glob "**/test/**/*.*"  $@
 }
 
 # Find git conflicts

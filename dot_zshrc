@@ -297,8 +297,9 @@ export FZF_DEFAULT_OPTS="
 --bind 'ctrl-d:preview-half-page-down'
 --bind 'alt-k:page-up'
 --bind 'alt-j:page-down'
---bind 'ctrl-v:execute(nvim {} < /dev/tty > /dev/tty 2>&1)+accept'
+--bind 'ctrl-v:become(nvim {+})'
 "
+# --bind 'ctrl-v:execute(nvim {} < /dev/tty > /dev/tty 2>&1)+accept'
 
 # generated from tokyo dark colorscheme
 # export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
@@ -547,10 +548,11 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 	*) git log --color=always $word ;;
 	esac'
 
-# export PYENV_ROOT="$HOME/.pyenv"
+export PYENV_ROOT="$HOME/.pyenv"
 # export PATH="$PYENV_ROOT/shims:$PATH"
 # [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 eval "$(uv generate-shell-completion zsh)"
 
 # source <(stern --completion=zsh)

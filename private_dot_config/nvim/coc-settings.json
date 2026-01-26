@@ -2,11 +2,11 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "stylelintplus.filetypes": [
-    "scss",
-    "less"
-  ],
-  "stylelintplus.autoFixOnSave": true,
+  // "stylelintplus.filetypes": [
+  //   "scss",
+  //   "less"
+  // ],
+  // "stylelintplus.autoFixOnSave": true,
   "markdownlint.config": {
     "code_blocks": false,
     "enableCompoundWords": true,
@@ -22,7 +22,8 @@
     "header-style": false,
     "no-trailing-punctuation": false,
     "single-trailing-newline": false,
-    "blanks-around-fences": false
+    "blanks-around-fences": false,
+    "blanks-around-headings": false,
   },
   "cssmodules.camelCase": true,
   "cssmodules.hintName": "cssmodule",
@@ -210,7 +211,7 @@
   "tsserver.trace.server": "off",
   "tsserver.disableAutomaticTypeAcquisition": false,
   "tsserver.preferGoToSourceDefinition": false,
-  "stylelintplus.trace.server": "off",
+  // "stylelintplus.trace.server": "off",
   "coc.preferences.extensionUpdateCheck": "daily",
   "coc.preferences.silentAutoupdate": false,
   "react-refactor.produceClass": false,
@@ -295,5 +296,5 @@
       "settings": {}
     }
   },
-  "snippets.ultisnips.pythonPrompt": true
+  "snippets.ultisnips.pythonPrompt": false
 }

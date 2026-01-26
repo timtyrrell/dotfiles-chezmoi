@@ -11,13 +11,6 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Add plugins
 require('lazy').setup({
-    checker = {
-      enabled = false,
-      concurrency = nil, ---@type number? set to 1 to check for updates very slowly
-      notify = true, -- get a notification when new updates are found
-      frequency =  86400, -- check for updates every day
-      check_pinned = false, -- check for pinned packages that can't be updated
-    },
     {
         'folke/tokyonight.nvim',
         lazy = false, -- make sure we load this during startup if it is your main colorscheme
@@ -85,15 +78,15 @@ require('lazy').setup({
       end
     },
     'kazhala/close-buffers.nvim',
-    {
-            'vhyrro/luarocks.nvim',
-            build = ':source ./build.lua',
-            config = function()
-                require("luarocks-nvim").setup {
-                  rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }
-                }
-            end,
-        },
+    -- {
+    --     'vhyrro/luarocks.nvim',
+    --     build = ':source ./build.lua',
+    --     config = function()
+    --         require("luarocks-nvim").setup {
+    --           rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" }
+    --         }
+    --     end,
+    -- },
     {
       'rmagatti/auto-session',
       lazy = false,
@@ -167,10 +160,60 @@ require('lazy').setup({
     },
     'vim-test/vim-test',
     'tpope/vim-dispatch',
-    'mfussenegger/nvim-dap',
+    {
+     "mfussenegger/nvim-dap",
+     dependencies = {
+       -- Python-specific DAP plugin
+       {
+         "mfussenegger/nvim-dap-python",
+         ft = "python", -- Use ft = "python", not { "python" }
+         config = function()
+           local py = vim.fn.expand("~/.venvs/debugpy/bin/python")
+           require("dap-python").setup(py)
+           require("dap-python").test_runner = "pytest"
+         end,
+       },
+       -- Optional, but recommended: DAP UI
+       "rcarriga/nvim-dap-ui",
+       -- Optional: Virtual text for DAP
+       "theHamsta/nvim-dap-virtual-text",
+     },
+     config = function()
+       -- If you use nvim-dap-ui, you can configure it here
+       local dapui = require("dapui")
+       dapui.setup()
+
+       local dap = require("dap")
+       dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+       dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
+       dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
+     end,
+    },
+    -- {
+    --   "mfussenegger/nvim-dap",
+    --   dependencies = { "rcarriga/nvim-dap-ui" },
+    --   config = function()
+    --     require("dapui").setup()
+    --     local dap = require("dap")
+    --     dap.listeners.after.event_initialized["dapui_config"] = function() require("dapui").open() end
+    --     dap.listeners.before.event_terminated["dapui_config"] = function() require("dapui").close() end
+    --     dap.listeners.before.event_exited["dapui_config"] = function() require("dapui").close() end
+    --   end,
+    -- },
+    -- {
+    --   "mfussenegger/nvim-dap-python",
+    --   ft = { "python" },
+    --   dependencies = { "mfussenegger/nvim-dap" },
+    --   config = function()
+    --     -- Point to uv-managed venv python
+    --     local py = vim.fn.expand("~/.venvs/debugpy/bin/python")
+    --     require("dap-python").setup(py)
+    --     require("dap-python").test_runner = "pytest"
+    --   end,
+    -- },
     'theHamsta/nvim-dap-virtual-text',
     'nvim-neotest/nvim-nio',
-    'rcarriga/nvim-dap-ui',
+    -- 'rcarriga/nvim-dap-ui',
     'David-Kunz/jester',
     {
         'nvim-treesitter/nvim-treesitter',
@@ -231,14 +274,60 @@ require('lazy').setup({
     'tpope/vim-abolish',
     'mileszs/ack.vim',
     'andymass/vim-matchup',
-    'ggandor/leap.nvim',
     {
-        'ggandor/flit.nvim',
-        config = function()
-          require('flit').setup {
-            multiline = false,
-          }
-        end,
+      'ggandor/leap.nvim',
+      url = "https://codeberg.org/andyg/leap.nvim",
+      dependencies = {
+        "tpope/vim-repeat",
+      },
+      keys = {
+        { "s", "<Plug>(leap-forward)",  mode = { "n", "x", "o" }, noremap = false, desc = "leap forward" },
+        { "S", "<Plug>(leap-backward)", mode = { "n", "x", "o" }, noremap = false, desc = "leap backward" },
+      },
+      config = function()
+        do
+          -- Returns an argument table for `leap()`, tailored for f/t-motions.
+          local function as_ft (key_specific_args)
+            local common_args = {
+              inputlen = 1,
+              inclusive = true,
+              -- To limit search scope to the current line:
+              -- pattern = function (pat) return '\\%.l'..pat end,
+              opts = {
+                labels = '',  -- force autojump
+                safe_labels = vim.fn.mode(1):match('o') and '' or nil,  -- [1]
+                case_sensitive = true,                                  -- [2]
+              },
+            }
+            return vim.tbl_deep_extend('keep', common_args, key_specific_args)
+          end
+
+          local clever = require('leap.user').with_traversal_keys       -- [3]
+          local clever_f = clever('f', 'F')
+          local clever_t = clever('t', 'T')
+
+          for key, args in pairs {
+            f = { opts = clever_f, },
+            F = { backward = true, opts = clever_f },
+            t = { offset = -1, opts = clever_t },
+            T = { backward = true, offset = 1, opts = clever_t },
+          } do
+            vim.keymap.set({'n', 'x', 'o'}, key, function ()
+              require('leap').leap(as_ft(args))
+            end)
+          end
+        end
+      end,
+      opts = {
+        -- labels = {}, -- force auto-jumping to the first match
+        preview_filter =
+          function (ch0, ch1, ch2)
+            return not (
+              ch1:match('%s') or
+              ch0:match('%a') and ch1:match('%a') and ch2:match('%a')
+            )
+          end
+        },
     },
     'drmingdrmer/vim-toggle-quickfix',
     'gabrielpoca/replacer.nvim',
@@ -354,6 +443,20 @@ require('lazy').setup({
       cmd = { "CurlOpen" },
       dependencies = { "nvim-lua/plenary.nvim", },
       config = true,
+    },
+    {
+      "mistweaverco/kulala.nvim",
+      keys = {
+        { "<leader>Rs", desc = "Send request" },
+        { "<leader>Ra", desc = "Send all requests" },
+        { "<leader>Rb", desc = "Open scratchpad" },
+      },
+      ft = {"http", "rest"},
+      opts = {
+        global_keymaps = false,
+        global_keymaps_prefix = "<leader>R",
+        kulala_keymaps_prefix = "",
+      },
     },
     'voldikss/vim-browser-search',
     -- 'airblade/vim-rooter'
@@ -471,13 +574,19 @@ require('lazy').setup({
         end,
     },
     {
-        'iamcco/markdown-preview.nvim',
-        build = 'cd app && npx --yes yarn install'
+      "OXY2DEV/markview.nvim",
+      lazy = false,
     },
     {
-      -- replace with https://github.com/MeanderingProgrammer/render-markdown.nvim
-        'ellisonleao/glow.nvim',
-        ft =  'markdown'
+      -- replace with https://github.com/MeanderingProgrammer/render-markdown.nvim ?
+      -- https://github.com/brianhuster/live-preview.nvim
+      "iamcco/markdown-preview.nvim",
+      cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+      build = "cd app && yarn install",
+      init = function()
+        vim.g.mkdp_filetypes = { "markdown" }
+      end,
+      ft = { "markdown" },
     },
     {
         "folke/zen-mode.nvim",
@@ -505,12 +614,39 @@ require('lazy').setup({
     },
     'folke/which-key.nvim'
 }, {
-    checker = { enabled = true },
+    -- rocker = {
+    --   paths = {
+    --     -- Point to the new, working repository for rocks
+    --     "lua-rocks.treesitter.org",
+    --     -- You can also add the original as a fallback
+    --     "https://nvim-neorocks.github.io/rocks-binaries/manifest-5.1",
+    --   },
+    -- },
+    checker = {
+        enabled = false,
+        concurrency = nil,
+        notify = true,
+        frequency =  86400,
+        check_pinned = false,
+    },
+    -- build = {
+    --     hererocks = {
+    --         version = "2.0.17",
+    --         plugins = { "luafilesystem" },
+    --     },
+    -- },
 })
 
 -- add anything else here
 -- vim.opt.termguicolors = true
 -- -- do not remove the colorscheme!
+
+vim.filetype.add({
+  extension = {
+    ['http'] = 'http',
+  },
+})
+
 vim.cmd [[
 " If installed using Homebrew on Apple Silicon
 " set rtp+=/opt/homebrew/opt/fzf
@@ -795,10 +931,9 @@ cabbrev q! use ZQ
 " cabbrev wq! use :x
 
 " speedup :StartTime - :h g:python3_host_prog
-" let g:python3_host_prog = '/opt/homebrew/bin/python3'
-let g:loaded_python3_provider = 0
-" let g:python3_host_prog = '/opt/homebrew/opt/python@3.10/libexec/bin/python'
-" let g:python3_host_prog = '~/.pyenv/shims/python3'
+let g:node_host_prog = '~/.volta/tools/image/node/22.15.0/lib/node_modules/neovim/bin/cli.js'
+let g:python3_host_prog = '~/.venvs/neovim/bin/python'
+" let g:loaded_python3_provider = 0
 " let g:loaded_python_provider = 1
 let g:loaded_perl_provider = 0
 let g:loaded_ruby_provider = 0
@@ -1070,9 +1205,6 @@ let g:mkdp_filetypes = ['markdown', 'mermaid']
 nmap <leader>mp <Plug>MarkdownPreview
 nmap <leader>ms <Plug>MarkdownPreviewStop
 
-" Plug 'ellisonleao/glow.nvim', {'for': 'markdown'}
-nmap <leader>mg :Glow<CR>
-
 augroup MyColors
   autocmd!
   if g:colors_name ==# 'tokyonight'
@@ -1207,10 +1339,6 @@ nmap <space>cl <Plug>(coc-codeaction-line)
 vmap <space>cs <Plug>(coc-codeaction-selected)
 nmap <space>cs <Plug>(coc-codeaction-selected)
 
-" incoming calls
-nmap <space>cki <Cmd>CHI<cr>
-" outgoing calls
-nmap <space>cko <Cmd>CHO<cr>
 nmap <space>co  <Cmd>CocOutline<cr>
 " nmap <space>cw  <Cmd>CocSearch -w <C-R><C-W><cr>
 nmap <space>cr  <Cmd>CocRestart<CR>
@@ -1224,6 +1352,11 @@ command! -nargs=? Fold     :call CocAction('fold', <f-args>)
 command! -nargs=0 OR       :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 command! -nargs=0 CHI      :call CocActionAsync('runCommand', 'document.showIncomingCalls')
 command! -nargs=0 CHO      :call CocActionAsync('runCommand', 'document.showOutgoingCalls')
+
+" incoming calls
+nmap <space>cki <Cmd>CHI<cr>
+" outgoing calls
+nmap <space>cko <Cmd>CHO<cr>
 
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -1443,19 +1576,19 @@ nnoremap <silent> <Leader>rw :RgLines <C-R><C-W><CR>
 " Rg with dir autocomplete
 nnoremap <leader>rd :RGdir<Space>
 
+" https://github.com/ranelpadon/configs/blob/24ba87e32ab1185076e478ae977fd15a826c6776/nvim/plugins-config/fzf.vim#L136
 let s:rg_initial_command = 'true'
-
 let s:rg_colors = ' --colors line:fg:red --colors path:fg:blue --colors match:fg:green '
-
-" REMOVED, BAD LUA
-" let s:rg_full_command
+" {q} is the query string passed from fzf to ripgrep.
+" If query is empty do nothing instead of fetching all lines.
+" `--fixed-strings` to avoid escaping regex chars like parentheses.
+" `%s` is a placeholder for `rg_base_command` and resolved by using `printf()`.
 
 command! -bang -nargs=* Rg
 \   call fzf#vim#grep(
 \       'rg' . s:rg_colors . ' --line-number --color=always --smart-case -- '.shellescape(<q-args>), 1,
 \       fzf#vim#with_preview({'options': '--exact --delimiter : --nth 3..'}), <bang>0
 \   )
-
 
 " On-demand search using Rg if query is non-empty. Fzf is a middleman only.
 function! RgReloader(query, fullscreen, rg_base_command)
@@ -1525,27 +1658,27 @@ nnoremap <silent> <Leader>rawa :call RgLoader(expand('<cword>'), 0, rg_all)<CR>
 command! -nargs=* -bang RgAll call RgLoader(<q-args>, <bang>0, rg_all)
 noremap <Leader>raf :RgAll<CR>
 
-" Search all JS/JSX/TS/TSX file content
+" Search all WEB JS/JSX/TS/TSX file content
 let rg_js_ts_all = 'rg --type webjsts'
 command! -nargs=* -bang RgJsTsAll call RgReloader(<q-args>, <bang>0, rg_js_ts_all)
-noremap <Leader>raj :RgJsTsAll<CR>
+noremap <Leader>rat :RgJsTsAll<CR>
 
-" Search JS/JSX/TS/TSX file content, exclude test files
+" Search WEB JS/JSX/TS/TSX file content, exclude test files
 let rg_js_ts = 'rg --type webjsts --glob "!**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*" '
 command! -nargs=* -bang RgJsTs call RgReloader(<q-args>, <bang>0, rg_js_ts)
-noremap <Leader>rfj :RgJsTs<CR>
+noremap <Leader>rft :RgJsTs<CR>
 
-" Search JS/JSX/TS/TSX file content, only test files
+" Search WEB JS/JSX/TS/TSX file content, only test files
 let rg_js_ts_test = 'rg --type webjsts --glob "**/{__tests__,__mocks__,__tests_scaffolding__}/**/*.*"'
 command! -nargs=* -bang RgJsTsTest call RgReloader(<q-args>, <bang>0, rg_js_ts_test)
-noremap <Leader>rtj :RgJsTsTest<CR>
+noremap <Leader>rtt :RgJsTsTest<CR>
 
-" Search all JS/JSX/TS/TSX file content using the word under the cursor
-nnoremap <silent> <Leader>rawj :call RgLoader(expand('<cword>'), 0, rg_js_ts_all)<CR>
-" Search JS/JSX/TS/TSX file content using the word under the cursor, exclude test files
-nnoremap <silent> <Leader>rfwj :call RgLoader(expand('<cword>'), 0, rg_js_ts)<CR>
-" Search JS/JSX/TS/TSX test file content using the word under the cursor, only test files
-nnoremap <silent> <Leader>rtwj :call RgLoader(expand('<cword>'), 0, rg_js_ts_test)<CR>
+" Search all WEB JS/JSX/TS/TSX file content using the word under the cursor
+nnoremap <silent> <Leader>rawt :call RgLoader(expand('<cword>'), 0, rg_js_ts_all)<CR>
+" Search WEB JS/JSX/TS/TSX file content using the word under the cursor, exclude test files
+nnoremap <silent> <Leader>rfwt :call RgLoader(expand('<cword>'), 0, rg_js_ts)<CR>
+" Search WEB JS/JSX/TS/TSX test file content using the word under the cursor, only test files
+nnoremap <silent> <Leader>rtwt :call RgLoader(expand('<cword>'), 0, rg_js_ts_test)<CR>
 
 " Search all RB/ERB/SLIM/HTML file content
 let rg_rb_all = 'rg --type webrb'
@@ -1568,6 +1701,28 @@ nnoremap <silent> <Leader>rawr :call RgLoader(expand('<cword>'), 0, rg_rb_all)<C
 nnoremap <silent> <Leader>rfwr :call RgLoader(expand('<cword>'), 0, rg_rb)<CR>
 " Search RB/ERB/SLIM/HTML test file content using the word under the cursor, only test files
 nnoremap <silent> <Leader>rtwr :call RgLoader(expand('<cword>'), 0, rg_rb_test)<CR>
+
+" Search all Java file content
+let rg_java_all = 'rg --type java --type kotlin'
+command! -nargs=* -bang RgJavaAll call RgReloader(<q-args>, <bang>0, rg_java_all)
+noremap <Leader>raj :RgJavaAll<CR>
+
+" Search Java file content, exclude test files
+let rg_java = 'rg --type java --type kotlin --glob "!**/test/**/*.*" '
+command! -nargs=* -bang RgJava call RgReloader(<q-args>, <bang>0, rg_java)
+noremap <Leader>rfj :RgJava<CR>
+
+" Search Java file content, only test files
+let rg_java_test = 'rg --type java --type kotlin --glob "**/test/**/*.*"'
+command! -nargs=* -bang RgJavaTest call RgReloader(<q-args>, <bang>0, rg_java_test)
+noremap <Leader>rtj :RgJavaTest<CR>
+
+" Search all Java file content using the word under the cursor
+nnoremap <silent> <Leader>rawj :call RgLoader(expand('<cword>'), 0, rg_java_all)<CR>
+" Search Java file content using the word under the cursor, exclude test files
+nnoremap <silent> <Leader>rfwj :call RgLoader(expand('<cword>'), 0, rg_java_ts)<CR>
+" Search Java test file content using the word under the cursor, only test files
+nnoremap <silent> <Leader>rtwj :call RgLoader(expand('<cword>'), 0, rg_java_test)<CR>
 
 
 command! -bang -nargs=* RgLines
@@ -2205,6 +2360,46 @@ map <leader>bdn :BDelete nameless<CR>
   nnoremap <leader>zm :ZenMode<CR>
 ]]
 
+vim.api.nvim_create_user_command("PromptClaudeWithLocation", function()
+  -- Get selected file and lines
+  local file = vim.fn.expand("%:.")
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+
+  -- Prefix with @ and remove backticks
+  local annotated_file = "@" .. file
+
+  vim.ui.input({ prompt = "What should Claude do? " }, function(user_input)
+    if user_input == nil or user_input == "" then
+      print("Aborted.")
+      return
+    end
+
+    -- Construct message
+    local message = string.format(
+      "%s\n(For Lines %d–%d of the file %s.)",
+      user_input, start_line, end_line, annotated_file
+    )
+
+    -- Find the Claude pane by title
+    local pane = vim.fn.system("tmux list-panes -F '#{pane_id} #{pane_title}' | grep 'claude-pane' | awk '{print $1}'"):gsub("%s+", "")
+    if pane == "" then
+      print("Claude pane not found.")
+      return
+    end
+
+    vim.g.VimuxRunnerType = "pane"
+    vim.g.VimuxRunnerPane = pane
+
+    -- Send and switch
+    vim.fn["VimuxSendText"](message .. "\n")
+    vim.fn.system("tmux select-pane -t " .. pane)
+  end)
+end, { range = true })
+
+-- Keybind (visual mode)
+vim.keymap.set("v", "<leader>va", [[:<C-u>PromptClaudeWithLocation<CR>]])
+
 vim.o.foldcolumn = '1'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99 -- open files without any folding
@@ -2223,14 +2418,6 @@ vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:,diff:╱]]
 --   highlight = { bg = 'white', ctermbg = 15 }, -- vim.api.keyset.highlight table passed to vim.api.nvim_set_hl
 -- })
 
-require('glow').setup({
-  glow_path = "/opt/homebrew/bin/glow",
-  border = "rounded",
-  width = 220,
-  height = 400,
-  width_ratio = 0.8,
-  height_ratio = 0.8,
-})
 
 -- require("colorful-winsep").setup({
 --   highlight = {
@@ -2775,79 +2962,79 @@ require('nvim-tree').setup {
   }
 }
 
-local leap = require "leap"
+-- local leap = require "leap"
 
-leap.add_default_mappings()
+-- leap.add_default_mappings()
 
-vim.keymap.del({'x', 'o'}, 'x')
-vim.keymap.del({'x', 'o'}, 'X')
+-- vim.keymap.del({'x', 'o'}, 'x')
+-- vim.keymap.del({'x', 'o'}, 'X')
 
--- The following example showcases a custom action, using `multiselect`
-function paranormal(targets)
-  local input = vim.fn.input("normal! ")
-  if #input < 1 then return end
+-- -- The following example showcases a custom action, using `multiselect`
+-- function paranormal(targets)
+--   local input = vim.fn.input("normal! ")
+--   if #input < 1 then return end
 
-  local ns = vim.api.nvim_create_namespace("")
+--   local ns = vim.api.nvim_create_namespace("")
 
-  for _, target in ipairs(targets) do
-    local line, col = unpack(target.pos)
-    id = vim.api.nvim_buf_set_extmark(0, ns, line - 1, col - 1, {})
-    target.extmark_id = id
-  end
+--   for _, target in ipairs(targets) do
+--     local line, col = unpack(target.pos)
+--     id = vim.api.nvim_buf_set_extmark(0, ns, line - 1, col - 1, {})
+--     target.extmark_id = id
+--   end
 
-  for _, target in ipairs(targets) do
-    local id = target.extmark_id
-    local pos = vim.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
-    vim.fn.cursor(pos[1] + 1, pos[2] + 1)
-    vim.cmd("normal! " .. input)
-  end
+--   for _, target in ipairs(targets) do
+--     local id = target.extmark_id
+--     local pos = vim.api.nvim_buf_get_extmark_by_id(0, ns, id, {})
+--     vim.fn.cursor(pos[1] + 1, pos[2] + 1)
+--     vim.cmd("normal! " .. input)
+--   end
 
-  vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-end
+--   vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+-- end
 
--- bi-directional
-vim.api.nvim_set_keymap('n','s','', {
-  callback = function() leap.leap {
-    target_windows = {
-      vim.fn.win_getid()
-    },
-  }
-  end,
-  noremap = true, silent = true
-})
+-- -- bi-directional
+-- vim.api.nvim_set_keymap('n','s','', {
+--   callback = function() leap.leap {
+--     target_windows = {
+--       vim.fn.win_getid()
+--     },
+--   }
+--   end,
+--   noremap = true, silent = true
+-- })
 
--- bi-directional and multiselect. hit Enter when all picked
-vim.api.nvim_set_keymap('n','S','', {
-  callback = function() leap.leap {
-    target_windows = {
-      vim.fn.win_getid()
-    },
-    action = paranormal,
-    multiselect = true
-  }
-  end,
-  noremap = true, silent = true
-})
+-- -- bi-directional and multiselect. hit Enter when all picked
+-- vim.api.nvim_set_keymap('n','S','', {
+--   callback = function() leap.leap {
+--     target_windows = {
+--       vim.fn.win_getid()
+--     },
+--     action = paranormal,
+--     multiselect = true
+--   }
+--   end,
+--   noremap = true, silent = true
+-- })
 
--- nvim bug workaround, hide the original cursor position after a leap
-vim.api.nvim_create_autocmd(
-  "User",
-  { callback = function()
-      vim.cmd.hi("Cursor", "blend=100")
-      vim.opt.guicursor:append { "a:Cursor/lCursor" }
-    end,
-    pattern = "LeapEnter"
-  }
-)
-vim.api.nvim_create_autocmd(
-  "User",
-  { callback = function()
-      vim.cmd.hi("Cursor", "blend=0")
-      vim.opt.guicursor:remove { "a:Cursor/lCursor" }
-    end,
-    pattern = "LeapLeave"
-  }
-)
+-- -- nvim bug workaround, hide the original cursor position after a leap
+-- vim.api.nvim_create_autocmd(
+--   "User",
+--   { callback = function()
+--       vim.cmd.hi("Cursor", "blend=100")
+--       vim.opt.guicursor:append { "a:Cursor/lCursor" }
+--     end,
+--     pattern = "LeapEnter"
+--   }
+-- )
+-- vim.api.nvim_create_autocmd(
+--   "User",
+--   { callback = function()
+--       vim.cmd.hi("Cursor", "blend=0")
+--       vim.opt.guicursor:remove { "a:Cursor/lCursor" }
+--     end,
+--     pattern = "LeapLeave"
+--   }
+-- )
 
 vim.keymap.set('n','<Leader>sr' , ':%s/<C-r><C-w>//gc<Left><Left><Left>',{silent = false,desc="search and replace cword"})
 vim.keymap.set('v','<Leader>sr' , 'y:%s/<C-R>"//gc<Left><Left><Left>',{silent = false,desc="search and replace selection"})

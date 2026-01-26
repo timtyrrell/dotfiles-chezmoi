@@ -54,7 +54,7 @@
 [color]
 	ui = true
 [core]
-	editor = nvim
+	editor = ~/bin/git_editor.sh
 	whitespace = warn
 	excludesFile = ~/.gitignore
 	pager = delta
