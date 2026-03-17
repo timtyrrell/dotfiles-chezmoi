@@ -548,11 +548,19 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 	*) git log --color=always $word ;;
 	esac'
 
+
+# export PYENV_SKIP_REHASH=1 # if not lazy loading
 export PYENV_ROOT="$HOME/.pyenv"
-# export PATH="$PYENV_ROOT/shims:$PATH"
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PATH="$PYENV_ROOT/shims:$PATH"  # Uncommented - adds Python shims
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"  # Uncommented - adds pyenv binary
+
+# Lazy load pyenv - only initialize when pyenv command is used
+pyenv() {
+  unset -f pyenv
+  eval "$(command pyenv init -)"
+  pyenv "$@"
+}
+
 eval "$(uv generate-shell-completion zsh)"
 
 # source <(stern --completion=zsh)

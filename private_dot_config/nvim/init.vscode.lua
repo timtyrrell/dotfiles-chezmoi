@@ -62,7 +62,6 @@ require("lazy").setup({
     --     })
     --   end
     -- },
-    'vim-repeat',
     'ggandor/leap.nvim',
     {
         'ggandor/flit.nvim',
@@ -78,7 +77,12 @@ require("lazy").setup({
   install = { colorscheme = { "habamax" } },
 })
 
-require('leap').set_default_mappings()
+-- require('leap').set_default_mappings()
+-- Setup leap.nvim default keymaps (s/S for bidirectional search)
+vim.keymap.set({'n', 'x', 'o'}, 's',  '<Plug>(leap-forward)')
+vim.keymap.set({'n', 'x', 'o'}, 'S',  '<Plug>(leap-backward)')
+vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
+
 
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
