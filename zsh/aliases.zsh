@@ -7,6 +7,12 @@ alias rd='rmdir'
 alias tree='eza -T --level=5'
 alias cl='clear'
 
+alias cc="claude"
+alias ccc="claude --continue"
+alias cco="claude --model opus"
+alias ccyolo="claude --dangerously-skip-permissions"
+alias cccyolo="claude --dangerously-skip-permissions --continue"
+
 alias cat='bat'
 alias baty='bat -l yaml'
 
