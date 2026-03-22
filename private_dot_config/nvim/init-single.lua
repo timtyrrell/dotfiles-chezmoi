@@ -222,10 +222,7 @@ require('lazy').setup({
     },
     -- 'mlaursen/vim-react-snippets'
     'nacro90/numb.nvim',
-    {
-     'barrett-ruth/import-cost.nvim',
-        build = 'sh install.sh yarn'
-    },
+    'barrett-ruth/import-cost.nvim',
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
     'junegunn/gv.vim',
@@ -2153,7 +2150,7 @@ require('glow').setup({
 --   symbols = { "─", "│", "┌", "┐", "└", "┘" },
 -- })
 
-require("import-cost").setup({})
+vim.g.import_cost = { package_manager = 'yarn' }
 
 require("tidy").setup()
 

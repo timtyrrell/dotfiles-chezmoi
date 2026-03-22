@@ -69,6 +69,8 @@ autoload colors; colors
 # https://rm-rf.ca/posts/2020/zsh-vi-mode/
 #vim binding
 bindkey -v
+bindkey -M viins '^?' backward-delete-char
+bindkey -M viins '^H' backward-delete-char
 # bindkey -M vicmd '^r' history-incremental-search-backward
 # bindkey -M viins '^r' history-incremental-search-backward
 
@@ -220,8 +222,7 @@ bindkey '\ep' up-line-or-search
 bindkey '\en' down-line-or-search
 bindkey '\ew' kill-region
 
-# alt-c
-bindkey "ç" fzf-cd-widget
+# alt-c (bound after fzf loads below)
 
 # disable in tmux
 if [ -z "$TMUX" ]; then
@@ -386,7 +387,11 @@ export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 
 [ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+# rustup installed via homebrew (keg-only, not on PATH by default)
+[[ -d /opt/homebrew/opt/rustup/bin ]] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# alt-c: bind after fzf loads so fzf-cd-widget exists
+bindkey "ç" fzf-cd-widget
 
 # export FZF_COMPLETION_TRIGGER=''
 # bindkey '^T' fzf-completion #context (dir) aware completion

@@ -1,0 +1,45 @@
+# Ghostty Configuration
+
+# Fonts
+font-family = JetBrains Mono
+font-size = 12
+
+# macOS: use Option as Alt for shell bindings (matching kitty's macos_option_as_alt both)
+macos-option-as-alt = true
+
+# Window
+macos-titlebar-style = transparent
+window-padding-x = 2
+window-padding-y = 2
+
+# Scrollback
+scrollback-limit = 10000
+
+# Disable ligatures when cursor is on them (matching kitty's disable_ligatures cursor)
+font-feature = -calt
+
+# Tab bar
+gtk-tabs-location = top
+
+# Tokyo Night color scheme (theme files in ~/.config/ghostty/themes/)
+# Switch by changing the theme name: tokyonight_night or tokyonight_storm
+theme = tokyonight_night
+
+# Keybinds (matching kitty mappings)
+keybind = cmd+c=copy_to_clipboard
+keybind = cmd+v=paste_from_clipboard
+keybind = cmd+t=new_tab
+keybind = cmd+shift+equal=increase_font_size:1
+keybind = cmd+equal=increase_font_size:1
+keybind = cmd+minus=decrease_font_size:1
+
+# Tab navigation
+keybind = cmd+1=goto_tab:1
+keybind = cmd+2=goto_tab:2
+keybind = cmd+3=goto_tab:3
+keybind = cmd+4=goto_tab:4
+keybind = cmd+5=goto_tab:5
+keybind = cmd+6=goto_tab:6
+keybind = cmd+7=goto_tab:7
+keybind = cmd+8=goto_tab:8
+keybind = cmd+9=goto_tab:9

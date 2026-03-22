@@ -244,7 +244,18 @@ require('lazy').setup({
         },
     {
         'lukas-reineke/indent-blankline.nvim',
-        tag =  'v2.20.8'
+        tag = 'v2.20.8',
+        config = function()
+            -- Workaround for nil node crash with newer nvim-treesitter
+            local ok, indent = pcall(require, 'nvim-treesitter.indent')
+            if ok then
+                local orig = indent.get_indent
+                indent.get_indent = function(lnum)
+                    local ok2, result = pcall(orig, lnum)
+                    return ok2 and result or 0
+                end
+            end
+        end,
     },
     'tmux-plugins/vim-tmux',
     {
@@ -363,9 +374,7 @@ require('lazy').setup({
     },
     -- 'mlaursen/vim-react-snippets'
     'nacro90/numb.nvim',
-    {
-     'barrettruth/import-cost.nvim'
-    },
+    'barrett-ruth/import-cost.nvim',
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
     'junegunn/gv.vim',
@@ -2431,10 +2440,7 @@ vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:,diff:╱]]
 --   symbols = { "─", "│", "┌", "┐", "└", "┘" },
 -- })
 
--- require("import-cost").setup({})
-vim.g.import_cost = {
-  package_manager = 'yarn',
-}
+vim.g.import_cost = { package_manager = 'yarn' }
 
 require("tidy").setup()
 
