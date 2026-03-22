@@ -10,8 +10,8 @@ alias cl='clear'
 alias cc="claude"
 alias ccc="claude --continue"
 alias cco="claude --model opus"
-alias ccyolo="claude --dangerously-skip-permissions"
-alias cccyolo="claude --dangerously-skip-permissions --continue"
+alias ccyolo="~/.claude/scripts/ccyolo.sh"
+alias cccyolo="~/.claude/scripts/ccyolo.sh --continue"
 
 alias cat='bat'
 alias baty='bat -l yaml'
