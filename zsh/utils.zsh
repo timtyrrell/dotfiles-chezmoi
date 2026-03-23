@@ -341,11 +341,6 @@ gpull() {
   git pull origin "$branch"
 }
 
-gpush() {
-  local branch=$(git branch --show-current)
-  git push -u origin "$branch"
-}
-
 kube-toggle() {
   if (( ${+POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND} )); then
     unset POWERLEVEL9K_KUBECONTEXT_SHOW_ON_COMMAND

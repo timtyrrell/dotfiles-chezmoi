@@ -2,20 +2,12 @@
 	skippedCherryPicks = false
 [alias]
 	aa = add -A .
-	b  = branch
-	st = status
 	ci = commit
-	co = checkout
 	cob = "!f() { git checkout $(git show-ref --verify --quiet refs/heads/\"$1\" || echo '-b') \"$1\"; }; f"
-	cp = cherry-pick
-	put = push origin HEAD
-	absorb = absorb --and-rebase
-	fixup = commit --fixup
 	fza = "!git ls-files -m -o --exclude-standard | fzf -m --print0 | xargs -0 git add"
 	squash = commit --squash
 	ri = rebase --interactive
-	br = branch
-	open = browse
+	open = "!gh browse"
 	pruneremote = remote prune origin
 	gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
 	root = rev-parse --show-toplevel
@@ -26,23 +18,14 @@
 	reset-authors = commit --amend --reset-author -CHEAD
 	rmbranch = !"git branch -d $(git branch --merged)"
 	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-	pushf = push --force-with-lease
 	pushforeal = push --force
-	append = commit --amend -C HEAD
-	amend = commit --amend
-	pnb = push -u origin HEAD
 	lart = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
-	sha = rev-parse HEAD
-	; releases = for-each-ref --sort=authordate --format=\"%(color:white)%(color:bold)%(refname:lstrip=-2)%09%(color:blue)%(authordate:relative)%09%(color:red)%(authorname)\" refs/remotes/origin/release
 	quickdiff = diff ':!package-lock.json'
-	diffs = diff --staged
 	last = log -1 HEAD --stat
 	cm = commit -m
 	rv = remote -v
-	d = diff
 	se = !git rev-list --all | xargs git grep -F
 	up = pull --rebase origin
-	p = pull
 	recent-branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 	recent-local-branches = !"git reflog | grep 'checkout:' | head | awk '{print $8}' | awk '!x[$0]++'"
 	clone-for-worktrees = "!sh $HOME/bin/git-clone-bare-for-worktrees.sh"
@@ -51,6 +34,8 @@
 	autoSetupMerge = always
 	autoSetupRebase = always
 	sort = -committerdate
+[column]
+	ui = auto
 [color]
 	ui = true
 [core]
@@ -62,10 +47,10 @@
 	fsmonitor = true
 [diff]
 	algorithm = histogram
-	compactionHeuristic = true
 	colorMoved = default
 	colorMovedWS = "allow-indentation-change"
-	context = 10
+	mnemonicPrefix = true
+	renames = true
 	tool = nvimdiff
 [difftool]
   prompt = false
@@ -123,8 +108,8 @@
 	path = ~/.gitconfig.local
 [includeIf "gitdir:~/code/COMPANY/"]
 	path = ~/.gitconfig.work
-[web]
-	browser = chromium
+[transfer]
+	fsckObjects = true
 [commit]
 	verbose = true
 [filter "lfs"]
