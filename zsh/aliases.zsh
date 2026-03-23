@@ -128,7 +128,6 @@ alias gds='git diff --staged'
 alias gdc='git diff --cached'
 alias glod='git log --oneline --decorate'
 alias glola='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
-alias gpush='git push'
 alias gpu='git push'
 alias gpf='git pushf'
 alias gp='git pull'
@@ -202,17 +201,17 @@ alias tmux_plugins_clean="~/.tmux/plugins/tpm/bin/clean_plugins"
 
 alias tig="TERM=xterm-256color tig"
 
-# frum
-alias rbl="frum local"
-alias rbg="frum global"
-alias rbu="frum uninstall"
-alias rbv="frum versions"
+# frum (not currently installed)
+# alias rbl="frum local"
+# alias rbg="frum global"
+# alias rbu="frum uninstall"
+# alias rbv="frum versions"
 
 alias tf="terraform"
 alias tg="terragrunt"
 
 # random alias
-alias nvm="fnm"
+# alias nvm="fnm"  # using Volta instead
 alias strat="start"
 alias ns="npm start"
 alias barf="rm -rf node_modules && npm i"

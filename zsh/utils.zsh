@@ -229,7 +229,7 @@ fstash() {
     fzf-tmux -p 90%,90% --ansi --no-sort --query="$q" --print-query \
         --expect=ctrl-d,ctrl-b);
   do
-    mapfile -t out <<< "$out"
+    out=("${(@f)out}")
     q="${out[0]}"
     k="${out[1]}"
     sha="${out[-1]}"
@@ -455,17 +455,17 @@ pods() {
         --preview 'kubectl logs --follow --all-containers --tail=10000 --namespace {1} {2}' "$@"
 }
 
-# Label: Ruby Install
+# Label: Ruby Install (frum not currently installed)
 # Description: Install a specific version with safe defaults.
 # Parameters: $1 (required) - Version.
-rbi() {
-  local version="$1"
-
-  frum install "$version" \
-               --with-openssl-dir="/opt/homebrew/opt/openssl@3" \
-               --enable-shared \
-               --disable-silent-rules
-}
+# rbi() {
+#   local version="$1"
+#
+#   frum install "$version" \
+#                --with-openssl-dir="/opt/homebrew/opt/openssl@3" \
+#                --enable-shared \
+#                --disable-silent-rules
+# }
 
 ###################################
 # https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236

@@ -61,10 +61,6 @@ export LESS=FRX
 export XDG_CONFIG_HOME=$HOME/.config
 # export XDG_DATA_HOME=$HOME/.local/.share
 
-# does this do anything?
-# make with the pretty colors
-autoload colors; colors
-
 # TODO: replace with https://github.com/jeffreytse/zsh-vi-mode ??
 # https://rm-rf.ca/posts/2020/zsh-vi-mode/
 #vim binding
@@ -157,15 +153,6 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# reload zsh shell with ctrl N
-# exec-zsh() {
-#   zle -I
-#   exec zsh <$TTY
-# }
-
-# zle -N exec-zsh
-# bindkey '^N' exec-zsh
-
 # history
 HISTFILE=~/.zsh_history
 HISTSIZE=1000000000              # The maximum number of events to save in the internal history.
@@ -192,8 +179,7 @@ setopt hist_ignore_dups        # don't record an event that was just recorded ag
 unsetopt hist_ignore_space
 setopt hist_reduce_blanks      # remove superfluous blanks from each command line being added to the history list
 setopt hist_save_no_dups       # don't write a duplicate event to the history file
-setopt inc_append_history      # write to the history file immediately, not when the shell exits
-setopt share_history           # Share history between all sessions
+setopt share_history           # Share history between all sessions (implies inc_append_history)
 
 # input/output
 setopt interactive_comments    # Allow comments even in interactive shells
@@ -223,27 +209,6 @@ bindkey '\en' down-line-or-search
 bindkey '\ew' kill-region
 
 # alt-c (bound after fzf loads below)
-
-# disable in tmux
-if [ -z "$TMUX" ]; then
-  fg-widget() {
-    stty icanon echo pendin -inlcr < /dev/tty
-    stty discard '^O' dsusp '^Y' lnext '^V' quit '^\' susp '^Z' < /dev/tty
-    zle reset-prompt
-    if jobs %- >/dev/null 2>&1; then
-      fg %-
-    else
-      fg
-    fi
-  }
-
-  # Use C-z to foreground in zsh
-  zle -N fg-widget
-  bindkey -M emacs "^Z" fg-widget
-  bindkey -M vicmd "^Z" fg-widget
-  bindkey -M viins "^Z" fg-widget
-fi
-# bindkey -s '^z' 'fg^M'
 
 # I have no idea why I have to unset this but otherwise I don't get LESS paging
 unset DELTA_PAGER
@@ -372,30 +337,24 @@ typeset -aU path
 
 # export PATH="$HOME/Library/Python/2.7/bin:$PATH"
 # export PATH="$(yarn global bin):$PATH"
-export PATH="$HOME/.yarn/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 
-#export GOPATH="${HOME>/.go
+export GOPATH="$HOME/go"
 export GOROOT="/opt/homebrew/opt/go/libexec"
 export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOPATH
+export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin
-export PYTHONPATH="."
 export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
 
 # pipx
 export PATH="$HOME/.local/bin:$PATH"
 
-[ -f $HOME/.cargo/env ] && source $HOME/.cargo/env
+# cargo env sourced in .zshenv
 # rustup installed via homebrew (keg-only, not on PATH by default)
 [[ -d /opt/homebrew/opt/rustup/bin ]] && export PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # alt-c: bind after fzf loads so fzf-cd-widget exists
 bindkey "ç" fzf-cd-widget
-
-# export FZF_COMPLETION_TRIGGER=''
-# bindkey '^T' fzf-completion #context (dir) aware completion
-# bindkey '^I' $fzf_default_completion
 
 # prevent paste readability issue https://github.com/zdharma-continuum/fast-syntax-highlighting/issues/25
 zle_highlight=('paste:none')
@@ -439,7 +398,7 @@ for w (
 }
 
 # Completion for kill-like commands
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm"
 zstyle ':completion:*:ssh:*' tag-order hosts users
 zstyle ':completion:*:ssh:*' group-order hosts-domain hosts-host users hosts-ipaddr
 
@@ -468,38 +427,17 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
 
-
-# https://github.com/Aloxaf/dotfiles/blob/180d97c8f13b001dbba49a69d964f4377d306748/zsh/.config/zsh/zshrc.zsh#L100-L113
-# == fzf-tab
-# zstyle ':fzf-tab:complete:_zlua:*' query-string input
-# zstyle ':fzf-tab:complete:kill:argument-rest' fzf-preview 'ps --pid=$word -o cmd --no-headers -w -w'
-# zstyle ':fzf-tab:complete:kill:argument-rest' fzf-flags '--preview-window=down:3:wrap'
-# zstyle ':fzf-tab:complete:kill:*' popup-pad 0 3
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
-# zstyle ":fzf-tab:*" fzf-flags --color=bg+:23
-# zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-# zstyle ':fzf-tab:*' switch-group ',' '.'
-# zstyle ":completion:*:git-checkout:*" sort false
-# zstyle ':completion:*' file-sort modification
-# zstyle ':completion:*:exa' sort false
-# zstyle ':completion:files' sort false
-# https://github.com/Aloxaf/dotfiles/blob/180d97c8f13b001dbba49a69d964f4377d306748/zsh/.config/zsh/zshrc.zsh#L100-L113
-# == fzf-tab
-
 zstyle ':fzf-tab:*' show-group brief
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' popup-pad 200 200
+zstyle ':fzf-tab:*' popup-pad 30 0
 zstyle ':fzf-tab:*' popup-min-size 50 8
 zstyle ':fzf-tab:*' fzf-min-height 50
 
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
-# use input as query string when completing zlua
-zstyle ':fzf-tab:complete:_zlua:*' query-string input
 
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-  '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+  '[[ $group == "[process ID]" ]] && ps -p $word -o comm='
 zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
 
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-u:preview-half-page-up' 'ctrl-d:preview-half-page-down' 'space:accept' 'alt-k:page-up' 'alt-j:page-down'
@@ -570,8 +508,8 @@ eval "$(uv generate-shell-completion zsh)"
 
 # source <(stern --completion=zsh)
 
-# fnm
-eval "$(fnm --version-file-strategy=recursive --log-level=quiet env --use-on-cd)"
+# fnm (using Volta instead)
+# eval "$(fnm --version-file-strategy=recursive --log-level=quiet env --use-on-cd)"
 
 # directly executing the command (CTRL-X CTRL-R)
 fzf-history-widget-accept() {
@@ -593,9 +531,12 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 eval "$(zoxide init zsh)"
 
+# work-specific config (not tracked by chezmoi)
+[ -f ~/zsh/work.zsh ] && source ~/zsh/work.zsh
+
 # eval "$(frum init)"
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# Add RVM to PATH for scripting. (rvm not currently installed)
+# export PATH="$PATH:$HOME/.rvm/bin"
 
 # Run compinit and compile its cache
 zcomet compinit
