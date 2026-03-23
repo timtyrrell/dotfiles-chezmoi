@@ -21,7 +21,6 @@ zcomet load romkatv/powerlevel10k
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
-  # exit 1
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -227,9 +226,6 @@ export FZF_TMUX_POP_UP_OPTS="-p 90%,90%"
 
 # default fzf
 export FZF_HEADER_DEFAULT="ALT-k/j page up/down, CTRL-u/d preview half-page up/down, \ to toggle"
-export FZF_HEADER_FILES="CTRL-s/ALT-d to select/unselect-all, CTRL-v open in nvim"
-export FZF_HEADER_PASTE="CTRL-y to copy into clipboard"
-export FZF_YANK_COMMAND="--bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'"
 
 # preview cycle window rotate: https://github.com/junegunn/fzf/commit/43f0d0c
 export FZF_HIDE_PREVIEW="--preview-window=:hidden"
@@ -283,7 +279,6 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 '
 
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-export ESCDELAY="1" # https://github.com/junegunn/fzf/issues/2052
 export FZF_DEFAULT_COMMAND='rg --files'
 # files
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules' --exclude '.rvm' --exclude '.frum' --exclude '.pyenv' --exclude '.npm'"
@@ -422,74 +417,44 @@ zstyle ':completion:complete:*:options' sort false
 cdpath=($HOME/code/brandfolder $HOME/code/timtyrrell)
 zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
 
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
+# disable zsh menu completion (fzf-tab handles it)
+zstyle ':completion:*' menu no
 
-zstyle ':fzf-tab:*' show-group brief
+# == fzf-tab
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' popup-pad 30 0
-zstyle ':fzf-tab:*' popup-min-size 50 8
-zstyle ':fzf-tab:*' fzf-min-height 50
-
-# switch group using `,` and `.`
+zstyle ':fzf-tab:*' popup-min-size 80 12
+zstyle ':fzf-tab:*' show-group brief
 zstyle ':fzf-tab:*' switch-group ',' '.'
-
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-  '[[ $group == "[process ID]" ]] && ps -p $word -o comm='
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
-
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-u:preview-half-page-up' 'ctrl-d:preview-half-page-down' 'space:accept' 'alt-k:page-up' 'alt-j:page-down'
 zstyle ':fzf-tab:*' continuous-trigger '/'
 zstyle ':fzf-tab:*' accept-line ctrl-x
 
-local preview_command='
-if [[ -d $realpath ]]; then
-  eza -a --icons --tree --level=1 --color=always $realpath
-elif [[ -f $realpath ]]; then
-  bat --pager=never --color=always --line-range :80 $realpath
-else
-  # lesspipe.sh $word | bat --color=always
-  exit 1
-fi
-'
-zstyle ':fzf-tab:complete:*' fzf-preview $preview_command
-# zstyle ':fzf-tab:complete:*.*' fzf-preview $preview_command
-# zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
-# export LESSOPEN="|/usr/local/bin/lesspipe.sh %s" LESS_ADVANCED_PREPROCESSOR=1
+# file/directory preview
+zstyle ':fzf-tab:complete:*' fzf-preview \
+  'if [[ -d $realpath ]]; then eza -a --icons --tree --level=1 --color=always $realpath; elif [[ -f $realpath ]]; then bat --pager=never --color=always --line-range :80 $realpath; fi'
 
-# zstyle ':fzf-tab:complete:(\\|)run-help:*' fzf-preview 'run-help $word'
-# zstyle ':fzf-tab:complete:(\\|*/|)man:*' fzf-preview 'man $word'
-# zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
-	# fzf-preview 'echo ${(P)word}'
+# process preview (macOS-compatible)
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+  '[[ $group == "[process ID]" ]] && ps -p $word -o comm='
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
 
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'lsd --color always --icon always --depth 2 --tree $realpath'
-# zstyle ':fzf-tab:complete:exa:*' extra-opts --preview=$extract'preview_file_or_folder.sh $realpath' --preview-window=right:40%
-# zstyle ':fzf-tab:complete:git-checkout:argument-rest' fzf-preview '
-# [[ $group == "[recent branches]" || $group == "[local head]" ]] && git log --max-count=3 -p $word | delta
-# '
-# zstyle ':fzf-tab:complete:*' fzf-preview 'less $realpath'
-# zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $word'
-# zstyle -s ':fzf-tab:complete:git-add:*' fzf-preview str
-
-zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-	'git diff $word | delta'
-zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
-	'git log --color=always $word'
-zstyle ':fzf-tab:complete:git-help:*' fzf-preview \
-	'git help $word | bat -plman --color=always'
+# git previews
+zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $word | delta'
+zstyle ':fzf-tab:complete:git-log:*' fzf-preview 'git log --color=always $word'
+zstyle ':fzf-tab:complete:git-help:*' fzf-preview 'git help $word | bat -plman --color=always'
 zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
-	'case "$group" in
-	"commit tag") git show --color=always $word ;;
-	*) git show --color=always $word | delta ;;
-	esac'
+  'case "$group" in
+  "commit tag") git show --color=always $word ;;
+  *) git show --color=always $word | delta ;;
+  esac'
 zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
-	'case "$group" in
-	"modified file") git diff $word | delta ;;
-	"recent commit object name") git show --color=always $word | delta ;;
-	*) git log --color=always $word ;;
-	esac'
+  'case "$group" in
+  "modified file") git diff $word | delta ;;
+  "recent commit object name") git show --color=always $word | delta ;;
+  *) git log --color=always $word ;;
+  esac'
 
 
 # export PYENV_SKIP_REHASH=1 # if not lazy loading

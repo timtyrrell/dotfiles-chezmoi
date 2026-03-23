@@ -1,8 +1,3 @@
-local branch_name="$(git rev-parse --show-toplevel 2> /dev/null | rev | cut -d'/' -f1 | rev)"
-
-# show top level git dir
-# git rev-parse --show-toplevel 2> /dev/null
-
 # to create branch in a worktree not `main` from `main`
 # gco -b tt/delete-ancient-editorconfig main
 #
@@ -36,18 +31,13 @@ gw_add_remote() {
   git ls-files --others | rsync --links --files-from - . ../$1
 }
 
-gw_add_track() {
-  # git worktree add -b <branch-name> <PATH> <remote>/<branch-name>
-  # git worktree add -b feature-zzz ../feature-x origin/feature-zzz
-}
-
 gw_remove() {
   git worktree remove $1
 }
 
 gw_fuzzy_remote() {
-  $branch = $(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | fzf-tmux -p 90%,90%)
-  gw_add_remote $branch
+  local branch=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)" | fzf-tmux -p 90%,90%)
+  [[ -n "$branch" ]] && gw_add_remote $branch
 }
 
 kill-port() { lsof -tPni :$1 | xargs kill }
@@ -133,17 +123,18 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-notify() {
-  if [ -z $1 ]; then
-    terminal-notifier -title "CMD" -message "Completed!"  -sound purr -ignoreDnD
-  elif [ -z $2 ]; then
-    terminal-notifier -message "$1" -sound purr -ignoreDnD
-  elif [ -z $3 ]; then
-    terminal-notifier -title "$1" -message "$2" -sound purr -ignoreDnD
-  else
-    terminal-notifier -title "$1" -subtitle "$2" -message "$3" -sound purr -ignoreDnD
-  fi
-}
+# notify() - requires terminal-notifier (not installed)
+# notify() {
+#   if [ -z $1 ]; then
+#     terminal-notifier -title "CMD" -message "Completed!"  -sound purr -ignoreDnD
+#   elif [ -z $2 ]; then
+#     terminal-notifier -message "$1" -sound purr -ignoreDnD
+#   elif [ -z $3 ]; then
+#     terminal-notifier -title "$1" -message "$2" -sound purr -ignoreDnD
+#   else
+#     terminal-notifier -title "$1" -subtitle "$2" -message "$3" -sound purr -ignoreDnD
+#   fi
+# }
 
 # pkill -15 nvim
 # pgrep nvim
@@ -192,14 +183,6 @@ tm() {
     tmux $change -t "$1" 2>/dev/null || (tmux new-session -d -s $1 && tmux $change -t "$1"); return
   fi
   session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | fzf-tmux -p 90%,90% -preview-window=:hidden --exit-0) &&  tmux $change -t "$session" || echo "No sessions found."
-}
-
-tmt() {
-  if [[ -z "$TMUX" ]]; then
-    tmux attach -t "$session_name"
-  else
-    tmux switch-client -t "$session_name"
-  fi
 }
 
 # frg SOMETHING
@@ -288,28 +271,25 @@ fbr() {
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
-alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
-_gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
-_viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
-
-# fcoc_preview - checkout git commit with previews
-fcoc_preview() {
-  local commit
-  commit=$( glNoGraph |
-    fzf-tmux -p 90%,90% --no-sort --reverse --tiebreak=index --no-multi \
-        --ansi --preview="$_viewGitLogLine" ) &&
-  git checkout $(echo "$commit" | sed "s/ .*//")
-}
-
-# fshow_preview - git commit browser with previews
-fshow_preview() {
-    glNoGraph |
-        fzf-tmux -p 90%,90% --no-sort --reverse --tiebreak=index --no-multi \
-            --ansi --preview="$_viewGitLogLine" \
-                --header "enter to view, alt-y to copy hash" \
-                --bind "enter:execute:$_viewGitLogLine   | less -R" \
-                --bind "alt-y:execute:$_gitLogLineToHash | pbcopy"
-}
+# fcoc_preview / fshow_preview - require diff-so-fancy (not installed)
+# alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
+# _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+# _viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
+# fcoc_preview() {
+#   local commit
+#   commit=$( glNoGraph |
+#     fzf-tmux -p 90%,90% --no-sort --reverse --tiebreak=index --no-multi \
+#         --ansi --preview="$_viewGitLogLine" ) &&
+#   git checkout $(echo "$commit" | sed "s/ .*//")
+# }
+# fshow_preview() {
+#     glNoGraph |
+#         fzf-tmux -p 90%,90% --no-sort --reverse --tiebreak=index --no-multi \
+#             --ansi --preview="$_viewGitLogLine" \
+#                 --header "enter to view, alt-y to copy hash" \
+#                 --bind "enter:execute:$_viewGitLogLine   | less -R" \
+#                 --bind "alt-y:execute:$_gitLogLineToHash | pbcopy"
+# }
 
 # fco_preview - checkout git branch/tag, with a preview showing the commits between the tag/branch and HEAD
 fco_preview() {
@@ -357,18 +337,13 @@ gcob() {
 }
 
 gpull() {
-  if [ $# -eq 0 ]
-    then
-      BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-    else
-      BRANCH=${1}
-  fi
-  git pull origin "${BRANCH}"
+  local branch="${1:-$(git branch --show-current)}"
+  git pull origin "$branch"
 }
 
 gpush() {
-  BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-  git push -u origin "${BRANCH}"
+  local branch=$(git branch --show-current)
+  git push -u origin "$branch"
 }
 
 kube-toggle() {
@@ -392,22 +367,18 @@ gref() {
 # only run lint on changes
 # "git diff --name-only | grep -E '.(js|ts|tsx)$' | xargs eslint --fix"
 
-ch() {
-  local cols sep
-  cols=$(( COLUMNS / 3 ))
-  sep='{::}'
-
-  # Chrome search
-  # cp -f ~/Library/Application\ Support/Google/Chrome/Default/History /tmp/h
-  # Chromium search https://github.com/Eloston/ungoogled-chromium
-  cp -f ~/Library/ApplicationSupport/Chromium/Default/History /tmp/h
-
-  sqlite3 -separator $sep /tmp/h \
-    "select substr(title, 1, $cols), url
-     from urls order by last_visit_time desc" |
-  awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
-  fzf-tmux -p 90%,90% --ansi --multi --preview-window=:hidden | sed 's#.*\(https*://\)#\1#' | xargs open -a "Chromium"
-}
+# ch() - Chromium history search (Chromium not installed)
+# ch() {
+#   local cols sep
+#   cols=$(( COLUMNS / 3 ))
+#   sep='{::}'
+#   cp -f ~/Library/ApplicationSupport/Chromium/Default/History /tmp/h
+#   sqlite3 -separator $sep /tmp/h \
+#     "select substr(title, 1, $cols), url
+#      from urls order by last_visit_time desc" |
+#   awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
+#   fzf-tmux -p 90%,90% --ansi --multi --preview-window=:hidden | sed 's#.*\(https*://\)#\1#' | xargs open -a "Chromium"
+# }
 
 # Select a docker container to start and attach
 function da() {
