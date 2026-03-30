@@ -206,7 +206,7 @@
   "diagnostic.hintSign": "",
   "diagnostic.locationlistUpdate": true,
   "diagnostic.refreshOnInsertMode": true,
-  "tsserver.npm": "/Users/ttyrrell/Library/Caches/fnm_multishells/35178_1662125975150/bin/npm",
+  "tsserver.npm": "/Users/ttyrrell/.volta/bin/npm",
   "tsserver.log": "normal",
   "tsserver.trace.server": "off",
   "tsserver.disableAutomaticTypeAcquisition": false,
