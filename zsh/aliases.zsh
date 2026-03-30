@@ -8,10 +8,15 @@ alias tree='eza -T --level=5'
 alias cl='clear'
 
 alias cc="claude"
+alias ccw="claude -w"
 alias ccc="claude --continue"
 alias cco="claude --model opus"
-alias ccyolo="~/.claude/scripts/ccyolo.sh"
-alias cccyolo="~/.claude/scripts/ccyolo.sh --continue"
+alias ccs="claude --model sonnet"
+alias ccyolo="claude --dangerously-skip-permissions"
+alias cccyolo="claude --continue --dangerously-skip-permissions"
+alias ccwyolo="claude -w --dangerously-skip-permissions"
+# alias ccyolo="~/.claude/scripts/ccyolo.sh"
+# alias cccyolo="~/.claude/scripts/ccyolo.sh --continue"
 
 alias cat='bat'
 alias baty='bat -l yaml'

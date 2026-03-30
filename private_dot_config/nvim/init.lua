@@ -63,10 +63,7 @@ require('lazy').setup({
     {
         'junegunn/fzf.vim',
         dependencies = {
-          {
-              'junegunn/fzf',
-              build = ':call fzf#install()'
-          }
+          { dir = '/opt/homebrew/opt/fzf' }
         }
     },
     'AndrewRadev/undoquit.vim',
@@ -235,7 +232,7 @@ require('lazy').setup({
                 }
             end
             },
-                'JoosepAlviste/nvim-ts-context-commentstring',
+                -- 'JoosepAlviste/nvim-ts-context-commentstring', -- TODO: uncomment after upstream fixes nvim 0.12 compat (PR #124)
                 'nvim-treesitter/nvim-treesitter-textobjects',
                 'mfussenegger/nvim-treehopper',
                 'RRethy/nvim-treesitter-endwise',
@@ -417,7 +414,6 @@ require('lazy').setup({
      -- 'pwntester/octo.nvim',
      -- 'fannheyward/telescope-coc.nvim',
     'windwp/nvim-spectre',
-    'norcalli/nvim-terminal.lua',
     {
         'nvim-tree/nvim-web-devicons',
         lazy = true
@@ -469,118 +465,6 @@ require('lazy').setup({
     'voldikss/vim-browser-search',
     -- 'airblade/vim-rooter'
     -- 'dstein64/vim-startuptime'
-    {
-        'vimwiki/vimwiki',
-        branch = 'dev',
-        -- ft = 'markdown',
-        -- cmd = 'VimwikiMakeDiaryNote',
-        dependencies = { 'mattn/calendar-vim' },
-        init = function()
-            vim.cmd(
-              [[
-                " vimwiki & friends
-                let g:vim_markdown_new_list_item_indent = 0
-                let g:vim_markdown_auto_insert_bullets = 1
-                let g:vim_markdown_conceal = 0
-                let g:vim_markdown_conceal_code_blocks = 0
-                let g:vimwiki_conceal_pre = 1
-                let g:vimwiki_hl_headers = 1 " highlight headers with different colors
-                let g:vimwiki_hl_cb_checked = 2 " highlight completed tasks and line
-                let g:vim_markdown_fenced_languages = ['viml=vim', 'bash=sh', 'javascript=js']
-                " let g:vimwiki_url_maxsave = 0 " display full url path
-
-                let g:vimwiki_create_link = 0
-
-                " trying to make markdown snippets work
-                " let g:vimwiki_table_mappings=0
-                " autocmd filetype vimwiki ultisnipsaddfiletypes vimwiki
-                let g:vimwiki_global_ext = 0 " don't hijack all .md files
-                let g:vimwiki_listsyms = ' ○◐●✓'
-
-                let g:vimwiki_list = [{
-                  \ 'path': '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/',
-                  \ 'syntax': 'markdown',
-                  \ 'ext': '.md',
-                  \ 'auto_toc': 1,
-                  \ }]
-              ]]
-           )
-        end,
-        config = function()
-          vim.cmd(
-            [[
-                " fix `gx` command https://github.com/plasticboy/vim-markdown/issues/372#issuecomment-394237720
-                nnoremap <plug> <plug>markdown_openurlundercursor
-
-                " better line search with ripgrep
-                nmap <Leader>wl :SearchNotes<CR>
-                " filename search
-                nmap <Leader>wf  :Files ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/<CR>
-                " need to call this way when using vim-plug on-demand
-                nmap <Leader>wdn :VimwikiMakeDiaryNote<CR>
-                " nmap <Leader>wdn <Plug>VimwikiMakeDiaryNote
-                nmap <Leader>wdy <Plug>VimwikiMakeYesterdayDiaryNote
-                nmap <Leader>wdt <Plug>VimwikiMakeTomorrowDiaryNote
-                " if wanting to use telescope for this: https://aymenhafeez.github.io/nvim-telescope/
-
-                command! -bang -nargs=* SearchNotes
-                  \ call fzf#vim#grep(
-                  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-                  \   fzf#vim#with_preview({'dir': '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/'}), <bang>0)
-
-                command! -bang -nargs=* EditNote call fzf#vim#files('~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes', <bang>0)
-
-                command! -bang -nargs=0 NewNote
-                  \ call vimwiki#base#edit_file(":e", strftime('~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/%F-%T.md'), "")
-
-                command! Diary VimwikiDiaryIndex
-
-                function InsertDate()
-                    :.!echo "= $(date) ="
-                    normal 2o
-                    :start
-                endfunction
-
-            ]]
-          )
-        end,
-    },
-    {
-        'alok/notational-fzf-vim',
-        -- ft = 'markdown',
-        init = function()
-            vim.cmd(
-              [[
-                let g:nv_search_paths = ['~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes']
-                let g:nv_create_note_key = 'ctrl-x'
-
-                " NV-fzf floating window
-                function! FloatingFZF()
-                  let width = float2nr(&columns * 0.9)
-                  let height = float2nr(&lines * 0.6)
-                  let opts = { 'relative': 'editor',
-                             \ 'row': (&lines - height) / 2,
-                             \ 'col': (&columns - width) / 2,
-                             \ 'width': width,
-                             \ 'height': height,
-                             \}
-
-                  let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-                  call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
-                endfunction
-                let g:nv_window_command = 'call FloatingFZF()'
-              ]]
-           )
-        end,
-        config = function()
-          vim.cmd(
-            [[
-              " default 'alok/notational-fzf-vim' search
-              nmap <Leader>wv :NV!<CR>
-            ]]
-          )
-        end,
-    },
     {
       "OXY2DEV/markview.nvim",
       lazy = false,
@@ -657,7 +541,7 @@ vim.filetype.add({
 
 vim.cmd [[
 " If installed using Homebrew on Apple Silicon
-" set rtp+=/opt/homebrew/opt/fzf
+set rtp+=/opt/homebrew/opt/fzf
 
 let base16colorspace=256
 set termguicolors
@@ -1071,9 +955,6 @@ inoremap                    <Left> <Plug>(copilot-dismiss)
 imap <silent><script><expr> <Right> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
 
-let g:copilot_filetypes = {
-            \ 'vimwiki': v:false,
-            \ }
 
 function! UpdateRemotePlugins(...)
   " Needed to refresh runtime files
@@ -2226,91 +2107,6 @@ nmap <silent> <leader>dcu :diffupdate<cr>
 " skip the file
 nmap <silent> <leader>dcs :cq<cr>
 
-" Plug 'mattn/calendar-vim'
-let g:calendar_no_mappings=0
-nmap <Leader>wdc <Plug>CalendarV
-nmap <Leader>wdC <Plug>CalendarH
-
-augroup vimwikigroup
-  autocmd!
-  " do not set syntax to 'vimwiki'
-  autocmd BufEnter *.md setl syntax=markdown
-  " make syntax highlighting work
-  autocmd BufEnter *.md :syntax enable
-  " automatically update links on read diary
-  autocmd BufRead,BufNewFile diary.md VimwikiDiaryGenerateLinks
-
-  autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
-  autocmd FileType markdown setlocal shiftwidth=2 softtabstop=2 expandtab
-  autocmd FileType markdown nmap <buffer> <silent> gf <Plug>VimwikiFollowLink<CR>
-augroup end
-
-" Plug 'alok/notational-fzf-vim'
-" let g:nv_search_paths = ['~/Documents/notes']
-" let g:nv_search_paths = ['~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes']
-" let g:nv_create_note_key = 'ctrl-x'
-
-" " vimwiki & friends
-" let g:vim_markdown_new_list_item_indent = 0
-" let g:vim_markdown_auto_insert_bullets = 1
-" let g:vim_markdown_conceal = 0
-" let g:vim_markdown_conceal_code_blocks = 0
-" let g:vimwiki_conceal_pre = 1
-" let g:vimwiki_hl_headers = 1 " highlight headers with different colors
-" let g:vimwiki_hl_cb_checked = 2 " highlight completed tasks and line
-" let g:vim_markdown_fenced_languages = ['viml=vim', 'bash=sh', 'javascript=js']
-" " let g:vimwiki_url_maxsave = 0 " display full url path
-
-" " fix `gx` command https://github.com/plasticboy/vim-markdown/issues/372#issuecomment-394237720
-" nnoremap <plug> <plug>markdown_openurlundercursor
-
-" " trying to make markdown snippets work
-" " let g:vimwiki_table_mappings=0
-" " autocmd filetype vimwiki ultisnipsaddfiletypes vimwiki
-" let g:vimwiki_global_ext = 1 " don't hijack all .md files
-" let g:vimwiki_listsyms = ' ○◐●✓'
-
-" NV-fzf floating window
-" function! FloatingFZF()
-"   let width = float2nr(&columns * 0.9)
-"   let height = float2nr(&lines * 0.6)
-"   let opts = { 'relative': 'editor',
-"              \ 'row': (&lines - height) / 2,
-"              \ 'col': (&columns - width) / 2,
-"              \ 'width': width,
-"              \ 'height': height,
-"              \}
-
-"   let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-"   call nvim_win_set_option(win, 'winhl', 'Normal:MyHighlight')
-" endfunction
-" let g:nv_window_command = 'call FloatingFZF()'
-
-" list of all files and sub-directory path'd files sorted by date modified
-" function! g:init_funcs#fzf_nv()
-function! SortWiki()
-  let l:fzf_opts = {}
-  let l:fzf_opts.sink = 'e'
-  let l:fzf_opts.dir = '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes'
-  let l:fzf_opts.source = 'ls -td $(fd .)'
-  let l:fzf_opts.options = '--delimiter ":" --preview="bat ~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/{1}" --preview-window=right:80'
-  call fzf#run(fzf#wrap(l:fzf_opts))
-endfunction
-
-" if you want to turn off support for other extension(for example, disabling accidently creating new wiki and link for normal markdown files)
-" set the following option in your `.vimrc` before packadd vimwiki:
-" let g:vimwiki_ext2syntax = {}
-
-" let g:vimwiki_list = [{
-"   \ 'path': '~/Library/Mobile Documents/com~apple~CloudDocs/Documents/notes/',
-"   \ 'syntax': 'markdown',
-"   \ 'ext': 'md',
-"   \ 'auto_toc': 1,
-"   \ }]
-" gln to toggle forward
-" glp to toggle back
-let g:coc_filetype_map = { 'vimwiki': 'markdown' } " register with coc-markdownlint
-
 " tabs_buffers.vim
 nnoremap <silent> <c-n> :bnext<CR>
 nnoremap <silent> <c-p> :bprev<CR>
@@ -2530,8 +2326,6 @@ require('lualine').setup {
   },
   extensions = {'fugitive', 'fzf', 'man', 'mundo', 'nvim-dap-ui', 'nvim-tree', 'quickfix'}
 }
-
-require('terminal').setup {}
 
 require('package-info').setup({
   hide_up_to_date = true,

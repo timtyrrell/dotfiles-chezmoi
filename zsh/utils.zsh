@@ -166,6 +166,12 @@ gcr() {
   git checkout -b $1 origin/$1
 }
 
+# new branch from origin (defaults to mainline)
+# usage: gnb my-feature [base-branch]
+gnb() {
+  git checkout -b "$1" "origin/${2:-mainline}"
+}
+
 in_tmux () {
   if [ -n "$TMUX" ]; then
     return 0

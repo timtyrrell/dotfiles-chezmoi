@@ -32,6 +32,7 @@ keybind = cmd+t=new_tab
 keybind = cmd+shift+equal=increase_font_size:1
 keybind = cmd+equal=increase_font_size:1
 keybind = cmd+minus=decrease_font_size:1
+keybind = shift+enter=text:\x1b\x0d
 
 # Tab navigation
 keybind = cmd+1=goto_tab:1

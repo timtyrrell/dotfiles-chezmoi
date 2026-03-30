@@ -220,11 +220,6 @@ export MANPAGER='nvim --clean +Man!'
 # export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANWIDTH=999
 
-# tmux
-export FZF_TMUX=1 # open in pop-up
-export FZF_TMUX_OPTS="-p -w 90% -h 60%"
-export FZF_TMUX_POP_UP_OPTS="-p 90%,90%"
-
 # default fzf
 export FZF_HEADER_DEFAULT="ALT-k/j page up/down, CTRL-u/d preview half-page up/down, \ to toggle"
 
@@ -241,6 +236,7 @@ export FZF_SHOW_PREVIEW="
 
 # TODO: remove --preview from FZF_DEFAULT_OPTS and use FZF_SHOW_PREVIEW
 export FZF_DEFAULT_OPTS="
+--tmux 90%,60%
 --walker=file,dir,hidden,follow --walker-skip=.git,node_modules,target
 --history=$HOME/.fzf_history
 --layout=reverse

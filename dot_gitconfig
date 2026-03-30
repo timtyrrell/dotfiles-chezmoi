@@ -25,6 +25,7 @@
 	cm = commit -m
 	rv = remote -v
 	se = !git rev-list --all | xargs git grep -F
+	pnb = push -u origin HEAD
 	up = pull --rebase origin
 	recent-branches = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 	recent-local-branches = !"git reflog | grep 'checkout:' | head | awk '{print $8}' | awk '!x[$0]++'"
