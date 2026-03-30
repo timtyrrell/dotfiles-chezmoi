@@ -2,15 +2,11 @@ return {
   -- NOTE: vim-commentary removed — Neovim 0.10+ has built-in gc/gcc commenting
   'tpope/vim-surround',
   'tpope/vim-repeat',
-  'tpope/vim-unimpaired',
+  'tpope/vim-unimpaired', -- [n/]n conflict nav, yo* toggles not in nvim 0.11+
   'tpope/vim-abolish',
   'tpope/vim-eunuch',
   'tpope/vim-sleuth',
   'tpope/vim-projectionist',
-  'tpope/vim-apathy',
-  'tpope/vim-rails',
-  'tpope/vim-rake',
-  'tpope/vim-bundler',
   'tpope/vim-scriptease',
   {
     'kana/vim-textobj-user',
@@ -27,7 +23,15 @@ return {
       require('spectre').setup()
     end,
   },
-  'mileszs/ack.vim',
+  {
+    'mhinz/vim-grepper',
+    cmd = { 'Grepper', 'GrepperRg' },
+    keys = {
+      { '<leader><bs>', '<cmd>Grepper -tool rg -cword -nojump<cr>' },
+      { '<space><bs>', '<cmd>Grepper -tool rg -cword -nojump -buffers<cr>' },
+      { 'gs', '<plug>(GrepperOperator)', mode = { 'n', 'x' } },
+    },
+  },
   { 'nvim-mini/mini.splitjoin', version = '*' },
   {
     'mcauley-penney/tidy.nvim',
@@ -39,11 +43,4 @@ return {
   'AndrewRadev/undoquit.vim',
   'kazhala/close-buffers.nvim',
   'barrett-ruth/import-cost.nvim',
-  {
-    'sheerun/vim-polyglot',
-    init = function()
-      vim.g.polyglot_disabled = { 'autoindent' }
-      vim.g.markdown_fenced_languages = { 'ruby', 'sh', 'javascript', 'typescript', 'json' }
-    end,
-  },
 }

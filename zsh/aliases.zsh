@@ -31,6 +31,7 @@ alias ranger='TERM=xterm-256color ranger'
 alias vi='nvim'
 alias vim='nvim'
 alias n='nvim'
+alias nmod='nvim -u ~/.config/nvim/init-modular.lua'
 alias nn='nvim --cmd "let g:auto_session_enabled = v:false"'
 alias nm='nvim -u ~/.config/nvim/mini.vim'
 alias no='nvim -u NONE' # no config

@@ -109,8 +109,6 @@ vim.opt.pumheight = 20
 vim.opt.grepprg = 'rg --vimgrep --no-heading'
 vim.opt.grepformat = '%f:%l:%c:%m'
 
--- indent-blankline fix
-vim.opt.colorcolumn = '99999'
 vim.opt.list = true
 vim.opt.listchars = { tab = '→ ', space = '⋅', trail = '•', nbsp = '␣', extends = '▶', precedes = '◀' }
 

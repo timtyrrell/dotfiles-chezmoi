@@ -1,17 +1,22 @@
 return {
   {
     'lukas-reineke/indent-blankline.nvim',
-    tag = 'v2.20.8',
-    config = function()
-      local ok, indent = pcall(require, 'nvim-treesitter.indent')
-      if ok then
-        local orig = indent.get_indent
-        indent.get_indent = function(lnum)
-          local ok2, result = pcall(orig, lnum)
-          return ok2 and result or 0
-        end
-      end
-    end,
+    main = 'ibl',
+    opts = {
+      indent = { char = '▏' },
+      scope = {
+        enabled = true,
+        show_start = true,
+        show_end = false,
+      },
+      exclude = {
+        filetypes = {
+          'checkhealth', 'NvimTree', 'vim-plug', 'man', 'help',
+          'lspinfo', '', 'GV', 'git', 'packer', 'lazy', 'mason',
+        },
+        buftypes = { 'terminal', 'nofile', 'quickfix', 'prompt' },
+      },
+    },
   },
   {
     'nvim-lualine/lualine.nvim',
@@ -100,7 +105,7 @@ return {
     end,
   },
   {
-    'karb94/neoscroll.nvim',
+    'karb94/neoscroll.nvim', -- TODO: consider vim.opt.smoothscroll (nvim 0.10+)
     config = function()
       require('neoscroll').setup {}
     end,

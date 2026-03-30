@@ -174,21 +174,6 @@ map('n', '<Leader>bs', '<Plug>SearchNormal', { silent = true })
 map('v', '<Leader>bs', '<Plug>SearchVisual', { silent = true })
 vim.g.browser_search_default_engine = 'duckduckgo'
 
--- Indent-blankline v2 settings
-vim.g.indent_blankline_use_treesitter = true
-vim.g.indent_blankline_char = '▏'
-vim.g.indent_blankline_filetype_exclude = { 'checkhealth', 'NvimTree', 'vim-plug', 'man', 'help', 'lspinfo', '', 'GV', 'git', 'packer' }
-vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile', 'quickfix', 'prompt' }
-vim.g.indent_blankline_bufname_exclude = { 'README.md', '.*%.py' }
-vim.g.indent_blankline_show_first_indent_level = true
-vim.g.indent_blankline_show_trailing_blankline_indent = false
-vim.g.indent_blankline_show_current_context = true
-vim.g.indent_blankline_show_current_context_start = true
-vim.g.indent_blankline_context_patterns = { 'declaration', 'expression', 'pattern', 'primary_expression', 'statement', 'switch_body', 'def', 'class', 'return', '^func', 'method', '^if', 'while', 'jsx_element', 'for', 'object', 'table', 'block', 'arguments', 'else_clause', '^jsx', 'try', 'catch_clause', 'import_statement', 'operation_type', 'with', 'except', 'arguments', 'argument_list', 'dictionary', 'element', 'tuple' }
--- Disable in diff mode
-if vim.opt.diff:get() then
-  vim.g.indent_blankline_enabled = false
-end
 
 -- Markdown preview
 vim.g.mkdp_filetypes = { 'markdown', 'mermaid' }
@@ -495,11 +480,6 @@ map('n', '<leader>sw', "<cmd>lua require('spectre').open_visual({select_word=tru
 map('v', '<leader>s', "<esc>:lua require('spectre').open_visual()<CR>")
 map('n', '<leader>sp', "viw:lua require('spectre').open_file_search()<cr>")
 
--- Ack
-vim.g.ackprg = 'rg --vimgrep'
-vim.cmd([[cnoreabbrev Ack Ack!]])
-map('n', '<leader><bs>', ':Ack! <C-R><C-W><CR>')
-map('n', '<space><bs>', ':AckWindow! <C-R><C-W><CR>')
 
 -- vim-matchup
 vim.g.matchup_matchparen_offscreen = { method = 'popup' }
