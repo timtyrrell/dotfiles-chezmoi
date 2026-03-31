@@ -99,6 +99,28 @@ return {
       require('telescope').load_extension('ui-select')
       require('telescope').load_extension('undo')
       require('telescope').load_extension('dap')
+
+      local builtin = require('telescope.builtin')
+      local map = vim.keymap.set
+
+      -- Telescope builtin
+      map('n', '<leader>fB', function() builtin.current_buffer_fuzzy_find() end, { silent = true })
+      map('n', '<leader>fz', function() builtin.live_grep({ prompt_title = 'find string in open buffers...', grep_open_files = true }) end, { silent = true })
+      map('n', '<leader>fd', function() builtin.find_files({ cwd = require('telescope.utils').buffer_dir() }) end, { silent = true })
+      map('n', '<leader>fh', function() builtin.command_history() end, { silent = true })
+      map('n', '<leader>fH', function() builtin.oldfiles() end, { silent = true })
+      map('n', '<leader>fS', function() builtin.search_history() end, { silent = true })
+      map('n', '<Leader>fg', function() builtin.git_status() end, { silent = true })
+      map('n', '<leader>fm', function() builtin.marks() end, { silent = true })
+      map('n', '<leader>fM', function() builtin.keymaps() end, { silent = true })
+      map('n', '<leader>fs', function() builtin.spell_suggest() end, { silent = true })
+      map('n', '<leader>fr', function() builtin.resume() end, { silent = true })
+
+      -- Telescope extensions
+      map('n', '<leader>te', '<cmd>Telescope<cr>')
+      map('n', '<leader>tu', '<cmd>Telescope undo<cr>')
+      map('n', '<leader>fn', '<cmd>Telescope node_modules list<cr>')
+      map('n', '<leader>ti', '<cmd>Telescope import<cr>')
     end,
   },
 }

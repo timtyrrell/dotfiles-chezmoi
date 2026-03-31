@@ -196,6 +196,42 @@ return {
         endfunction
         inoremap <expr> <c-x><c-f> AbsolutePathNoExtension()
       ]])
+
+      -- Fzf settings
+      vim.g.fzf_vim = { grep_multi_line = 2 }
+      vim.g.fzf_action = {
+        ['ctrl-t'] = 'tab split',
+        ['ctrl-x'] = 'split',
+        ['ctrl-v'] = 'vsplit',
+      }
+      vim.g.fzf_layout = { window = { width = 0.9, height = 0.7 } }
+      vim.g.fzf_buffers_jump = 1
+      vim.g.fzf_history_dir = '~/.local/share/fzf-history'
+
+      -- File finding
+      vim.keymap.set('n', '<Leader>ff', '<cmd>Files<CR>', { silent = true })
+      vim.keymap.set('n', '<Leader>fF', ':Files ', { silent = true })
+      vim.keymap.set('n', '<Leader>fT', '<cmd>Windows<CR>', { silent = true })
+      vim.keymap.set('n', '<Leader>fb', ':Buffers<CR>', { silent = true })
+      vim.keymap.set('n', '<leader>bx', ':BD<CR>', { silent = true })
+
+      -- Rg
+      vim.keymap.set('n', '<Leader>rw', ':RgLines <C-R><C-W><CR>', { silent = true })
+      vim.keymap.set('n', '<leader>rd', ':RGdir ')
+      vim.keymap.set('n', '<Leader>fl', '<cmd>RgLines<CR>', { silent = true })
+      vim.keymap.set('n', '<Leader>fL', ':Lines<CR>', { silent = true })
+      vim.keymap.set('n', '<Leader>fc', ':BCommits<CR>', { silent = true })
+      vim.keymap.set('n', '<Leader>fC', ':Commits<CR>', { silent = true })
+
+      -- Fzf maps/completions
+      vim.keymap.set('n', '<leader>fj', ':Jumps<CR>', { silent = true })
+      vim.keymap.set('n', '<leader>fJ', ':Changes<CR>', { silent = true })
+      vim.keymap.set('n', '<tab><tab>', '<plug>(fzf-maps-n)')
+      vim.keymap.set('x', '<tab><tab>', '<plug>(fzf-maps-x)')
+      vim.keymap.set('o', '<tab><tab>', '<plug>(fzf-maps-o)')
+      vim.keymap.set('i', '<c-x><c-p>', '<plug>(fzf-complete-path)')
+      vim.keymap.set('i', '<c-x><c-k>', '<plug>(fzf-complete-word)')
+      vim.keymap.set('i', '<c-x><c-l>', '<plug>(fzf-complete-line)')
     end,
   },
 }

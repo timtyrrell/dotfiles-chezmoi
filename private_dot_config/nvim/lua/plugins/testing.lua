@@ -1,5 +1,24 @@
 return {
-  'vim-test/vim-test',
+  {
+    'vim-test/vim-test',
+    event = 'VeryLazy',
+    init = function()
+      vim.g['test#ruby#rspec#executable'] = 'bundle exec rspec'
+      vim.g['test#strategy'] = 'vimux'
+      vim.g['test#typescriptreact#jest#options'] = {
+        nearest = '--backtrace',
+        file = '--format documentation',
+        suite = '--tag ~slow',
+      }
+    end,
+    keys = {
+      { '<leader>tt', ':TestNearest<CR>', silent = true },
+      { '<leader>tf', ':TestFile<CR>', silent = true },
+      { '<leader>tl', ':TestLast<CR>', silent = true },
+      { '<leader>tv', ':TestVisit<CR>', silent = true },
+      -- Note: <leader>ts conflicts with 'tab sp' — keeping both as original
+    },
+  },
   'tpope/vim-dispatch',
   'David-Kunz/jester',
   {

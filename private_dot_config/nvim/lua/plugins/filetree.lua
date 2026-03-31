@@ -1,6 +1,10 @@
 return {
   {
     'kyazdani42/nvim-tree.lua',
+    keys = {
+      { '<leader>ee', ':NvimTreeFindFile<CR>', silent = true },
+      { '<leader>et', ':NvimTreeToggle<CR>', silent = true },
+    },
     config = function()
       require('nvim-tree').setup {
         git = { ignore = false },

@@ -1,3 +1,5 @@
+local map = vim.keymap.set
+
 return {
   {
     'ggandor/leap.nvim',
@@ -31,7 +33,7 @@ return {
         t = { offset = -1, opts = clever_t },
         T = { backward = true, offset = 1, opts = clever_t },
       } do
-        vim.keymap.set({ 'n', 'x', 'o' }, key, function()
+        map({ 'n', 'x', 'o' }, key, function()
           require('leap').leap(as_ft(args))
         end)
       end
@@ -45,11 +47,21 @@ return {
       end,
     },
   },
-  'andymass/vim-matchup',
+  {
+    'andymass/vim-matchup',
+    init = function()
+      vim.g.matchup_matchparen_offscreen = { method = 'popup' }
+      vim.g.matchup_text_obj_enabled = 0
+    end,
+  },
   {
     'kevinhwang91/nvim-hlslens',
     config = function()
       require('hlslens').setup({ nearest_only = true })
+
+      map('n', '*', "m`:keepjumps normal! *``<cr><Cmd>lua require('hlslens').start()<CR>", { silent = true })
+      map('n', 'n', "<Cmd>execute('normal! ' . v:count1 . 'nzz')<CR><Cmd>lua require('hlslens').start()<CR>", { silent = true })
+      map('n', 'N', "<Cmd>execute('normal! ' . v:count1 . 'Nzz')<CR><Cmd>lua require('hlslens').start()<CR>", { silent = true })
     end,
   },
 }

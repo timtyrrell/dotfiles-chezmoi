@@ -75,27 +75,6 @@ return {
     end,
   },
   {
-    'folke/zen-mode.nvim',
-    config = function()
-      require('zen-mode').setup {
-        window = {
-          backdrop = 0.95,
-          width = 0.5,
-          height = 1,
-          options = {
-            signcolumn = 'yes',
-            number = true,
-            relativenumber = false,
-            cursorline = true,
-            cursorcolumn = false,
-            foldcolumn = '0',
-            list = false,
-          },
-        },
-      }
-    end,
-  },
-  {
     'folke/which-key.nvim',
     config = function()
       require('which-key').setup {
@@ -199,7 +178,6 @@ return {
       })
     end,
   },
-  'drmingdrmer/vim-toggle-quickfix',
   'kevinhwang91/promise-async',
   {
     'kevinhwang91/nvim-fundo',
@@ -217,8 +195,42 @@ return {
     cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
     build = 'cd app && yarn install',
     init = function()
-      vim.g.mkdp_filetypes = { 'markdown' }
+      vim.g.mkdp_filetypes = { 'markdown', 'mermaid' }
     end,
+    keys = {
+      { '<leader>mp', '<Plug>MarkdownPreview' },
+      { '<leader>ms', '<Plug>MarkdownPreviewStop' },
+    },
     ft = { 'markdown' },
+  },
+  {
+    'drmingdrmer/vim-toggle-quickfix',
+    keys = {
+      { '<Leader>qq', '<Plug>window:quickfix:loop' },
+    },
+  },
+  {
+    'folke/zen-mode.nvim',
+    keys = {
+      { '<leader>zm', ':ZenMode<CR>' },
+    },
+    config = function()
+      require('zen-mode').setup {
+        window = {
+          backdrop = 0.95,
+          width = 0.5,
+          height = 1,
+          options = {
+            signcolumn = 'yes',
+            number = true,
+            relativenumber = false,
+            cursorline = true,
+            cursorcolumn = false,
+            foldcolumn = '0',
+            list = false,
+          },
+        },
+      }
+    end,
   },
 }

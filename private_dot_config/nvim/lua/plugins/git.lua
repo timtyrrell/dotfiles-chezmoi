@@ -1,11 +1,108 @@
+local map = vim.keymap.set
+
 return {
-  'tpope/vim-fugitive',
+  {
+    'tpope/vim-fugitive',
+    event = 'VeryLazy',
+    config = function()
+      map('n', '<leader>gV', ':GV --first-parent -100<cr>')
+      map('n', '<leader>gv', ':GV! -100<cr>')
+      map('n', '<leader>gb', ':Git blame<cr>')
+      map('n', '<leader>gB', ':%Git blame<cr>')
+      map('n', '<leader>gd', ':Gdiff<cr>')
+      map('n', '<leader>gt', '<cmd>Git difftool --name-only<CR>', { silent = true })
+      map('n', '<leader>gT', '<cmd>Git difftool<CR>', { silent = true })
+      map('n', '<leader>gl', ':Gclog -- % -100<cr>')
+      map('n', '<leader>gL', ':Gclog -100<cr>')
+      map('v', '<leader>gL', ':Gclog -100<cr>')
+      map('n', '<Leader>ge', ':Gedit <bar> only<CR>', { silent = true })
+      map('n', '<leader>gr', ':Gread<cr>:noautocmd update<cr>')
+      map('n', '<leader>gg', ':Glgrep! -q ')
+      map('n', '<Leader>g/', ':Glrep! -Hnri --quiet ')
+      map('n', '<Leader>g?', ':Git! log --grep=')
+      map('n', '<Leader>gS', ':Git! log -S ')
+      map('n', '<Leader>g*', ':Glgrep! -Hnri --quiet <C-r>=expand("<cword>")<CR><CR>')
+      map('n', '<leader>gc', '<cmd>Git commit<CR>', { silent = true })
+      map('n', '<Leader>gP', '<cmd>Git -p push<CR>', { silent = true })
+      map('n', '<Leader>gp', '<cmd>Git -p pull<CR>', { silent = true })
+      map('n', '<Leader>gf', '<cmd>Git -p fetch<CR>', { silent = true })
+      map('v', '<Leader>Gb', ':GBrowse<CR>')
+      map('n', '<Leader>Gb', ':.GBrowse<CR>')
+      map('v', '<Leader>GB', ':GBrowse!<CR>')
+      map('n', '<Leader>GB', ':.GBrowse!<CR>')
+      map('n', '<Leader>go', '<cmd>GBrowse HEAD<cr>')
+      map('n', '<Leader>gw', '<cmd>Gwrite<CR>', { silent = true })
+      map('n', '<Leader>gW', '<cmd>Gwrite!<CR>', { silent = true })
+
+      -- Git status in new tab
+      map('n', '<leader>gs', ':tab Git<cr>:G<cr>/^M\\s<cr>:let @/=""<cr>', { silent = true })
+
+      -- Fugitive blame extension
+      vim.api.nvim_create_augroup('fugitive_ext', { clear = true })
+      vim.api.nvim_create_autocmd('FileType', {
+        group = 'fugitive_ext',
+        pattern = 'fugitiveblame',
+        callback = function()
+          map('n', '<leader>Gb', function()
+            vim.cmd(':GBrowse ' .. vim.fn.expand('<cword>'))
+          end, { buffer = true })
+        end,
+      })
+
+      -- Put changed file names from previous commit into quickfix
+      vim.api.nvim_create_user_command('Gshow', function(opts)
+        vim.fn.setqflist(vim.tbl_map(function(f)
+          return { filename = f, lnum = 1 }
+        end, vim.fn.systemlist("git show --pretty='' --name-only " .. (opts.args or ''))))
+      end, { nargs = '?', bar = true })
+    end,
+  },
   'tpope/vim-rhubarb',
-  'shumphrey/fugitive-gitlab.vim',
+  {
+    'shumphrey/fugitive-gitlab.vim',
+    init = function()
+      vim.g.fugitive_gitlab_domains = { 'https://git.lab.smartsheet.com' }
+    end,
+  },
   'junegunn/gv.vim',
-  'whiteinge/diffconflicts',
-  'sindrets/diffview.nvim',
-  'rhysd/committia.vim',
+  {
+    'whiteinge/diffconflicts',
+    keys = {
+      { '<leader>dcc', ':DiffConflicts<cr>', silent = true },
+      { '<leader>dch', ':DiffConflictsShowHistory<cr>', silent = true },
+      { '<leader>dcb', ':DiffConflictsWithHistory<cr>', silent = true },
+      { '<leader>dcu', ':diffupdate<cr>', silent = true },
+      { '<leader>dcs', ':cq<cr>', silent = true },
+    },
+  },
+  {
+    'sindrets/diffview.nvim',
+    keys = {
+      { '<leader>dvm', '<Cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<cr>' },
+      { '<leader>dvp', '<Cmd>DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges<cr>' },
+      { '<leader>dvo', '<cmd>DiffviewOpen<cr>' },
+      { '<leader>dvf', '<Cmd>DiffviewFileHistory %<cr>' },
+      { '<leader>dvF', '<Cmd>DiffviewFileHistory<cr>' },
+      { '<leader>dvl', '<Cmd>DiffviewOpen HEAD~1<cr>' },
+      { '<leader>dvh', '<Cmd>DiffviewFileHistory --range=origin/HEAD..HEAD<cr>' },
+      { '<leader>dvh', "<Cmd>'<,'>DiffviewFileHistory<CR>", mode = 'v' },
+    },
+  },
+  {
+    'rhysd/committia.vim',
+    init = function()
+      vim.g.committia_open_only_vim_starting = 1
+      vim.g.committia_hooks = {}
+      vim.g.committia_hooks.edit_open = function(info)
+        vim.opt_local.spell = true
+        if info.vcs == 'git' and vim.fn.getline(1) == '' then
+          vim.cmd('startinsert')
+        end
+        map('i', '<C-n>', '<Plug>(committia-scroll-diff-down-half)', { buffer = true })
+        map('i', '<C-p>', '<Plug>(committia-scroll-diff-up-half)', { buffer = true })
+      end
+    end,
+  },
   'hotwatermorning/auto-git-diff',
   {
     'ThePrimeagen/git-worktree.nvim',

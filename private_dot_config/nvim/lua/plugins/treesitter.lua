@@ -20,11 +20,19 @@ return {
       },
       -- 'JoosepAlviste/nvim-ts-context-commentstring', -- TODO: uncomment after upstream fixes nvim 0.12 compat (PR #124)
       'nvim-treesitter/nvim-treesitter-textobjects',
-      'mfussenegger/nvim-treehopper',
+      {
+        'mfussenegger/nvim-treehopper',
+        keys = {
+          { 'm', "<Cmd>lua require('tsht').nodes()<CR>", mode = 'o', silent = true },
+          { 'm', ":lua require('tsht').nodes()<CR>", mode = 'x', silent = true },
+        },
+      },
       'RRethy/nvim-treesitter-endwise',
       'windwp/nvim-ts-autotag',
     },
     config = function()
+      vim.g.vim_jsx_pretty_colorful_config = 1
+
       -- main branch: nvim-treesitter is a parser/query manager only
       -- highlight + indent are built-in on nvim 0.12
       -- parsers: install via :TSInstall
