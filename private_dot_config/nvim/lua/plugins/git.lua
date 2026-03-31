@@ -92,15 +92,17 @@ return {
     'rhysd/committia.vim',
     init = function()
       vim.g.committia_open_only_vim_starting = 1
-      vim.g.committia_hooks = {}
-      vim.g.committia_hooks.edit_open = function(info)
-        vim.opt_local.spell = true
-        if info.vcs == 'git' and vim.fn.getline(1) == '' then
-          vim.cmd('startinsert')
-        end
-        map('i', '<C-n>', '<Plug>(committia-scroll-diff-down-half)', { buffer = true })
-        map('i', '<C-p>', '<Plug>(committia-scroll-diff-up-half)', { buffer = true })
-      end
+      vim.cmd([[
+        let g:committia_hooks = {}
+        function! g:committia_hooks.edit_open(info)
+          setlocal spell
+          if a:info.vcs ==# 'git' && getline(1) ==# ''
+            startinsert
+          endif
+          imap <buffer><C-n> <Plug>(committia-scroll-diff-down-half)
+          imap <buffer><C-p> <Plug>(committia-scroll-diff-up-half)
+        endfunction
+      ]])
     end,
   },
   'hotwatermorning/auto-git-diff',
