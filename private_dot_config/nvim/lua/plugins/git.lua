@@ -92,6 +92,25 @@ return {
     'rhysd/committia.vim',
     init = function()
       vim.g.committia_open_only_vim_starting = 1
+
+      -- committia's regex only matches .git/worktrees/*, not .bare/worktrees/*
+      -- Set GIT_DIR and GIT_WORK_TREE before committia runs so it skips the regex
+      vim.api.nvim_create_autocmd('BufReadPre', {
+        pattern = { 'COMMIT_EDITMSG', 'MERGE_MSG' },
+        callback = function(args)
+          local path = vim.fn.fnamemodify(args.file, ':p')
+          local git_dir = path:match('(.+[\\/]%.bare[\\/]worktrees[\\/][^\\/]+)[\\/]')
+          if git_dir then
+            local gitdir_file = git_dir .. '/gitdir'
+            if vim.fn.filereadable(gitdir_file) == 1 then
+              local work_tree = vim.fn.fnamemodify(vim.fn.readfile(gitdir_file)[1], ':h')
+              vim.env.GIT_DIR = git_dir
+              vim.env.GIT_WORK_TREE = work_tree
+            end
+          end
+        end,
+      })
+
       vim.cmd([[
         let g:committia_hooks = {}
         function! g:committia_hooks.edit_open(info)

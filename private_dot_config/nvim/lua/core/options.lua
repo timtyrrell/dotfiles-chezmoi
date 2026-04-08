@@ -3,7 +3,7 @@ vim.opt.rtp:append('/opt/homebrew/opt/fzf')
 
 vim.opt.termguicolors = true
 
-vim.opt.title = true -- displays current file as vim title
+vim.opt.title = true      -- displays current file as vim title
 vim.opt.visualbell = true -- kills the bell
 vim.opt.errorbells = false
 
@@ -58,6 +58,7 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
 vim.opt.undofile = true
+vim.opt.autoread = true
 
 -- Search highlighting/behavior
 vim.opt.hlsearch = true
@@ -137,9 +138,10 @@ vim.filetype.add({
 })
 
 -- Provider configuration (speedup :StartTime)
-vim.g.node_host_prog = '~/.volta/tools/image/node/22.15.0/lib/node_modules/neovim/bin/cli.js'
 vim.g.python3_host_prog = '~/.venvs/neovim/bin/python'
+vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0
 
 -- Disable netrw's gx mapping (use open-browser.vim instead)

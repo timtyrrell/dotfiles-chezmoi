@@ -64,8 +64,18 @@ return {
       vim.g.openbrowser_default_search = 'duckduckgo'
     end,
     keys = {
-      { 'gx', '<Plug>(openbrowser-smart-search)', mode = 'n' },
       { 'gx', '<Plug>(openbrowser-smart-search)', mode = 'v' },
+    },
+  },
+  {
+    'rmagatti/gx-extended.nvim',
+    keys = {
+      { 'gx', mode = 'n' },
+    },
+    opts = {
+      open_fn = function(url)
+        vim.ui.open(url)
+      end,
     },
   },
   {

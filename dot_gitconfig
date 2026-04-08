@@ -18,7 +18,8 @@
 	reset-authors = commit --amend --reset-author -CHEAD
 	rmbranch = !"git branch -d $(git branch --merged)"
 	snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
-	pushforeal = push --force
+	pushf = push --force-with-lease
+	pushyolo = push --force
 	lart = for-each-ref --sort=committerdate refs/heads/ --format='%(color: red)%(committerdate:short) %(color: cyan)%(refname:short)'
 	quickdiff = diff ':!package-lock.json'
 	last = log -1 HEAD --stat

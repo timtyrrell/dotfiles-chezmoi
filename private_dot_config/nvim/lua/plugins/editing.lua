@@ -4,7 +4,10 @@ return {
   'tpope/vim-repeat',
   'tpope/vim-unimpaired', -- [n/]n conflict nav, yo* toggles not in nvim 0.11+
   'tpope/vim-abolish',
-  'tpope/vim-eunuch',
+  {
+    'tpope/vim-eunuch',
+    init = function() vim.g.eunuch_no_maps = 1 end,
+  },
   'tpope/vim-sleuth',
   {
     'tpope/vim-projectionist',

@@ -16,3 +16,6 @@ esm
 target
 .yarn
 .idea
+.cursor
+.roo
+sdlc

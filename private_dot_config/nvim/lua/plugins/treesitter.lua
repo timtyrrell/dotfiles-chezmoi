@@ -18,13 +18,13 @@ return {
           }
         end,
       },
-      -- 'JoosepAlviste/nvim-ts-context-commentstring', -- TODO: uncomment after upstream fixes nvim 0.12 compat (PR #124)
+      'JoosepAlviste/nvim-ts-context-commentstring',
       'nvim-treesitter/nvim-treesitter-textobjects',
       {
         'mfussenegger/nvim-treehopper',
         keys = {
           { 'm', "<Cmd>lua require('tsht').nodes()<CR>", mode = 'o', silent = true },
-          { 'm', ":lua require('tsht').nodes()<CR>", mode = 'x', silent = true },
+          { 'm', ":lua require('tsht').nodes()<CR>",     mode = 'x', silent = true },
         },
       },
       'RRethy/nvim-treesitter-endwise',
@@ -79,14 +79,14 @@ return {
 
       -- move keymaps
       local move_maps = {
-        { ']m', move.goto_next_start, '@function.outer' },
-        { ']]', move.goto_next_start, '@class.outer' },
-        { ']M', move.goto_next_end, '@function.outer' },
-        { '][', move.goto_next_end, '@class.outer' },
+        { ']m', move.goto_next_start,     '@function.outer' },
+        { ']]', move.goto_next_start,     '@class.outer' },
+        { ']M', move.goto_next_end,       '@function.outer' },
+        { '][', move.goto_next_end,       '@class.outer' },
         { '[m', move.goto_previous_start, '@function.outer' },
         { '[[', move.goto_previous_start, '@class.outer' },
-        { '[M', move.goto_previous_end, '@function.outer' },
-        { '[]', move.goto_previous_end, '@class.outer' },
+        { '[M', move.goto_previous_end,   '@function.outer' },
+        { '[]', move.goto_previous_end,   '@class.outer' },
       }
       for _, map in ipairs(move_maps) do
         vim.keymap.set({ 'n', 'x', 'o' }, map[1], function()
