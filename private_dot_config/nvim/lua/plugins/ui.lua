@@ -187,8 +187,10 @@ return {
     end,
   },
   {
-    'OXY2DEV/markview.nvim',
-    lazy = false,
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+    ft = { 'markdown' },
+    opts = {},
   },
   {
     'iamcco/markdown-preview.nvim',

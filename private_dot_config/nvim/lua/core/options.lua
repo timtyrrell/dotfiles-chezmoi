@@ -47,6 +47,7 @@ vim.opt.shiftwidth = 2
 vim.opt.showtabline = 2
 vim.opt.breakindent = true
 vim.opt.breakindentopt = 'shift:2'
+vim.opt.linebreak = true
 
 vim.opt.number = true
 
@@ -86,7 +87,7 @@ vim.opt.complete:append('kspell')
 -- Keep windows same size when opening/closing splits
 vim.opt.equalalways = true
 
-vim.opt.sessionoptions = 'curdir,tabpages,winpos,localoptions'
+vim.opt.sessionoptions = 'curdir,tabpages,winpos'
 
 -- Disable mouse
 vim.opt.mouse = ''

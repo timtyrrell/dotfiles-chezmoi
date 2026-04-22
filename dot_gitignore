@@ -17,13 +17,10 @@ algo/
 *.bak
 config/solargraph_definitions.rb
 *.http
-.claude
-.clinerules*
-.roomodes
-memory-bank/
 mutagen.*
 cert-*
 *.p12
 GEMINI.md
 zsh/work.zsh
 dot_gitconfig.work
+.claude/settings.local.json

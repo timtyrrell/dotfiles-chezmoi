@@ -43,9 +43,11 @@ return {
         group = 'fugitive_ext',
         pattern = 'fugitiveblame',
         callback = function()
-          map('n', '<leader>Gb', function()
+          local gbrowse_cword = function()
             vim.cmd(':GBrowse ' .. vim.fn.expand('<cword>'))
-          end, { buffer = true })
+          end
+          map('n', '<leader>Gb', gbrowse_cword, { buffer = true })
+          map('n', 'gx', gbrowse_cword, { buffer = true })
         end,
       })
 

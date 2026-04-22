@@ -179,7 +179,7 @@ unsetopt hist_ignore_space
 setopt hist_reduce_blanks      # remove superfluous blanks from each command line being added to the history list
 setopt hist_save_no_dups       # don't write a duplicate event to the history file
 setopt extended_history        # write timestamps to the history file
-setopt share_history           # Share history between all sessions (implies inc_append_history)
+setopt inc_append_history      # Append to history file immediately, but don't import from other sessions
 
 # input/output
 setopt interactive_comments    # Allow comments even in interactive shells
@@ -241,7 +241,6 @@ export FZF_DEFAULT_OPTS="
 --history=$HOME/.fzf_history
 --layout=reverse
 --info=inline
---height=80%
 --multi
 --border=double
 --prompt='> ' --pointer='▶' --marker='✓'
@@ -256,6 +255,8 @@ export FZF_DEFAULT_OPTS="
 --bind 'ctrl-d:preview-half-page-down'
 --bind 'alt-k:page-up'
 --bind 'alt-j:page-down'
+--bind 'ctrl-j:down'
+--bind 'ctrl-k:up'
 --bind 'ctrl-v:become(nvim {+})'
 "
 # --bind 'ctrl-v:execute(nvim {} < /dev/tty > /dev/tty 2>&1)+accept'
@@ -424,7 +425,7 @@ zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-min-size 80 12
 zstyle ':fzf-tab:*' show-group brief
 zstyle ':fzf-tab:*' switch-group ',' '.'
-zstyle ':fzf-tab:*' fzf-bindings 'ctrl-u:preview-half-page-up' 'ctrl-d:preview-half-page-down' 'space:accept' 'alt-k:page-up' 'alt-j:page-down'
+zstyle ':fzf-tab:*' fzf-bindings 'ctrl-u:preview-half-page-up' 'ctrl-d:preview-half-page-down' 'space:accept' 'alt-k:page-up' 'alt-j:page-down' 'ctrl-j:down' 'ctrl-k:up'
 zstyle ':fzf-tab:*' continuous-trigger '/'
 zstyle ':fzf-tab:*' accept-line ctrl-x
 
