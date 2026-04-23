@@ -193,17 +193,23 @@ return {
     opts = {},
   },
   {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    build = 'cd app && yarn install',
-    init = function()
-      vim.g.mkdp_filetypes = { 'markdown', 'mermaid' }
-    end,
+    'toppair/peek.nvim',
+    build = 'deno task --quiet build:fast',
+    cmd = { 'PeekOpen', 'PeekClose' },
     keys = {
-      { '<leader>mp', '<Plug>MarkdownPreview' },
-      { '<leader>ms', '<Plug>MarkdownPreviewStop' },
+      { '<leader>mp', function() require('peek').open() end, desc = 'Markdown preview' },
+      { '<leader>ms', function() require('peek').close() end, desc = 'Markdown preview stop' },
     },
     ft = { 'markdown' },
+    opts = {
+      theme = 'dark',
+      app = 'browser',
+    },
+    config = function(_, opts)
+      require('peek').setup(opts)
+      vim.api.nvim_create_user_command('PeekOpen', require('peek').open, {})
+      vim.api.nvim_create_user_command('PeekClose', require('peek').close, {})
+    end,
   },
   {
     'drmingdrmer/vim-toggle-quickfix',
