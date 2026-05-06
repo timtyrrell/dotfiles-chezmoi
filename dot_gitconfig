@@ -41,7 +41,7 @@
 [color]
 	ui = true
 [core]
-	editor = ~/bin/git_editor.sh
+	editor = ~/bin/quick_editor.sh
 	whitespace = warn
 	excludesFile = ~/.gitignore
 	pager = delta
@@ -108,7 +108,7 @@
 	autoupdate = true
 [include]
 	path = ~/.gitconfig.local
-[includeIf "gitdir:~/code/COMPANY/"]
+[includeIf "gitdir:~/code/smartsheet/"]
 	path = ~/.gitconfig.work
 [transfer]
 	fsckObjects = true

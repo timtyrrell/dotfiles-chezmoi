@@ -197,7 +197,7 @@ return {
     build = 'deno task --quiet build:fast',
     cmd = { 'PeekOpen', 'PeekClose' },
     keys = {
-      { '<leader>mp', function() require('peek').open() end, desc = 'Markdown preview' },
+      { '<leader>mp', function() require('peek').open() end,  desc = 'Markdown preview' },
       { '<leader>ms', function() require('peek').close() end, desc = 'Markdown preview stop' },
     },
     ft = { 'markdown' },
@@ -215,6 +215,17 @@ return {
     'drmingdrmer/vim-toggle-quickfix',
     keys = {
       { '<Leader>qq', '<Plug>window:quickfix:loop' },
+    },
+  },
+  {
+    'nvim-zh/colorful-winsep.nvim',
+    event = { 'WinLeave' },
+    opts = {
+      border = 'single',
+      highlight = '#7dcfff',
+      excluded_ft = { 'TelescopePrompt', 'mason', 'NvimTree', 'lazy', 'help' },
+      animate = { enabled = 'shift' },
+      indicator_for_2wins = { position = false },
     },
   },
   {

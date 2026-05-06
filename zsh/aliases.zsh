@@ -7,21 +7,16 @@ alias rd='rmdir'
 alias tree='eza -T --level=5'
 alias cl='clear'
 
-alias cc="claude"
-alias ccc="claude --continue"
-alias ccw="claude -w"
-alias ccyolo="claude --permission-mode plan --dangerously-skip-permissions"
-alias cccyolo="claude --continue --dangerously-skip-permissions"
-alias ccwyolo="claude -w --permission-mode plan --dangerously-skip-permissions"
-
 alias cat='bat'
 alias baty='bat -l yaml'
 
 # copy the last zsh command to clipboard
 alias clc='echo !! | pbcopy'
 
-# needed for ranger to run in tmux
-alias ranger='TERM=xterm-256color ranger'
+alias cc="claude"
+alias ccc="claude --continue"
+alias ccyolo="claude --dangerously-skip-permissions"
+alias cccyolo="claude --continue --dangerously-skip-permissions"
 
 #vim
 alias vi='nvim'
