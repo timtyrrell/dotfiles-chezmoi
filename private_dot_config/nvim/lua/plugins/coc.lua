@@ -199,5 +199,4 @@ return {
     end,
   },
   'antoinemadec/coc-fzf',
-  'tjdevries/coc-zsh',
 }

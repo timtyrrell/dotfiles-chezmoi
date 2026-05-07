@@ -58,7 +58,6 @@ require('lazy').setup({
         build = 'npm ci'
     },
     'antoinemadec/coc-fzf',
-    'tjdevries/coc-zsh',
     'github/copilot.vim',
     {
         'junegunn/fzf.vim',
