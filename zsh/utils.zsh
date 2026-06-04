@@ -313,18 +313,15 @@ fco_preview() {
   git checkout $(awk '{print $2}' <<<"$target" )
 }
 
-# change all these with these
 git_reset_hard_remote() {
-  local commit
-  commit=$( git branch --show-current ) &&
-  git fetch origin $(echo "$commit")
-  git reset --hard origin/$(echo "$commit")
+  local branch
+  branch=$(git branch --show-current) &&
+  git fetch origin "$branch" &&
+  git reset --hard "origin/$branch"
 }
 
 git_reset_hard_local() {
-  local commit
-  commit=$( git branch --show-current ) &&
-  git reset --hard $(echo "$commit")
+  git reset --hard HEAD
 }
 
 # checkout existing branch otherwise create new branch
@@ -340,11 +337,6 @@ gcob() {
   else
     git checkout $(git show-ref --verify --quiet refs/heads/$BRANCH || echo '-b') $BRANCH
   fi
-}
-
-gpull() {
-  local branch="${1:-$(git branch --show-current)}"
-  git pull origin "$branch"
 }
 
 kube-toggle() {

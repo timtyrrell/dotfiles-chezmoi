@@ -3,7 +3,7 @@ local map = vim.keymap.set
 return {
   {
     'ggandor/leap.nvim',
-    url = 'https://codeberg.org/andyg/leap.nvim',
+    url = 'https://git.disroot.org/andyg/leap.nvim',
     dependencies = { 'tpope/vim-repeat' },
     keys = {
       { 's', '<Plug>(leap-forward)',  mode = { 'n', 'x', 'o' }, noremap = false, desc = 'leap forward' },

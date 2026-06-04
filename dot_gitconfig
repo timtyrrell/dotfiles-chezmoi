@@ -87,6 +87,7 @@
 	conflictstyle = zdiff3
 	summary = true
 	tool = diffconflicts
+	autoStash = true
 [merge "bundlelock"]
 	name = lock Gemfile
 	driver = bundle install
@@ -96,7 +97,7 @@
 [pull]
 	rebase = true
 [push]
-  autoSetupRemote = true
+	autoSetupRemote = true
 	default = current
 	followTags = true
 [rebase]

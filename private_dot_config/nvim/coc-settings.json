@@ -226,8 +226,12 @@
   "coc.preferences.enableMessageDialog": true,
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
+  "sumneko-lua.enableNvimLuaDev": true,
   "Lua.telemetry.enable": false,
   "Lua.hint.arrayIndex": "Disable",
+  "Lua.diagnostics.globals": ["vim"],
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.workspace.checkThirdParty": false,
   "languageserver": {
     // "efm": {
     //   "command": "efm-langserver",

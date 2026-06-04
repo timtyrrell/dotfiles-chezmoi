@@ -15,8 +15,8 @@ alias clc='echo !! | pbcopy'
 
 alias cc="claude"
 alias ccc="claude --continue"
-alias ccyolo="claude --dangerously-skip-permissions"
-alias cccyolo="claude --continue --dangerously-skip-permissions"
+alias ccyolo="claude --permission-mode bypassPermissions"
+alias cccyolo="claude --continue --permission-mode bypassPermissions"
 
 #vim
 alias vi='nvim'
@@ -125,9 +125,9 @@ alias gds='git diff --staged'
 alias gdc='git diff --cached'
 alias glod='git log --oneline --decorate'
 alias glola='git log --graph --decorate --pretty=oneline --abbrev-commit --all'
-alias gpu='git push'
-alias gpf='git pushf'
+alias gpush='git push'
 alias gp='git pull'
+alias gpull='git pull'
 alias gput='git fetch --tags -f && git pull'
 alias gpr='git pull --rebase'
 alias pulls='gh browse --pulls'
@@ -165,6 +165,7 @@ alias grestore="git restore --staged . && git restore ."
 alias reset_authors='git commit --amend --reset-author -C HEAD'
 alias grhr="git_reset_hard_remote"
 alias grhl="git_reset_hard_local"
+alias grevert="git reset --hard ORIG_HEAD" # Undo — go back to where HEAD was before your last reset/merge/rebase
 alias stash="git stash -u"
 alias wip="git add . && gc -m 'wip [ci skip]' --no-verify"
 # wtc = !sh -c 'git add -A && git commit $@ -m \""`curl -s https://whatthecommit.com/index.txt`"\"' -

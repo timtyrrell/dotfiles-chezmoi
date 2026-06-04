@@ -499,7 +499,11 @@ eval "$(zoxide init zsh)"
 # Add RVM to PATH for scripting. (rvm not currently installed)
 # export PATH="$PATH:$HOME/.rvm/bin"
 
-# Run compinit and compile its cache
+# Run compinit and compile its cache.
+# -u: trust insecure-looking dirs. Workbrew owns /opt/homebrew as uid `workbrew`
+# (not root or $USER), which compaudit flags even though perms are 0755.
+# zcomet ignores CLI args — flags must be passed via zstyle.
+zstyle ':zcomet:compinit' arguments -u
 zcomet compinit
 # [ -z "$ZPROF" ] || zprof
 # zprof
