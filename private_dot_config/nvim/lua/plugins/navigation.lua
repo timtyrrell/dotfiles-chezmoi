@@ -52,6 +52,7 @@ return {
     init = function()
       vim.g.matchup_matchparen_offscreen = { method = 'popup' }
       vim.g.matchup_text_obj_enabled = 0
+      vim.g.matchup_delim_stopline = 5000
     end,
   },
   {
