@@ -87,7 +87,7 @@ vim.opt.complete:append('kspell')
 -- Keep windows same size when opening/closing splits
 vim.opt.equalalways = true
 
-vim.opt.sessionoptions = 'curdir,tabpages,winpos'
+vim.opt.sessionoptions = 'blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions'
 
 -- Disable mouse
 vim.opt.mouse = ''
