@@ -465,8 +465,6 @@ pyenv() {
   pyenv "$@"
 }
 
-eval "$(uv generate-shell-completion zsh)"
-
 # source <(stern --completion=zsh)
 
 # fnm (using Volta instead)
@@ -490,8 +488,6 @@ bindkey '^X^R' fzf-history-widget-accept
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
-eval "$(zoxide init zsh)"
-
 # work-specific config (not tracked by chezmoi)
 [ -f ~/zsh/work.zsh ] && source ~/zsh/work.zsh
 
@@ -505,6 +501,23 @@ eval "$(zoxide init zsh)"
 # zcomet ignores CLI args — flags must be passed via zstyle.
 zstyle ':zcomet:compinit' arguments -u
 zcomet compinit
+
+# These must init AFTER compinit — they call `compdef` to register completions,
+# which only exists once compinit has run.
+eval "$(uv generate-shell-completion zsh)"
+
+# zi/interactive picker ignores FZF_DEFAULT_OPTS — _ZO_FZF_OPTS fully replaces
+# zoxide's defaults, so --read0 (null-delimited paths) must stay.
+export _ZO_FZF_OPTS="
+--read0
+--layout=reverse
+--height=40%
+--bind 'ctrl-j:down'
+--bind 'ctrl-k:up'
+--bind 'alt-j:page-down'
+--bind 'alt-k:page-up'
+"
+eval "$(zoxide init zsh)"
 # [ -z "$ZPROF" ] || zprof
 # zprof
 
