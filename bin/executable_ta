@@ -10,6 +10,9 @@
 
 # https://github.com/WaylonWalker/devtainer/blob/main/bin/.local/bin/ta
 # https://github.com/christoomey/dotfiles/blob/master/bin/tat
+# example usage
+# alias tag='ta ~/code/something'
+
 
 DIR=$1
 

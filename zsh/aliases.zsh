@@ -44,7 +44,6 @@ alias tmn='tmux new -s'
 alias tma='tmux attach -t'
 alias tms='tmux switch-client -t'
 alias tmls='tmux ls'
-alias tag='ta ~/code/brandfolder'
 alias tkill="for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
 # alias tkill=tmux display-popup -E "for s in \$(tmux list-sessions | awk '{print \$1}' | rg ':' -r '' | fzf); do tmux kill-session -t \$s; done;"
 

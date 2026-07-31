@@ -92,7 +92,7 @@ return {
     'rmagatti/auto-session',
     lazy = false,
     opts = {
-      suppressed_dirs = { '~/', '~/Downloads', '~/code', '~/code/timtyrrell', '~/code/brandfolder' },
+      suppressed_dirs = { '~/', '~/Downloads', '~/code', '~/code/timtyrrell' },
       git_use_branch_name = true,
       git_auto_restore_on_branch_change = true,
       log_level = 'error',
@@ -101,7 +101,7 @@ return {
   {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
-      { 'tpope/vim-dadbod', lazy = true },
+      { 'tpope/vim-dadbod',                     lazy = true },
       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
     },
     cmd = { 'DBUI', 'DBUIToggle', 'DBUIAddConnection', 'DBUIFindBuffer' },
