@@ -1,0 +1,492 @@
+{
+  "BTTPresetCreatorNotes" : "",
+  "BTTPresetInfoURL" : "",
+  "BTTPresetName" : "Default",
+  "BTTPresetColor" : "18.653250, 79.021950, 169.575000, 255.000000",
+  "BTTGeneralSettings" : {
+    "BTTPathSampleSize" : 100,
+    "BTTCMOnTop" : true,
+    "BTTForceForceClickPressure2F" : 700,
+    "BSTLeftHalfBlock" : true,
+    "BTTMinDrawingMovement" : 2,
+    "BTTTouchBarMouseModeClickBlock" : true,
+    "BSTRightHalfBlock" : true,
+    "disableScrollingIf2" : true,
+    "batteryWarning" : false,
+    "BSTDontShowSnapAreasWhileModMoving" : 0,
+    "BSTWindowGrabPosY" : 10,
+    "showTrackpadTab" : true,
+    "singleFingerTapRight" : 0.050000000000000003,
+    "BTTDrawingStrokeWidth" : 4,
+    "cornerSnap" : true,
+    "BTRScrollSpeed" : 1,
+    "BTTTouchBarHapticFeedbackRelease" : 0,
+    "BSTIncreaseSnappingArea" : true,
+    "showDrawingsTab" : true,
+    "SIRIMouseSpeed" : 1,
+    "BTTUseNewUI" : true,
+    "BSTEnableEnhancementCheck" : true,
+    "BTTNotchBarNotchWidgetModeHideLeftFixed" : false,
+    "useAppleRemotePlugin" : false,
+    "BTTTouchBarFontSize" : 15,
+    "BSTSnapAreaDefaultPictoDistanceFromBottom" : 0.10000000000000001,
+    "BTRMouseSpeed" : 1,
+    "BSTPreventTopMissionControl" : true,
+    "BSTSnapAreaDefaultDashedBorder" : false,
+    "BTTEnablePalmRecognition" : true,
+    "BSTBrokenAPICheckEnabled" : false,
+    "BTTStageManagerLeftGap" : 0,
+    "BTTAllowThumbIfAllFingersArePlacedSimultaneously" : true,
+    "BTTNotchBarStandardMenubarModeHideRightFixed" : false,
+    "BTTNotchBarNotchWidgetModeShowMiniMenubar" : true,
+    "BTTStageManagerSnappingIncreaseAbsolute" : false,
+    "BTTShowControlStripItem" : true,
+    "BSTSnapAreaDefaultCornerRadius" : 20,
+    "BTTNotchBarNotchMenubarModeHideLeftFixed" : true,
+    "BTTMovePastedToTop" : true,
+    "BTTMaxAllowedDrawingRotation" : 30,
+    "BTTDidRegisterForUpdateStats" : "6.516",
+    "BTTNotchBarNotchWidgetModeHideRightFixed" : false,
+    "BTTStageManagerLeaveGap" : true,
+    "BTTStageManagerLeftSnappingAreaIncreasePercentage" : 0.125,
+    "BTTTpFourFingerSwipeSensitivity" : 0.40000000000000002,
+    "BSTMoveTreshold" : 2,
+    "BTTHideFomControlStripWhenOpen" : false,
+    "BTTNumberOfStarts" : 15,
+    "BTTForceNormalClickPressure3F" : 150,
+    "showSiriRemoteTab" : true,
+    "SIRIScrollSpeed" : 1,
+    "BTTShowControlStrip" : true,
+    "tpThreeFingerDoubleTapDelay" : 0.5,
+    "showNormalMiceTab" : true,
+    "BTTNotchBarStandardMenubarModeHideLeftScrollable" : true,
+    "BSTSnapAreaDefaultBorderWidth" : 3,
+    "BTTTouchBarHapticFeedback" : 0,
+    "BTTForceNormalClickPressure" : 150,
+    "BTTDrawingRightMouse" : true,
+    "BTTConvertedDevices" : true,
+    "snapBottomRight" : true,
+    "BTTThreeFingerTipTapMinSpread" : 0.029999999999999999,
+    "BTTIMGURDefault" : true,
+    "BTTNotchBarShowOnStandardScreens" : true,
+    "BSTSnapAreaDefaultBackgroundColor" : "129.991390, 201.122858, 227.012328, 104.550000",
+    "BSTSnapAreaDefaultPictoSize" : 0.69999999999999996,
+    "BSTSnapAreaDefaultBorderColor" : "0.000000, 0.000000, 0.000000, 255.000000",
+    "BTTNotchBarNotchMenubarModeHideLeftScrollable" : true,
+    "BTTNotchBarNotchMenubarModeShowOriginalStatusIcons" : true,
+    "BSTTopMissionControlTreshold" : 34,
+    "BTTNotchBarNotchWidgetModeHideRightScrollable" : false,
+    "BSTSnapAreaDefaultHighlightColor" : "92.625563, 122.647995, 161.664347, 56.100000",
+    "BTTStageManagerLeftGapPercentage" : 0.10000000000000001,
+    "BTTForceForceClickPressure5F" : 600,
+    "BTTForceForceClickPressure" : 700,
+    "BSTMemorySaver" : true,
+    "BTTLastClamshellState" : false,
+    "BTTStageManagerLeaveGapEvenIfHiding" : false,
+    "BTTTouchBarAnimateGroups" : true,
+    "BTTShowBTTWhenControlStripHidden" : true,
+    "BTTFreeSpaceAfterESC" : 10,
+    "mmZoomRepeatDelay" : 0.10000000000000001,
+    "snapTopLeft" : true,
+    "BTTDrawingAreaWidth" : 915,
+    "BTTTiltWheelDelay" : 0.45000000000000001,
+    "twoFingerDoubleTapDelay" : 0.5,
+    "BTTForceNormalClickPressure5F" : 200,
+    "BTTShowESCWhenControlStripHidden" : true,
+    "showBTTRemoteTab" : true,
+    "BTTFilterMagicMouseLeftRightEdge" : true,
+    "BTTNotchBarStandardWidgetModeShowOriginalStatusIcons" : false,
+    "BTTDrawingsHighlightStartPoint" : true,
+    "BTTEnableUsageLogging" : true,
+    "snapBottomLeft" : true,
+    "BTTScreenshotOpenImgurInBrowser" : true,
+    "BTTDontRestartAfterSleep" : true,
+    "BTTForceNormalClickPressure2F" : 140,
+    "BSTSnapAreaDefaultInvisible" : false,
+    "BTTDrawingAreaHeight" : 626,
+    "BTTForceForceClickPressure4F" : 650,
+    "BTTTouchBarUseMonoSpacedFont" : true,
+    "BSTCornerRoundness" : 40,
+    "BTTStageManagerLeftSnappingAreaIncrease" : 0,
+    "BTTForceForceHapticResponse" : 13,
+    "BTTNotchBarStandardMenubarModeHideLeftFixed" : true,
+    "showMagicMouseTab" : true,
+    "BTTNotchBarNotchWidgetModeShowOriginalStatusIcons" : false,
+    "BTTAlwaysShowPresetIndicators" : true,
+    "BTTStageManagerIncreaseEvenIfHiding" : true,
+    "showTouchBarTab" : false,
+    "BTTFreeSpaceAfterBTT" : 20,
+    "BTTNotchBarStandardWidgetModeHideRightFixed" : false,
+    "BTTTwoFingerTipTapMinSpread" : 0.029999999999999999,
+    "BTTDismissIfNothingToShow" : true,
+    "BTTDrawingsRestoreMousePosition" : true,
+    "BSTDisableSnapAreas" : false,
+    "BTTDefaultTBIconWidth" : 22,
+    "BTTStageManagerLeftGapAbsolute" : false,
+    "snapTopRight" : true,
+    "BSTSnapAreaDefaultShowPictogram" : false,
+    "BTTSelectedKeyboardTabIndex" : 1,
+    "BTTTouchBarKeepIconRatio" : true,
+    "BSTBrokenAPICheckDelay" : 0.20000000000000001,
+    "BTTStageManagerIncrease" : true,
+    "showKeyboardTab" : true,
+    "BTTForceForceClickPressure3F" : 700,
+    "disableScrollingIf3" : true,
+    "BSTWindowGrabPosX" : 67,
+    "BTTHandleThumbsRestingOnTopEdgeAndCorners" : true,
+    "BTTAutoSwitchToOldKeyboardImplementation" : true,
+    "BTTTpThreeFingerSwipeSensitivity" : 0.29999999999999999,
+    "BTTCopyImgurURLToClipboard" : true,
+    "BTTForceNormalHapticResponse" : 12,
+    "BTTTouchBarSupportEnabled" : false,
+    "BTTDaysToKeepHistory" : 14,
+    "BTTNotchBarNotchMenubarModeHideRightFixed" : true,
+    "BTTDefaultTBIconHeight" : 22,
+    "BTTNotchBarStandardMenubarModeShowOriginalStatusIcons" : true,
+    "BTTNotchBarStandardWidgetModeHideLeftFixed" : false,
+    "singleFingerTapLeft" : 0.45000000000000001,
+    "BTTNotchBarStandardWidgetModeHideLeftScrollable" : false,
+    "BTTForceNormalClickPressure4F" : 175,
+    "BTTNotchBarNotchWidgetModeHideLeftScrollable" : false,
+    "BSTSnapAreaDefaultAnimationDuration" : 0.29999999999999999,
+    "BTTNotchBarStandardWidgetModeHideRightScrollable" : false,
+    "BTTNotchBarStandardMenubarModeHideRightScrollable" : false,
+    "BTTNoShortcutDelay" : true,
+    "showOtherTriggersTab" : true,
+    "BTTNotchBarNotchMenubarModeHideRightScrollable" : true,
+    "BSTSnapAreaDefaultPictoDistanceFromLeft" : 0.10000000000000001
+  },
+  "BTTPresetUUID" : "755A81DF-0B66-451A-9E4D-3261C23C6D1E",
+  "BTTPresetContent" : [
+    {
+      "BTTAppBundleIdentifier" : "com.apple.finder",
+      "BTTAppName" : "Finder",
+      "BTTAppAutoInvertIcon" : 1,
+      "BTTTriggers" : [
+
+      ]
+    },
+    {
+      "BTTAppBundleIdentifier" : "BT.G",
+      "BTTAppName" : "Global",
+      "BTTAppAutoInvertIcon" : 1,
+      "BTTAppSpecificSettings" : {
+        "BTTDisableGlobalTriggers" : false
+      },
+      "BTTTriggers" : [
+        {
+          "BTTLastUpdatedAt" : 1774283030.207418,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "B95C671E-D592-4401-962C-1234A2DDE313",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "i",
+          "BTTShortcutKeyCode" : 34,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 1,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773850194.235029,
+              "BTTTriggerParentUUID" : "B95C671E-D592-4401-962C-1234A2DDE313",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "0DEC86DF-C037-4E9B-9B6F-573EFDA3ADFF",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/ghostty.app",
+              "BTTOrder" : 5
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2074399,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "B558F161-9A5C-4AF3-9830-40665B1B0CC8",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "z",
+          "BTTShortcutKeyCode" : 6,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 4,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773855635.1795759,
+              "BTTTriggerParentUUID" : "B558F161-9A5C-4AF3-9830-40665B1B0CC8",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "B1B05894-4324-463E-B0C1-94419A22A2C8",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/zoom.us.app",
+              "BTTOrder" : 8
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2074351,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "B503DE8B-6163-4EDC-8A5D-3F19AD4334D4",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "x",
+          "BTTShortcutKeyCode" : 7,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 2,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773846053.875035,
+              "BTTTriggerParentUUID" : "B503DE8B-6163-4EDC-8A5D-3F19AD4334D4",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "1123DB94-DF4F-470B-BCAD-F3C9D9718A46",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/Google Chrome.app",
+              "BTTOrder" : 6
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2073879,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "312C15B4-C0D9-41DD-8F01-298EA48DDE03",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "p",
+          "BTTShortcutKeyCode" : 35,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 6,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773855715.5506039,
+              "BTTTriggerParentUUID" : "312C15B4-C0D9-41DD-8F01-298EA48DDE03",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "57B349B4-4CD0-428A-9126-74D828C2747B",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/Spotify.app",
+              "BTTOrder" : 10
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2074521,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "B66AA991-EDC3-41EB-B029-E5904BA56BB6",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "s",
+          "BTTShortcutKeyCode" : 1,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 5,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773855677.693346,
+              "BTTTriggerParentUUID" : "B66AA991-EDC3-41EB-B029-E5904BA56BB6",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "78683EBB-89D0-42B3-B7A3-AD2BFEF67ECE",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app",
+              "BTTOrder" : 9
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.207406,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "9D1DB4B4-6264-43C9-9F6A-D1CB749C3D17",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "m",
+          "BTTShortcutKeyCode" : 46,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 7,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1775751394.1727161,
+              "BTTTriggerParentUUID" : "9D1DB4B4-6264-43C9-9F6A-D1CB749C3D17",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "66D83D61-4403-49E7-8CDD-AA3C1CE1D6D0",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Users/ttyrrell/Applications/Chrome Apps.localized/Google Meet.app",
+              "BTTOrder" : 11
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774369214.961997,
+          "BTTTriggerType" : 624,
+          "BTTTriggerTypeDescriptionReadOnly" : "Please Select a Trigger ",
+          "BTTTriggerClass" : "BTTTriggerTypeKeySequence",
+          "BTTUUID" : "9ED0F02E-484C-4C5E-84A2-BB6C805BD0DA",
+          "BTTOrder" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773845234.4276819,
+              "BTTTriggerParentUUID" : "9ED0F02E-484C-4C5E-84A2-BB6C805BD0DA",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "C30D4592-32DA-4D96-B9FF-7194B4AC6899",
+              "BTTPredefinedActionType" : 264,
+              "BTTPredefinedActionName" : "",
+              "BTTLayoutIndependentActionChar" : "ESCAPE",
+              "BTTShortcutToSend" : "53",
+              "BTTOrder" : 2
+            }
+          ],
+          "BTTKeySequence" : {
+            "BTTPauseAfter" : 0.099777904582885754,
+            "BTTPauseBetween" : 0.29999999999999999,
+            "BTTKeyCount" : 2,
+            "BTTKeyboardType" : -2052004921,
+            "BTTKeySequenceDownKeys" : [
+              {
+                "BTTKEYCharacter" : "r⌃ ",
+                "BTTKEYCode" : 62,
+                "BTTKEYDown" : 1,
+                "BTTKEYOrderRelevant" : 1,
+                "BTTKEYRequired" : 1
+              }
+            ],
+            "BTTKeySequenceMixedKeys" : [
+              {
+                "BTTKEYCharacter" : "r⌃ ",
+                "BTTKEYCode" : 62,
+                "BTTKEYDown" : 1,
+                "BTTKEYOrderRelevant" : 1,
+                "BTTKEYRequired" : 1
+              },
+              {
+                "BTTKEYCharacter" : "r⌃ ",
+                "BTTKEYCode" : 62,
+                "BTTKEYRequired" : 1
+              }
+            ],
+            "BTTKeySequenceUpKeys" : [
+              {
+                "BTTKEYCharacter" : "r⌃ ",
+                "BTTKEYCode" : 62,
+                "BTTKEYRequired" : 1
+              }
+            ]
+          }
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2074242,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "9CF9C565-CD84-4F56-96D9-DFBD1D954E78",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutScope" : 0,
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "l",
+          "BTTShortcutKeyCode" : 37,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 0,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773845854.7057481,
+              "BTTTriggerParentUUID" : "9CF9C565-CD84-4F56-96D9-DFBD1D954E78",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "8B5129F8-45D8-4A1D-8958-AFC5FA054D7D",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/Slack.app",
+              "BTTOrder" : 1
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.207412,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "1CAA3724-9CB8-4365-A1BD-9D449082E539",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "o",
+          "BTTShortcutKeyCode" : 31,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 8,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773865573.523674,
+              "BTTTriggerParentUUID" : "1CAA3724-9CB8-4365-A1BD-9D449082E539",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "FDED0FBD-0C02-40EF-B00C-98AB81ED4B1F",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/Obsidian.app",
+              "BTTOrder" : 12
+            }
+          ]
+        },
+        {
+          "BTTLastUpdatedAt" : 1774283030.2074289,
+          "BTTTriggerType" : 0,
+          "BTTTriggerClass" : "BTTTriggerTypeKeyboardShortcut",
+          "BTTUUID" : "3EBE813C-741B-4260-BFB8-8B7589BAFA8F",
+          "BTTAdditionalConfiguration" : "1310729",
+          "BTTShortcutKeyboardType" : -2052004921,
+          "BTTTriggerOnDown" : 1,
+          "BTTLayoutIndependentChar" : "c",
+          "BTTShortcutKeyCode" : 8,
+          "BTTShortcutAdvancedModifierKeys" : "1310729",
+          "BTTShortcutModifierKeys" : 1310720,
+          "BTTOrder" : 3,
+          "BTTAutoAdaptToKeyboardLayout" : 0,
+          "BTTActionsToExecute" : [
+            {
+              "BTTLastUpdatedAt" : 1773846575.4572339,
+              "BTTTriggerParentUUID" : "3EBE813C-741B-4260-BFB8-8B7589BAFA8F",
+              "BTTIsPureAction" : true,
+              "BTTUUID" : "397EEB66-FB94-4A64-A883-CE17E383DAF9",
+              "BTTPredefinedActionType" : 49,
+              "BTTPredefinedActionName" : "Launch Application  or  Open File  or  Start Apple Script …",
+              "BTTLaunchPath" : "/Applications/Firefox.app",
+              "BTTOrder" : 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "BTTAppBundleIdentifier" : "BT.L",
+      "BTTAppName" : "Recently Used",
+      "BTTAppAutoInvertIcon" : 1,
+      "BTTTriggers" : [
+
+      ]
+    }
+  ],
+  "BTTPresetSnapAreas" : [
+
+  ]
+}
