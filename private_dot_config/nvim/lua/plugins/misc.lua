@@ -3,6 +3,7 @@ local map = vim.keymap.set
 return {
   {
     'github/copilot.vim',
+    enabled = false,
     event = 'VeryLazy',
     init = function()
       vim.g.copilot_no_tab_map = true

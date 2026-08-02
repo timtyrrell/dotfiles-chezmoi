@@ -223,10 +223,11 @@
     "no-watchman"
   ],
   "importCost.debug": false,
-  "coc.preferences.enableMessageDialog": true,
+  "coc.preferences.enableMessageDialog": false,
   "solargraph.autoformat": true,
   "solargraph.formatting": true,
   "sumneko-lua.enableNvimLuaDev": true,
+  "sumneko-lua.serverDir": "/opt/homebrew/opt/lua-language-server/libexec",
   "Lua.telemetry.enable": false,
   "Lua.hint.arrayIndex": "Disable",
   "Lua.diagnostics.globals": ["vim"],
