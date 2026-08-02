@@ -46,8 +46,6 @@ brew "bash"
 brew "bat"
 # Terminal multiplexer
 brew "tmux"
-# Text-based window manager and terminal multiplexer
-brew "byobu"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
 # Container Signing
@@ -100,8 +98,6 @@ brew "imagemagick"
 brew "jq"
 # Pager program similar to more
 brew "less"
-# Clone of ls with colorful output, file type icons, and more
-brew "lsd"
 # Powerful, lightweight programming language
 brew "lua"
 # Language Server for the Lua language
@@ -157,7 +153,7 @@ brew "zsh"
 # AI code review CLI
 cask "coderabbit"
 cask "font-jetbrains-mono"
-cask "font-source-code-pro"
+cask "font-symbols-only-nerd-font"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "gcloud-cli"
 uv "mlflow"
