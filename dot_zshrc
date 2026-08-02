@@ -427,8 +427,9 @@ zstyle ':fzf-tab:*' fzf-bindings 'ctrl-u:preview-half-page-up' 'ctrl-d:preview-h
 zstyle ':fzf-tab:*' continuous-trigger '/'
 zstyle ':fzf-tab:*' accept-line ctrl-x
 
-# file/directory preview
-zstyle ':fzf-tab:complete:*' fzf-preview \
+# file/directory preview - only for commands that actually complete paths
+# (aliases are expanded by fzf-tab, so use the real command: ls->eza, cat->bat, vi/vim/n->nvim)
+zstyle ':fzf-tab:complete:(cd|eza|bat|nvim|cp|mv|rm|mkdir|rmdir|tree|code|open|less|more|head|tail|du|chmod|chown|ln|diff|file|unzip|tar|rsync|scp|stat|touch|find|xdg-open):*' fzf-preview \
   'if [[ -d $realpath ]]; then eza -a --icons --tree --level=1 --color=always $realpath; elif [[ -f $realpath ]]; then bat --pager=never --color=always --line-range :80 $realpath; fi'
 
 # process preview (macOS-compatible)
