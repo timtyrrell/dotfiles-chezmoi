@@ -280,10 +280,11 @@ export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 export FZF_DEFAULT_COMMAND='rg --files'
 # files
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude '.git' --exclude 'node_modules' --exclude '.rvm' --exclude '.frum' --exclude '.pyenv' --exclude '.npm'"
-export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
+# ctrl-g: toggle gitignored files on/off (fd respects .gitignore by default)
+export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1 --bind 'ctrl-g:transform:[[ \$FZF_PROMPT == \"> \" ]] && echo \"reload($FZF_CTRL_T_COMMAND --no-ignore)+change-prompt(ignored> )\" || echo \"reload($FZF_CTRL_T_COMMAND)+change-prompt(> )\"'"
 # directories
 export FZF_ALT_C_COMMAND="$FZF_CTRL_T_COMMAND --type d"
-export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1"
+export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS $FZF_SHOW_PREVIEW --select-1 --bind 'ctrl-g:transform:[[ \$FZF_PROMPT == \"> \" ]] && echo \"reload($FZF_ALT_C_COMMAND --no-ignore)+change-prompt(ignored> )\" || echo \"reload($FZF_ALT_C_COMMAND)+change-prompt(> )\"'"
 # history
 # modify keybindings.zsh or add plugin: https://github.com/junegunn/fzf/issues/477#issuecomment-230338992
 # ctrl-x to execute, enter to put in cmd line

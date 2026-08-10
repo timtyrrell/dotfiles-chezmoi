@@ -208,6 +208,12 @@ return {
       vim.g.fzf_buffers_jump = 1
       vim.g.fzf_history_dir = '~/.local/share/fzf-history'
 
+      -- ctrl-g: toggle gitignored files on/off for :Files (mirrors the zsh ctrl-t binding)
+      vim.g.fzf_files_options = {
+        '--bind',
+        [=[ctrl-g:transform:[[ $FZF_PROMPT == "ignored> " ]] && echo "reload(rg --files)+change-prompt(> )" || echo "reload(rg --files --hidden --no-ignore)+change-prompt(ignored> )"]=],
+      }
+
       -- File finding
       vim.keymap.set('n', '<Leader>ff', '<cmd>Files<CR>', { silent = true })
       vim.keymap.set('n', '<Leader>fF', ':Files ', { silent = true })
