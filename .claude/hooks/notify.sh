@@ -1,10 +1,16 @@
 #!/bin/bash
-# Sends an OSC 9 desktop notification to Ghostty. Wired to two Claude Code
-# hooks (see ~/.claude/settings.json):
+# Sends a desktop notification. Wired to two Claude Code hooks (see
+# ~/.claude/settings.json):
 #   - Notification: permission prompts etc. (idle waits are filtered out)
 #   - Stop:         fires when Claude finishes a turn ("task done running")
-# Ghostty only shows the banner when its window is unfocused, so these are
-# silent while you're watching and only alert once you've stepped away.
+#
+# Normally this sends OSC 9 straight to the pane's tty; Ghostty only shows
+# the banner when its window is unfocused, so these are silent while you're
+# watching and only alert once you've stepped away. But tmux only relays a
+# pane's escape sequences to a client attached to its session - if you've
+# detached (e.g. the dotfiles-popup `g` binding) the pane keeps running with
+# no client to relay to, so OSC 9 silently goes nowhere. In that case, fall
+# back to a native macOS notification instead.
 INPUT=$(cat)
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // ""' 2>/dev/null || echo "")
 MSG=$(echo "$INPUT" | jq -r '.message // ""' 2>/dev/null || echo "")
@@ -21,6 +27,20 @@ case "$EVENT" in
     fi
     ;;
 esac
+
+notify_macos() {
+  osascript -e "display notification \"$1\" with title \"Claude Code\"" >/dev/null 2>&1
+}
+
+# If we're in a tmux session with zero attached clients, there's no client
+# for OSC 9 passthrough to reach - skip straight to the macOS fallback.
+if [ -n "$TMUX" ]; then
+  ATTACHED=$(tmux display-message -p -t "$TMUX_PANE" '#{session_attached}' 2>/dev/null)
+  if [ "$ATTACHED" = "0" ]; then
+    notify_macos "$MSG"
+    exit 0
+  fi
+fi
 
 # Emit OSC 9. Inside tmux the inner OSC 9 is BEL-terminated (\a) so there is no
 # bare ESC that tmux would mistake for the end of its own passthrough wrapper;
@@ -52,4 +72,6 @@ find_tty() {
 TTY_DEV=$(find_tty)
 if [ -n "$TTY_DEV" ]; then
   printf '%s' "$SEQ" > "$TTY_DEV"
+else
+  notify_macos "$MSG"
 fi

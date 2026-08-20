@@ -17,6 +17,7 @@ alias cc="claude"
 alias ccc="claude --continue"
 alias ccyolo="claude --permission-mode bypassPermissions"
 alias cccyolo="claude --continue --permission-mode bypassPermissions"
+alias /exit="exit" # muscle memory from Claude Code's /exit slash command
 
 #vim
 alias vi='nvim'
